@@ -141,7 +141,8 @@ const server = http.createServer((req, res) => {
   }
 
   // 4. STATIC FILE SERVER
-  let filePath = path.join(__dirname, pathname === '/' ? 'index.html' : pathname);
+  const targetFile = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
+  let filePath = path.join(__dirname, targetFile);
   
   if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.html')) {
     filePath = filePath + '.html';
