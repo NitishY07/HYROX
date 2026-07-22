@@ -1,0 +1,588 @@
+/* ==========================================================================
+   MIKA TIMING & SPORTVOT BROADCAST GFX ENGINE
+   Broadcast-Grade High-Legibility Styles for OBS Studio & vMix (1080p / 4K)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;0,900;1,800&family=Teko:wght@500;600;700&family=JetBrains+Mono:wght@700;800&display=swap');
+
+:root {
+  /* SportVot Signature High-Contrast Theme */
+  --gfx-primary: #FF1E38;
+  --gfx-primary-dark: #B9061C;
+  --gfx-secondary: #0F172A;
+  --gfx-accent: #00F2FE;
+  --gfx-text: #FFFFFF;
+  --gfx-text-muted: #CBD5E1;
+  --gfx-bg-glass: rgba(10, 14, 23, 0.97);
+  --gfx-bg-card: rgba(20, 27, 44, 0.98);
+  --gfx-border: rgba(255, 255, 255, 0.2);
+  --gfx-font-main: 'Montserrat', sans-serif;
+  --gfx-font-timer: 'Teko', sans-serif;
+  --gfx-font-mono: 'JetBrains Mono', monospace;
+  --gfx-shadow: 0 16px 40px rgba(0, 0, 0, 0.85);
+  --gfx-radius: 12px;
+}
+
+/* Themes */
+.theme-sportvot {
+  --gfx-primary: #FF1E38;
+  --gfx-primary-dark: #B9061C;
+  --gfx-bg-glass: rgba(10, 14, 22, 0.97);
+  --gfx-accent: #00F2FE;
+}
+
+.theme-dark-broadcast {
+  --gfx-primary: #2563EB;
+  --gfx-primary-dark: #1D4ED8;
+  --gfx-bg-glass: rgba(8, 12, 20, 0.97);
+  --gfx-accent: #38BDF8;
+}
+
+.theme-gold-edition {
+  --gfx-primary: #D97706;
+  --gfx-primary-dark: #B45309;
+  --gfx-bg-glass: rgba(18, 14, 10, 0.97);
+  --gfx-accent: #FBBF24;
+}
+
+.theme-neon-cyber {
+  --gfx-primary: #00E676;
+  --gfx-primary-dark: #00A152;
+  --gfx-bg-glass: rgba(8, 12, 16, 0.97);
+  --gfx-accent: #FF007A;
+}
+
+.theme-light-clean {
+  --gfx-primary: #0F172A;
+  --gfx-primary-dark: #020617;
+  --gfx-bg-glass: rgba(255, 255, 255, 0.98);
+  --gfx-text: #0F172A;
+  --gfx-text-muted: #475569;
+  --gfx-border: rgba(0, 0, 0, 0.2);
+}
+
+/* Standalone Overlay Container */
+body.gfx-overlay-body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent !important;
+  overflow: hidden;
+  font-family: var(--gfx-font-main);
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.gfx-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  box-sizing: border-box;
+  padding: 30px;
+}
+
+/* Smooth Entrance / Exit Animations */
+.gfx-animated {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  will-change: transform, opacity;
+}
+
+.gfx-hidden {
+  opacity: 0 !important;
+  transform: translateY(-20px) scale(0.98) !important;
+  pointer-events: none !important;
+}
+
+/* Sidebar Stack Container for Clean Vertical Alignment (Wider for Broadcast Legibility) */
+.gfx-sidebar-stack {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 100;
+}
+
+.pos-top-right .gfx-sidebar-stack {
+  left: auto;
+  right: 30px;
+}
+
+/* ==========================================================================
+   1. MEETING BANNER (LARGE HIGH-CONTRAST BROADCAST PILL)
+   ========================================================================== */
+.gfx-meeting-banner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--gfx-bg-glass);
+  border: 2px solid var(--gfx-border);
+  border-radius: var(--gfx-radius);
+  box-shadow: var(--gfx-shadow);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  color: var(--gfx-text);
+}
+
+.gfx-brand-badge {
+  background: linear-gradient(135deg, var(--gfx-primary), var(--gfx-primary-dark));
+  color: #FFF;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  height: 100%;
+  flex-shrink: 0;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.gfx-brand-badge svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.gfx-meeting-info {
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.gfx-meeting-title {
+  font-weight: 900;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #FFF;
+}
+
+.gfx-meeting-meta {
+  font-size: 12px;
+  color: var(--gfx-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+.gfx-live-badge {
+  background: rgba(255, 30, 56, 0.3);
+  color: #FF4D6D;
+  border: 1px solid rgba(255, 30, 56, 0.6);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.5px;
+}
+
+.gfx-live-dot {
+  width: 7px;
+  height: 7px;
+  background-color: #FF1E38;
+  border-radius: 50%;
+  animation: pulse-live 1.5s infinite;
+}
+
+@keyframes pulse-live {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 30, 56, 0.8); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(255, 30, 56, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 30, 56, 0); }
+}
+
+/* ==========================================================================
+   2. LEADERBOARD OVERLAY (LARGE PRO BROADCAST TYPOGRAPHY)
+   ========================================================================== */
+.gfx-leaderboard-box {
+  width: 100%;
+  background: var(--gfx-bg-glass);
+  border: 2px solid var(--gfx-border);
+  border-radius: var(--gfx-radius);
+  box-shadow: var(--gfx-shadow);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  color: var(--gfx-text);
+}
+
+.gfx-lb-header {
+  background: linear-gradient(90deg, var(--gfx-primary-dark), var(--gfx-primary));
+  padding: 14px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.gfx-lb-title {
+  font-weight: 900;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #FFF;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.gfx-lb-category {
+  font-size: 12px;
+  font-weight: 900;
+  background: rgba(0, 0, 0, 0.45);
+  color: var(--gfx-accent);
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+.gfx-lb-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.gfx-lb-item {
+  display: grid;
+  grid-template-columns: 42px 64px 1fr 110px;
+  align-items: center;
+  padding: 10px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: 56px;
+  box-sizing: border-box;
+  transition: background 0.2s ease;
+}
+
+.gfx-lb-item:last-child {
+  border-bottom: none;
+}
+
+.gfx-lb-item:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Rank Badges */
+.gfx-rank-num {
+  font-weight: 900;
+  font-size: 18px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--gfx-accent);
+}
+
+.gfx-lb-item.pos-1 .gfx-rank-num {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #000;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+}
+
+.gfx-lb-item.pos-2 .gfx-rank-num {
+  background: linear-gradient(135deg, #FFFFFF, #B0BEC5);
+  color: #000;
+}
+
+.gfx-lb-item.pos-3 .gfx-rank-num {
+  background: linear-gradient(135deg, #E67E22, #D35400);
+  color: #FFF;
+}
+
+/* High-Contrast Bib Badges */
+.gfx-bib-tag {
+  font-family: var(--gfx-font-mono);
+  font-size: 13px;
+  font-weight: 800;
+  background: #FFFFFF;
+  color: #0F172A;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-align: center;
+  width: 50px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.gfx-athlete-details {
+  display: flex;
+  flex-direction: column;
+  padding-left: 12px;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.gfx-athlete-name {
+  font-weight: 800;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.gfx-athlete-club {
+  font-size: 12px;
+  color: #94A3B8;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.gfx-time-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.gfx-time-val {
+  font-family: var(--gfx-font-timer);
+  font-size: 28px;
+  font-weight: 700;
+  text-align: right;
+  line-height: 1;
+  color: #FFFFFF;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.gfx-time-delta {
+  font-size: 11px;
+  color: var(--gfx-accent);
+  text-align: right;
+  font-weight: 800;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   3. ATHLETE SPOTLIGHT (LOWER THIRD)
+   ========================================================================== */
+.gfx-lower-third {
+  position: absolute;
+  bottom: 80px;
+  left: 30px;
+  display: flex;
+  align-items: stretch;
+  background: var(--gfx-bg-glass);
+  border: 2px solid var(--gfx-border);
+  border-radius: var(--gfx-radius);
+  box-shadow: var(--gfx-shadow);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  color: var(--gfx-text);
+  min-width: 580px;
+  z-index: 100;
+}
+
+.pos-bottom-right .gfx-lower-third {
+  left: auto;
+  right: 30px;
+}
+
+.gfx-lt-rank {
+  background: linear-gradient(135deg, var(--gfx-primary), var(--gfx-primary-dark));
+  min-width: 95px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+
+.gfx-lt-rank-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.gfx-lt-rank-num {
+  font-weight: 900;
+  font-size: 42px;
+  line-height: 1;
+  font-family: var(--gfx-font-timer);
+  color: #FFF;
+}
+
+.gfx-lt-content {
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.gfx-lt-bib {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--gfx-accent);
+  text-transform: uppercase;
+}
+
+.gfx-lt-name {
+  font-weight: 900;
+  font-size: 26px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 3px 0;
+  line-height: 1.1;
+  color: #FFF;
+}
+
+.gfx-lt-meta {
+  font-size: 13px;
+  color: var(--gfx-text-muted);
+  font-weight: 700;
+}
+
+.gfx-lt-time-box {
+  background: rgba(0, 0, 0, 0.45);
+  padding: 14px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.gfx-lt-time-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--gfx-text-muted);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.gfx-lt-time {
+  font-family: var(--gfx-font-timer);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  color: #FFF;
+}
+
+/* ==========================================================================
+   4. BOTTOM TICKER / SPLIT TRACKER (LARGE HIGH-CONTRAST BROADCAST BAR)
+   ========================================================================== */
+.gfx-ticker-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--gfx-bg-glass);
+  border-top: 3px solid var(--gfx-primary);
+  display: flex;
+  align-items: center;
+  height: 56px;
+  overflow: hidden;
+  color: var(--gfx-text);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
+  z-index: 110;
+}
+
+.gfx-ticker-badge {
+  background: linear-gradient(135deg, var(--gfx-primary), var(--gfx-primary-dark));
+  color: #FFF;
+  font-weight: 900;
+  font-size: 14px;
+  height: 100%;
+  padding: 0 26px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+  z-index: 10;
+  flex-shrink: 0;
+  box-shadow: 6px 0 18px rgba(0, 0, 0, 0.7);
+}
+
+.gfx-ticker-track {
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gfx-ticker-wrapper {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: ticker-scroll 25s linear infinite;
+  will-change: transform;
+}
+
+.gfx-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 28px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.gfx-ticker-item .bib {
+  font-family: var(--gfx-font-mono);
+  background: #00F2FE;
+  color: #0F172A;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.gfx-ticker-item .name {
+  color: #FFFFFF;
+  font-weight: 800;
+}
+
+.gfx-ticker-item .split {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #CBD5E1;
+}
+
+.gfx-ticker-item .time {
+  font-family: var(--gfx-font-timer);
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFF;
+  letter-spacing: 0.5px;
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mika Timing & SportVot Broadcast GFX</title>
+  <link rel="stylesheet" href="css/gfx-broadcast.css">
+</head>
+<body class="gfx-overlay-body theme-sportvot pos-top-left">
+
+  <div class="gfx-container" id="gfxContainer">
+    
+    <!-- Sidebar Stack for Meeting Banner & Leaderboard -->
+    <div class="gfx-sidebar-stack">
+      
+      <!-- 1. Meeting & Event Header Banner -->
+      <div id="gfxBanner" class="gfx-meeting-banner gfx-animated">
+        <div class="gfx-brand-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          SPORTVOT
+        </div>
+        <div class="gfx-meeting-info">
+          <div id="bannerTitle" class="gfx-meeting-title">DELHI CHAMPIONSHIP 2026</div>
+          <div class="gfx-meeting-meta">
+            <span class="gfx-live-badge"><span class="gfx-live-dot"></span> LIVE TIMING</span>
+            <span id="bannerMeta">HYROX • Day 2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Leaderboard Overlay -->
+      <div id="gfxLeaderboard" class="gfx-leaderboard-box gfx-animated">
+        <div class="gfx-lb-header">
+          <span class="gfx-lb-title">LEADERBOARD</span>
+          <span id="lbCategory" class="gfx-lb-category">TOP 10</span>
+        </div>
+        <div id="lbList" class="gfx-lb-list">
+          <!-- Rendered dynamically via overlay.js -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3. Athlete Spotlight (Lower Third) -->
+    <div id="gfxLowerThird" class="gfx-lower-third gfx-animated gfx-hidden">
+      <div class="gfx-lt-rank">
+        <span class="gfx-lt-rank-label">POS</span>
+        <span id="ltRankNum" class="gfx-lt-rank-num">#1</span>
+      </div>
+      <div class="gfx-lt-content">
+        <div id="ltBib" class="gfx-lt-bib">BIB #101 • IND</div>
+        <div id="ltName" class="gfx-lt-name">Rohan Sharma</div>
+        <div id="ltMeta" class="gfx-lt-meta">Delhi Runners Club • Pace: 3:45 /km</div>
+      </div>
+      <div class="gfx-lt-time-box">
+        <span class="gfx-lt-time-label">TIME</span>
+        <div id="ltTime" class="gfx-lt-time">20:45</div>
+      </div>
+    </div>
+
+    <!-- 4. Bottom Ticker / Split Tracker -->
+    <div id="gfxTicker" class="gfx-ticker-bar gfx-animated">
+      <div class="gfx-ticker-badge">SPLIT UPDATES</div>
+      <div class="gfx-ticker-track">
+        <div id="tickerWrapper" class="gfx-ticker-wrapper">
+          <!-- Rendered dynamically via overlay.js -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/overlay.js"></script>
+</body>
+</html>

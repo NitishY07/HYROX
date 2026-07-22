@@ -1,0 +1,19 @@
+{
+  "name": "mika-timing-gfx-suite",
+  "version": "1.0.0",
+  "description": "Mika Timing AppAPI & SportVot Live Broadcast GFX Suite",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "sportvot",
+    "mikatiming",
+    "broadcast",
+    "gfx",
+    "obs",
+    "vmix"
+  ],
+  "author": "SportVot",
+  "license": "ISC"
+}
