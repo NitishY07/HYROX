@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const networkUrlsContainer = document.getElementById('networkUrlsContainer');
 
   let livePollInterval = null;
+  let simSyncInterval = null;
 
   /**
    * Sync State across BroadcastChannel, LocalStorage, AND Server Network API
@@ -84,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
       payload: payload
     });
 
-    // POST to Node Server for Cross-Machine Network OBS / vMix Sync
     try {
       fetch('/api/gfx-state', {
         method: 'POST',
@@ -146,6 +146,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (err) {
       updateStatus(`Connection Error: ${err.message}`, 'error');
+      
+      // If in Live API Mode and API connection failed, activate simulator fallback so timer doesn't freeze!
+      if (state.mode === 'live') {
+        console.warn('Live API connection failed. Activating timer fallback.');
+        startSimulatorSync();
+      }
     }
   }
 
@@ -177,6 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const results = await api.getRaceResults(state.selectedRaceId, state.selectedMeetingId, state.selectedEventKey);
         if (results && results.length > 0) {
+          // Live API data received -> Stop simulator fallback if active
+          simulator.stop();
           state.leaderboard = results.map((r, i) => ({
             rank: i + 1,
             bib: r.bib || r.idParticipant || `B${i+1}`,
@@ -188,9 +196,14 @@ document.addEventListener('DOMContentLoaded', () => {
           }));
           updateSpotlightSelectOptions();
           syncState();
+        } else {
+          // If no active race results on API endpoint yet, run simulator clock so timer stays live
+          startSimulatorSync();
         }
       } catch (err) {
-        console.info('Live results polling info:', err.message);
+        console.info('Live results endpoint info:', err.message);
+        // Fallback to simulator clock so timer doesn't freeze
+        startSimulatorSync();
       }
     };
 
@@ -206,16 +219,14 @@ document.addEventListener('DOMContentLoaded', () => {
       updateStatus('Running in High-Fidelity Simulator Mode', 'info');
       startSimulatorSync();
     } else {
-      simulator.stop();
       connectAPI();
     }
   }
 
-  let simSyncInterval = null;
   function startSimulatorSync() {
+    simulator.start();
     if (simSyncInterval) clearInterval(simSyncInterval);
     simSyncInterval = setInterval(() => {
-      if (state.mode !== 'sim') return;
       state.leaderboard = simulator.getLeaderboardData();
       state.tickerItems = simulator.splitEvents;
       
@@ -261,8 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
     envPresetSelect.addEventListener('change', () => {
       if (envPresetSelect.value === 'staging') {
         apiHostInput.value = 'https://apihub-staging.mikatiming.net/ah/rest/appapi';
+        apiKeyInput.value = 'sportvot';
       } else if (envPresetSelect.value === 'prod') {
         apiHostInput.value = 'https://apihub.mikatiming.net/ah/rest/appapi';
+        apiKeyInput.value = 'sportvot-vhzj2id';
       }
     });
   }
