@@ -217,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
               name: fullName,
               club: r.clubname || r.club || r.nation || '',
               nat: r.nation || 'IND',
+              split: r.splitName || r.checkpointName || r.checkpoint || r.split || '',
               time: r.timeText || r.time || r.splitTime || '',
               delta: i === 0 ? '' : (r.delta || `+${(i * 3.5).toFixed(1)}s`)
             };

@@ -119,7 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="gfx-rank-num">${item.rank}</div>
               <div class="gfx-athlete-details">
                 <div class="gfx-athlete-name">${escapeHtml(item.name || 'Athlete')}</div>
-                ${(isClubsEnabled && (item.club || item.nat)) ? `<div class="gfx-athlete-club">${escapeHtml(item.club || item.nat || '')}</div>` : ''}
+                <div class="gfx-athlete-club">
+                  ${(isClubsEnabled && (item.club || item.nat)) ? `<span>${escapeHtml(item.club || item.nat || '')}</span>` : ''}
+                  ${item.split ? `<span class="gfx-split-badge">${escapeHtml(item.split)}</span>` : ''}
+                </div>
               </div>
               <div class="gfx-time-col">
                 ${(isTimerEnabled && item.time) ? `<div class="gfx-time-val">${item.time}</div>` : ''}
