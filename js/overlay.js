@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const lowerThirdEl = document.getElementById('gfxLowerThird');
   const tickerEl = document.getElementById('gfxTicker');
 
+  // Cache last HTML to prevent destroying DOM nodes and restarting CSS keyframe animations
+  let lastTickerHtml = '';
+  let lastLeaderboardHtml = '';
+
   // State
   let state = {
     mode: 'sim',
@@ -41,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
         bannerEl.classList.remove('gfx-hidden');
         const t = document.getElementById('bannerTitle');
         const m = document.getElementById('bannerMeta');
-        if (t) t.innerText = state.meetingInfo.title || 'LIVE EVENT';
-        if (m) m.innerText = state.meetingInfo.meta || 'MIKA TIMING';
+        if (t && t.innerText !== state.meetingInfo.title) t.innerText = state.meetingInfo.title || 'LIVE EVENT';
+        if (m && m.innerText !== state.meetingInfo.meta) m.innerText = state.meetingInfo.meta || 'MIKA TIMING';
       } else {
         bannerEl.classList.add('gfx-hidden');
       }
@@ -54,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         leaderboardEl.classList.remove('gfx-hidden');
         const listContainer = document.getElementById('lbList');
         if (listContainer) {
-          listContainer.innerHTML = state.leaderboard.slice(0, 10).map(item => `
+          const lbHtml = state.leaderboard.slice(0, 10).map(item => `
             <div class="gfx-lb-item pos-${item.rank}">
               <div class="gfx-rank-num">${item.rank}</div>
               <div class="gfx-bib-tag">#${item.bib || '000'}</div>
@@ -68,6 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
           `).join('');
+
+          if (lbHtml !== lastLeaderboardHtml) {
+            listContainer.innerHTML = lbHtml;
+            lastLeaderboardHtml = lbHtml;
+          }
         }
       } else {
         leaderboardEl.classList.add('gfx-hidden');
@@ -94,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 5. Ticker
+    // 5. Ticker - Smooth Endless Marquee without Animation Reset
     if (tickerEl) {
       if (state.visibleElements && state.visibleElements.ticker && state.tickerItems && state.tickerItems.length > 0) {
         tickerEl.classList.remove('gfx-hidden');
@@ -108,7 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="time">${item.time}</span>
             </div>
           `).join('');
-          tickerWrapper.innerHTML = itemsHtml + itemsHtml;
+
+          // Only update DOM if ticker items changed, so keyframe animation scrolls continuously without resetting!
+          const fullTickerHtml = itemsHtml + itemsHtml;
+          if (fullTickerHtml !== lastTickerHtml) {
+            tickerWrapper.innerHTML = fullTickerHtml;
+            lastTickerHtml = fullTickerHtml;
+          }
         }
       } else {
         tickerEl.classList.add('gfx-hidden');
