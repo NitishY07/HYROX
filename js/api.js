@@ -102,28 +102,45 @@ class MikaTimingAPI {
   }
 
   /**
-   * 4. Get Race Results / Participations
+   * 4. Get Race Results / Participations for specific Event Key & Meeting ID
    */
   async getRaceResults(idRace, idMeeting, eventKey) {
+    const meetingId = idMeeting || 'LR3MS4JI1710';
+    const key = eventKey || 'BOG';
+
+    // 1. Try Event Key Results Endpoint (e.g. /meetinginfo/meeting/LR3MS4JI1710/event/key/BOG/results)
     try {
-      if (idRace) {
-        const data = await this.request(`/meetinginfo/race/${idRace}/results`);
-        if (data && data.results) return data.results;
+      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/results`);
+      if (data && (data.results || data.participations || data.items)) {
+        return data.results || data.participations || data.items;
       }
     } catch (e1) {
-      if (idMeeting && eventKey) {
-        try {
-          const data = await this.request(`/meetinginfo/meeting/${idMeeting}/event/key/${eventKey}/leaders`);
-          if (data && data.leaders) return data.leaders;
-        } catch (e2) {
-          if (idMeeting) {
-            const data = await this.request(`/meetinginfo/meeting/${idMeeting}/participations/basic`);
-            if (data && data.participations) return data.participations;
-          }
-        }
-      }
+      console.info(`[MikaTimingAPI] /event/key/${key}/results info:`, e1.message);
     }
-    throw new Error('Results endpoint restricted or no active race results on this API key');
+
+    // 2. Try Event Key Leaders Endpoint (e.g. /meetinginfo/meeting/LR3MS4JI1710/event/key/BOG/leaders)
+    try {
+      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/leaders`);
+      if (data && data.leaders) return data.leaders;
+    } catch (e2) {
+      console.info(`[MikaTimingAPI] /event/key/${key}/leaders info:`, e2.message);
+    }
+
+    // 3. Try Race Results Endpoint
+    if (idRace) {
+      try {
+        const data = await this.request(`/meetinginfo/race/${idRace}/results`);
+        if (data && data.results) return data.results;
+      } catch (e3) {}
+    }
+
+    // 4. Try Participations Basic Endpoint
+    try {
+      const data = await this.request(`/meetinginfo/meeting/${meetingId}/participations/basic`);
+      if (data && data.participations) return data.participations;
+    } catch (e4) {}
+
+    throw new Error(`No active live results returned for Meeting ${meetingId} and Key ${key}`);
   }
 }
 
