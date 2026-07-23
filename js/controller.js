@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
               club: r.clubname || r.club || r.nation || '',
               nat: r.nation || 'IND',
               time: r.timeText || r.time || r.splitTime || '',
-              delta: i === 0 ? 'LEADER' : (r.delta || `+${(i * 3.5).toFixed(1)}s`)
+              delta: i === 0 ? '' : (r.delta || `+${(i * 3.5).toFixed(1)}s`)
             };
           });
 

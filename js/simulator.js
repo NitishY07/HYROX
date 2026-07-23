@@ -115,7 +115,7 @@ class RaceSimulator {
       const athleteTimeSec = leaderTime + athlete.baseOffset;
       const formattedTime = this.formatTime(athleteTimeSec);
       const deltaSec = athlete.baseOffset;
-      const deltaText = index === 0 ? 'LEADER' : `+${deltaSec.toFixed(1)}s`;
+      const deltaText = index === 0 ? '' : `+${deltaSec.toFixed(1)}s`;
 
       return {
         rank: index + 1,
