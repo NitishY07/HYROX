@@ -102,7 +102,7 @@ body.gfx-overlay-body {
   position: absolute;
   top: 30px;
   left: 30px;
-  width: 520px;
+  width: 580px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -271,11 +271,11 @@ body.gfx-overlay-body {
 
 .gfx-lb-item {
   display: grid;
-  grid-template-columns: 44px 1fr 100px;
+  grid-template-columns: 40px 1fr 95px;
   align-items: center;
   padding: 10px 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  height: 58px;
+  min-height: 58px;
   box-sizing: border-box;
   transition: background 0.2s ease;
 }
@@ -336,20 +336,21 @@ body.gfx-overlay-body {
 .gfx-athlete-details {
   display: flex;
   flex-direction: column;
-  padding-left: 14px;
-  overflow: hidden;
+  padding-left: 12px;
   justify-content: center;
+  min-width: 0;
+  overflow: visible;
 }
 
 .gfx-athlete-name {
   font-weight: 800;
-  font-size: 17px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 16px;
+  line-height: 1.25;
   color: #FFFFFF;
   letter-spacing: 0.3px;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  white-space: normal;
+  word-break: break-word;
 }
 
 .gfx-athlete-club {
