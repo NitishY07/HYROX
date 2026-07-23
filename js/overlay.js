@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const isTimerEnabled = state.visibleElements && state.visibleElements.showTimer === true;
+    const isClubsEnabled = !state.visibleElements || state.visibleElements.showClubs !== false;
 
     // Dynamic clock calculation ONLY if showTimer is explicitly enabled
     let currentLeaderboard = state.leaderboard || [];
@@ -118,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="gfx-rank-num">${item.rank}</div>
               <div class="gfx-athlete-details">
                 <div class="gfx-athlete-name">${escapeHtml(item.name || 'Athlete')}</div>
-                <div class="gfx-athlete-club">${escapeHtml(item.club || item.nat || '')}</div>
+                ${(isClubsEnabled && (item.club || item.nat)) ? `<div class="gfx-athlete-club">${escapeHtml(item.club || item.nat || '')}</div>` : ''}
               </div>
               <div class="gfx-time-col">
                 ${(isTimerEnabled && item.time) ? `<div class="gfx-time-val">${item.time}</div>` : ''}

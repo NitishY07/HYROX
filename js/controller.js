@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
       leaderboard: true,
       lowerThird: false,
       ticker: true,
-      showTimer: false
+      showTimer: false,
+      showClubs: true
     },
     meetings: [],
     races: [],
@@ -56,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleLowerThird = document.getElementById('toggleLowerThird');
   const toggleTicker = document.getElementById('toggleTicker');
   const toggleTimer = document.getElementById('toggleTimer');
+  const toggleClubs = document.getElementById('toggleClubs');
 
   const themeSelect = document.getElementById('themeSelect');
   const posSelect = document.getElementById('posSelect');
@@ -377,6 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleLowerThird) toggleLowerThird.addEventListener('change', () => { state.visibleElements.lowerThird = toggleLowerThird.checked; syncState(); });
   if (toggleTicker) toggleTicker.addEventListener('change', () => { state.visibleElements.ticker = toggleTicker.checked; syncState(); });
   if (toggleTimer) toggleTimer.addEventListener('change', () => { state.visibleElements.showTimer = toggleTimer.checked; syncState(); });
+  if (toggleClubs) toggleClubs.addEventListener('change', () => { state.visibleElements.showClubs = toggleClubs.checked; syncState(); });
 
   if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; syncState(); });
   if (posSelect) posSelect.addEventListener('change', () => { state.position = posSelect.value; syncState(); });
