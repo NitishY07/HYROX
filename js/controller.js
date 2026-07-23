@@ -147,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       updateStatus(`Connection Error: ${err.message}`, 'error');
       
-      // If in Live API Mode and API connection failed, activate simulator fallback so timer doesn't freeze!
       if (state.mode === 'live') {
         console.warn('Live API connection failed. Activating timer fallback.');
         startSimulatorSync();
@@ -164,12 +163,23 @@ document.addEventListener('DOMContentLoaded', () => {
         text: `${r.descriptionText || r.idRace} (${r.distanceText || ''})`
       })));
 
+      if (races.length > 0 && !state.selectedRaceId) {
+        state.selectedRaceId = races[0].idRace;
+        state.meetingInfo.meta = `${races[0].descriptionText} • Live`;
+      }
+
       const events = await api.getEvents();
       state.events = events;
       populateSelect(eventSelect, events.map(e => ({
         value: e.key,
         text: `${e.nameText} [Key: ${e.key}]`
       })));
+
+      if (events.length > 0 && !state.selectedEventKey) {
+        state.selectedEventKey = events[0].key;
+      }
+
+      syncState();
     } catch (e) {
       console.warn('Failed fetching races/events:', e);
     }
@@ -183,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const results = await api.getRaceResults(state.selectedRaceId, state.selectedMeetingId, state.selectedEventKey);
         if (results && results.length > 0) {
-          // Live API data received -> Stop simulator fallback if active
           simulator.stop();
           state.leaderboard = results.map((r, i) => ({
             rank: i + 1,
@@ -197,12 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
           updateSpotlightSelectOptions();
           syncState();
         } else {
-          // If no active race results on API endpoint yet, run simulator clock so timer stays live
           startSimulatorSync();
         }
       } catch (err) {
         console.info('Live results endpoint info:', err.message);
-        // Fallback to simulator clock so timer doesn't freeze
         startSimulatorSync();
       }
     };
@@ -276,6 +283,45 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (envPresetSelect.value === 'prod') {
         apiHostInput.value = 'https://apihub.mikatiming.net/ah/rest/appapi';
         apiKeyInput.value = 'sportvot-vhzj2id';
+      }
+    });
+  }
+
+  if (meetingSelect) {
+    meetingSelect.addEventListener('change', () => {
+      const selectedId = meetingSelect.value;
+      const meetingObj = state.meetings.find(m => m.idMeeting === selectedId);
+      if (meetingObj) {
+        state.selectedMeetingId = selectedId;
+        state.meetingInfo.title = meetingObj.titleText;
+        syncState();
+        if (state.mode === 'live') startLivePolling();
+      }
+    });
+  }
+
+  if (raceSelect) {
+    raceSelect.addEventListener('change', () => {
+      const selectedId = raceSelect.value;
+      const raceObj = state.races.find(r => r.idRace === selectedId);
+      if (raceObj) {
+        state.selectedRaceId = selectedId;
+        state.meetingInfo.meta = `${raceObj.descriptionText || raceObj.idRace} • Live`;
+        syncState();
+        if (state.mode === 'live') startLivePolling();
+      }
+    });
+  }
+
+  if (eventSelect) {
+    eventSelect.addEventListener('change', () => {
+      const selectedKey = eventSelect.value;
+      const eventObj = state.events.find(e => e.key === selectedKey);
+      if (eventObj) {
+        state.selectedEventKey = selectedKey;
+        state.meetingInfo.meta = `${eventObj.nameText} • Live`;
+        syncState();
+        if (state.mode === 'live') startLivePolling();
       }
     });
   }
