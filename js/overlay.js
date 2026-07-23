@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const lbHtml = currentLeaderboard.slice(0, 10).map(item => `
             <div class="gfx-lb-item pos-${item.rank}">
               <div class="gfx-rank-num">${item.rank}</div>
-              <div class="gfx-bib-tag">#${item.bib || '000'}</div>
               <div class="gfx-athlete-details">
                 <div class="gfx-athlete-name">${escapeHtml(item.name || 'Athlete')}</div>
                 <div class="gfx-athlete-club">${escapeHtml(item.club || item.nat || '')}</div>
@@ -149,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const m = document.getElementById('ltMeta');
         const tm = document.getElementById('ltTime');
         if (r) r.innerText = a.rank ? `#${a.rank}` : '--';
-        if (b) b.innerText = `BIB #${a.bib || '---'} • ${a.nat || 'IND'}`;
+        if (b) b.innerText = `${a.nat || 'IND'}`;
         if (n) n.innerText = a.name || 'SELECT ATHLETE';
         if (m) m.innerText = `${a.club || 'Club'} • Pace: ${a.pace || 'N/A'}`;
         if (tm) tm.innerText = (isTimerEnabled && a.time) ? a.time : '';
@@ -166,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tickerWrapper) {
           const itemsHtml = state.tickerItems.map(item => `
             <div class="gfx-ticker-item">
-              <span class="bib">#${item.bib}</span>
               <span class="name">${escapeHtml(item.name)}</span>
               <span class="split">${escapeHtml(item.checkpoint)}</span>
               ${(isTimerEnabled && item.time) ? `<span class="time">${item.time}</span>` : ''}
