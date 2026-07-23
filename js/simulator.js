@@ -55,7 +55,8 @@ class RaceSimulator {
 
   setCategory(categoryName) {
     this.currentCategory = categoryName || '';
-    if (this.currentCategory.toUpperCase().includes('DOUBLES') || this.currentCategory.toUpperCase().includes('BATTLE') || this.currentCategory.toUpperCase().includes('GYMS')) {
+    const upper = this.currentCategory.toUpperCase();
+    if (upper.includes('DOUBLES') || upper.includes('BATTLE') || upper.includes('GYM') || upper.includes('BOG')) {
       this.athletes = this.doublesAthletes;
       this.splitEventsList = [
         { bib: 'D-501', name: 'R. Sharma & V. Singh', checkpoint: 'Battle of Gyms Heat 1', time: '04:12' },

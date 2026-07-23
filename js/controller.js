@@ -321,15 +321,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (raceSelect) {
     raceSelect.addEventListener('change', () => {
       const selectedId = raceSelect.value;
-      const raceObj = state.races.find(r => r.idRace === selectedId);
-      if (raceObj) {
-        state.selectedRaceId = selectedId;
-        const raceName = raceObj.descriptionText || raceObj.idRace;
-        state.meetingInfo.meta = `${raceName} • Live`;
-        state.meetingInfo.category = raceName;
-        simulator.setCategory(raceName);
-        syncState();
-        if (state.mode === 'live') startLivePolling();
+      const selectedText = raceSelect.options[raceSelect.selectedIndex]?.text || selectedId;
+      const raceObj = state.races ? state.races.find(r => r.idRace === selectedId) : null;
+      const raceName = raceObj ? (raceObj.descriptionText || raceObj.idRace) : selectedText;
+
+      state.selectedRaceId = selectedId;
+      state.meetingInfo.meta = `${raceName} • Live`;
+      state.meetingInfo.category = raceName;
+
+      simulator.setCategory(raceName);
+      state.leaderboard = simulator.getLeaderboardData();
+      state.tickerItems = simulator.splitEvents;
+
+      updateSpotlightSelectOptions();
+      syncState();
+
+      if (state.mode === 'live') {
+        startLivePolling();
       }
     });
   }
@@ -337,15 +345,24 @@ document.addEventListener('DOMContentLoaded', () => {
   if (eventSelect) {
     eventSelect.addEventListener('change', () => {
       const selectedKey = eventSelect.value;
-      const eventObj = state.events.find(e => e.key === selectedKey);
-      if (eventObj) {
-        state.selectedEventKey = selectedKey;
-        const eventName = eventObj.nameText;
-        state.meetingInfo.meta = `${eventName} • Live`;
-        state.meetingInfo.category = eventName;
-        simulator.setCategory(eventName);
-        syncState();
-        if (state.mode === 'live') startLivePolling();
+      const selectedText = eventSelect.options[eventSelect.selectedIndex]?.text || selectedKey;
+      const cleanEventName = selectedText.replace(/\s*\[Key:.*?\]/i, '').trim();
+      const eventObj = state.events ? state.events.find(e => e.key === selectedKey) : null;
+      const eventName = eventObj ? eventObj.nameText : cleanEventName;
+
+      state.selectedEventKey = selectedKey;
+      state.meetingInfo.meta = `${eventName} • Live`;
+      state.meetingInfo.category = eventName;
+
+      simulator.setCategory(eventName);
+      state.leaderboard = simulator.getLeaderboardData();
+      state.tickerItems = simulator.splitEvents;
+
+      updateSpotlightSelectOptions();
+      syncState();
+
+      if (state.mode === 'live') {
+        startLivePolling();
       }
     });
   }
