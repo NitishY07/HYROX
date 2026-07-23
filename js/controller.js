@@ -1,6 +1,6 @@
 /**
  * Operator Control Panel Logic (controller.js)
- * Manages API requests, Simulator, State, UI Events, and Server Network Sync.
+ * Manages API requests, Simulator, State, UI Events, Hotkeys, and Server Network Sync.
  */
 document.addEventListener('DOMContentLoaded', () => {
   const channel = new BroadcastChannel('mika_gfx_channel');
@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     tickerItems: [],
     meetingInfo: {
       title: 'DELHI CHAMPIONSHIP 2026',
-      meta: 'HYROX • Day 2 • Live'
+      meta: 'HYROX • Day 2 • Live',
+      sponsorLogo: ''
     }
   };
 
@@ -56,7 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const themeSelect = document.getElementById('themeSelect');
   const posSelect = document.getElementById('posSelect');
+  const athleteSearchInput = document.getElementById('athleteSearchInput');
   const athleteSpotlightSelect = document.getElementById('athleteSpotlightSelect');
+  const sponsorLogoInput = document.getElementById('sponsorLogoInput');
   const openOverlayBtn = document.getElementById('openOverlayBtn');
   const networkUrlsContainer = document.getElementById('networkUrlsContainer');
 
@@ -76,10 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
       meetingInfo: state.meetingInfo,
       leaderboard: state.leaderboard,
       spotlightAthlete: state.spotlightAthlete,
-      tickerItems: state.tickerItems
+      tickerItems: state.tickerItems,
+      timestamp: Date.now()
     };
 
-    localStorage.setItem('mika_gfx_state', JSON.stringify(payload));
+    try {
+      localStorage.setItem('mika_gfx_state', JSON.stringify(payload));
+    } catch (e) {}
 
     channel.postMessage({
       type: 'GFX_UPDATE',
@@ -258,10 +264,20 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateSpotlightSelectOptions() {
     if (!athleteSpotlightSelect) return;
     const currentVal = athleteSpotlightSelect.value;
-    athleteSpotlightSelect.innerHTML = state.leaderboard.map(a => 
+    const filterQuery = (athleteSearchInput ? athleteSearchInput.value : '').toLowerCase().trim();
+
+    const filtered = state.leaderboard.filter(a => {
+      if (!filterQuery) return true;
+      return a.bib.toLowerCase().includes(filterQuery) || a.name.toLowerCase().includes(filterQuery);
+    });
+
+    athleteSpotlightSelect.innerHTML = filtered.map(a => 
       `<option value="${a.bib}">#${a.bib} - ${escapeHtml(a.name)} (${a.time})</option>`
     ).join('');
-    if (currentVal) athleteSpotlightSelect.value = currentVal;
+    
+    if (currentVal && filtered.some(a => a.bib === currentVal)) {
+      athleteSpotlightSelect.value = currentVal;
+    }
   }
 
   function updateStatus(msg, type) {
@@ -283,7 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
         apiKeyInput.value = 'sportvot';
       } else if (envPresetSelect.value === 'prod') {
         apiHostInput.value = 'https://apihub.mikatiming.net/ah/rest/appapi';
-        apiKeyInput.value = 'sportvot-vhzj2id';
+        apiKeyInput.value = '';
+        apiKeyInput.placeholder = 'Enter Production API Key';
       }
     });
   }
@@ -307,7 +324,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const raceObj = state.races.find(r => r.idRace === selectedId);
       if (raceObj) {
         state.selectedRaceId = selectedId;
-        state.meetingInfo.meta = `${raceObj.descriptionText || raceObj.idRace} • Live`;
+        const raceName = raceObj.descriptionText || raceObj.idRace;
+        state.meetingInfo.meta = `${raceName} • Live`;
+        state.meetingInfo.category = raceName;
+        simulator.setCategory(raceName);
         syncState();
         if (state.mode === 'live') startLivePolling();
       }
@@ -320,7 +340,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const eventObj = state.events.find(e => e.key === selectedKey);
       if (eventObj) {
         state.selectedEventKey = selectedKey;
-        state.meetingInfo.meta = `${eventObj.nameText} • Live`;
+        const eventName = eventObj.nameText;
+        state.meetingInfo.meta = `${eventName} • Live`;
+        state.meetingInfo.category = eventName;
+        simulator.setCategory(eventName);
         syncState();
         if (state.mode === 'live') startLivePolling();
       }
@@ -337,6 +360,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; syncState(); });
   if (posSelect) posSelect.addEventListener('change', () => { state.position = posSelect.value; syncState(); });
+
+  if (sponsorLogoInput) {
+    sponsorLogoInput.addEventListener('input', () => {
+      state.meetingInfo.sponsorLogo = sponsorLogoInput.value.trim();
+      syncState();
+    });
+  }
+
+  if (athleteSearchInput) {
+    athleteSearchInput.addEventListener('input', () => {
+      updateSpotlightSelectOptions();
+    });
+  }
 
   if (athleteSpotlightSelect) {
     athleteSpotlightSelect.addEventListener('change', () => {
@@ -355,8 +391,67 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Tab Switcher Logic
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-tab');
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      
+      btn.classList.add('active');
+      const content = document.getElementById(targetTab);
+      if (content) content.classList.add('active');
+    });
+  });
+
+  const emergencyFadeBtn = document.getElementById('emergencyFadeBtn');
+  if (emergencyFadeBtn) {
+    emergencyFadeBtn.addEventListener('click', () => {
+      const anyVisible = Object.values(state.visibleElements).some(v => v);
+      const newState = !anyVisible;
+      state.visibleElements.banner = newState;
+      state.visibleElements.leaderboard = newState;
+      state.visibleElements.lowerThird = false;
+      state.visibleElements.ticker = newState;
+      if (toggleBanner) toggleBanner.checked = newState;
+      if (toggleLeaderboard) toggleLeaderboard.checked = newState;
+      if (toggleLowerThird) toggleLowerThird.checked = false;
+      if (toggleTicker) toggleTicker.checked = newState;
+      syncState();
+    });
+  }
+
+  // Live Broadcast Keyboard Hotkeys
+  document.addEventListener('keydown', (e) => {
+    // Ignore keypress when typing in input fields
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+    switch (e.key) {
+      case '1':
+        if (toggleBanner) { toggleBanner.checked = !toggleBanner.checked; state.visibleElements.banner = toggleBanner.checked; syncState(); }
+        break;
+      case '2':
+        if (toggleLeaderboard) { toggleLeaderboard.checked = !toggleLeaderboard.checked; state.visibleElements.leaderboard = toggleLeaderboard.checked; syncState(); }
+        break;
+      case '3':
+        if (toggleLowerThird) { toggleLowerThird.checked = !toggleLowerThird.checked; state.visibleElements.lowerThird = toggleLowerThird.checked; syncState(); }
+        break;
+      case '4':
+        if (toggleTicker) { toggleTicker.checked = !toggleTicker.checked; state.visibleElements.ticker = toggleTicker.checked; syncState(); }
+        break;
+      case ' ':
+        e.preventDefault();
+        if (emergencyFadeBtn) emergencyFadeBtn.click();
+        break;
+    }
+  });
+
   // Boot
   loadNetworkUrls();
   updateMode();
   connectAPI();
 });
+

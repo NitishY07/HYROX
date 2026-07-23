@@ -13,19 +13,10 @@ class RaceSimulator {
       dateStart: new Date().toISOString().split('T')[0]
     };
 
-    this.races = [
-      { idRace: 'RACE-01', descriptionText: 'HYROX Men Open', distanceText: '8km' },
-      { idRace: 'RACE-02', descriptionText: 'HYROX Doubles Pro', distanceText: '1km' },
-      { idRace: 'RACE-03', descriptionText: '10K Elite Sprint', distanceText: '10km' },
-      { idRace: 'RACE-04', descriptionText: 'Half Marathon Championship', distanceText: '21.1km' }
-    ];
+    this.currentCategory = 'HYROX DOUBLES';
 
-    this.selectedRaceId = 'RACE-01';
-    // Initialize base start timestamp (start 1245s / ~20m 45s ago)
-    this.startTimeMs = Date.now() - (1245 * 1000);
-    this.timerInterval = null;
-
-    this.athletes = [
+    // Standard Singles Athletes
+    this.singlesAthletes = [
       { bib: '101', name: 'Rohan Sharma', club: 'Delhi Runners Club', nat: 'IND', pace: '3:45 /km', split: '5.2km', baseOffset: 0 },
       { bib: '108', name: 'Vikramaditya Singh', club: 'Peak Fitness Crew', nat: 'IND', pace: '3:48 /km', split: '5.2km', baseOffset: 4.2 },
       { bib: '142', name: 'Marcus Vance', club: 'Red Bull Athletics', nat: 'GBR', pace: '3:51 /km', split: '5.2km', baseOffset: 8.5 },
@@ -38,18 +29,44 @@ class RaceSimulator {
       { bib: '299', name: 'Alexandre Dubois', club: 'Paris Athletics', nat: 'FRA', pace: '4:18 /km', split: '5.2km', baseOffset: 45.2 }
     ];
 
+    // HYROX Doubles & Battle of Gyms Teams
+    this.doublesAthletes = [
+      { bib: 'D-501', name: 'R. Sharma & V. Singh', club: 'Delhi CrossFit Gym (BOG)', nat: 'IND', pace: '3:30 /km', split: '800m', baseOffset: 0 },
+      { bib: 'D-504', name: 'M. Vance & D. Miller', club: 'Red Bull Performance Gym', nat: 'GBR', pace: '3:34 /km', split: '800m', baseOffset: 3.8 },
+      { bib: 'D-512', name: 'A. Mehta & S. Patel', club: 'HYROX India HQ Gym', nat: 'IND', pace: '3:38 /km', split: '800m', baseOffset: 7.2 },
+      { bib: 'D-520', name: 'K. Malhotra & P. Deshmukh', club: 'Mumbai Striders Gym', nat: 'IND', pace: '3:42 /km', split: '800m', baseOffset: 11.5 },
+      { bib: 'D-533', name: 'K. Sato & A. Dubois', club: 'Tokyo Fitness Arena', nat: 'JPN', pace: '3:46 /km', split: '800m', baseOffset: 16.0 },
+      { bib: 'D-540', name: 'A. Kumar & R. Verma', club: 'FitZone Delhi Gym', nat: 'IND', pace: '3:50 /km', split: '800m', baseOffset: 20.4 },
+      { bib: 'D-555', name: 'J. Smith & L. Taylor', club: 'London Iron Gym', nat: 'GBR', pace: '3:55 /km', split: '800m', baseOffset: 25.1 }
+    ];
+
+    this.athletes = this.doublesAthletes;
+
+    this.startTimeMs = Date.now() - (1245 * 1000);
+    this.timerInterval = null;
+
     this.splitEventsList = [
-      { bib: '101', name: 'Rohan Sharma', checkpoint: 'Split 3 (5.2km)', time: '19:30' },
-      { bib: '108', name: 'Vikramaditya Singh', checkpoint: 'Split 3 (5.2km)', time: '19:34' },
-      { bib: '142', name: 'Marcus Vance', checkpoint: 'Split 3 (5.2km)', time: '19:38' },
-      { bib: '205', name: 'Arjun Mehta', checkpoint: 'CheckPoint 2 (4km)', time: '19:42' },
-      { bib: '119', name: 'David Miller', checkpoint: 'CheckPoint 2 (4km)', time: '19:46' },
-      { bib: '312', name: 'Priya Deshmukh', checkpoint: 'CheckPoint 1 (2km)', time: '19:52' },
-      { bib: '188', name: 'Karan Malhotra', checkpoint: 'CheckPoint 1 (2km)', time: '19:58' }
+      { bib: 'D-501', name: 'R. Sharma & V. Singh', checkpoint: 'Sled Push (200m)', time: '04:12' },
+      { bib: 'D-504', name: 'M. Vance & D. Miller', checkpoint: 'Sled Push (200m)', time: '04:16' },
+      { bib: 'D-512', name: 'A. Mehta & S. Patel', checkpoint: 'SkiErg (400m)', time: '04:20' },
+      { bib: 'D-520', name: 'K. Malhotra & P. Deshmukh', checkpoint: 'SkiErg (400m)', time: '04:25' }
     ];
   }
 
-  // Dynamic elapsed seconds calculation based on system clock (immune to tab throttling)
+  setCategory(categoryName) {
+    this.currentCategory = categoryName || '';
+    if (this.currentCategory.toUpperCase().includes('DOUBLES') || this.currentCategory.toUpperCase().includes('BATTLE') || this.currentCategory.toUpperCase().includes('GYMS')) {
+      this.athletes = this.doublesAthletes;
+      this.splitEventsList = [
+        { bib: 'D-501', name: 'R. Sharma & V. Singh', checkpoint: 'Battle of Gyms Heat 1', time: '04:12' },
+        { bib: 'D-504', name: 'M. Vance & D. Miller', checkpoint: 'Battle of Gyms Heat 1', time: '04:16' },
+        { bib: 'D-512', name: 'A. Mehta & S. Patel', checkpoint: 'Sled Push (200m)', time: '04:20' }
+      ];
+    } else {
+      this.athletes = this.singlesAthletes;
+    }
+  }
+
   get elapsedSeconds() {
     if (!this.startTimeMs) {
       this.startTimeMs = Date.now() - (1245 * 1000);
@@ -65,7 +82,6 @@ class RaceSimulator {
     if (this.timerInterval) clearInterval(this.timerInterval);
     this.active = true;
     this.timerInterval = setInterval(() => {
-      // Periodically add new realistic split crossing event
       if (Math.random() < 0.12) {
         this.simulateSplitCrossing();
       }
@@ -120,7 +136,7 @@ class RaceSimulator {
 
   simulateSplitCrossing() {
     const randomAthlete = this.athletes[Math.floor(Math.random() * this.athletes.length)];
-    const splits = ['CheckPoint 1 (2km)', 'CheckPoint 2 (4km)', 'CheckPoint 3 (5.2km)', 'CheckPoint 4 (7km)', 'Final Stretch'];
+    const splits = ['SkiErg 1000m', 'Sled Push 50m', 'Sled Pull 50m', 'Burpee Broad Jump', 'Rowing 1000m', 'Farmers Carry'];
     const randomSplit = splits[Math.floor(Math.random() * splits.length)];
     
     const newEvent = {

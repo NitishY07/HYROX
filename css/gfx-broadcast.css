@@ -128,6 +128,15 @@ body.gfx-overlay-body {
   backdrop-filter: blur(20px);
   overflow: hidden;
   color: var(--gfx-text);
+  position: relative;
+}
+
+.gfx-sponsor-logo {
+  max-height: 36px;
+  max-width: 120px;
+  object-fit: contain;
+  margin-right: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 }
 
 .gfx-brand-badge {

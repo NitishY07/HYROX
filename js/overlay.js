@@ -1,6 +1,6 @@
 /**
  * Standalone Broadcast Overlay Controller (overlay.js)
- * Supports local BroadcastChannel AND Cross-Machine Network Sync via /api/gfx-state.
+ * Supports BroadcastChannel, Server-Sent Events (SSE /api/gfx-stream), and fallback HTTP polling.
  * Uses real wall-clock timestamps (Date.now()) for 100% background tab throttling immunity in OBS/vMix!
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Cache last HTML to prevent destroying DOM nodes and restarting CSS keyframe animations
   let lastTickerHtml = '';
   let lastLeaderboardHtml = '';
+  let lastStateTimestamp = 0;
 
   // State
   let state = {
@@ -30,11 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     meetingInfo: {
       title: 'DELHI CHAMPIONSHIP 2026',
-      meta: 'HYROX • Day 2 • Live'
+      meta: 'HYROX • Day 2 • Live',
+      sponsorLogo: ''
     },
     leaderboard: [],
     spotlightAthlete: null,
-    tickerItems: []
+    tickerItems: [],
+    timestamp: 0
   };
 
   function formatTime(totalSec) {
@@ -63,6 +66,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const m = document.getElementById('bannerMeta');
         if (t && t.innerText !== state.meetingInfo.title) t.innerText = state.meetingInfo.title || 'LIVE EVENT';
         if (m && m.innerText !== state.meetingInfo.meta) m.innerText = state.meetingInfo.meta || 'MIKA TIMING';
+        
+        // Sponsor Logo
+        let logoEl = document.getElementById('bannerSponsorLogo');
+        if (state.meetingInfo.sponsorLogo) {
+          if (!logoEl) {
+            logoEl = document.createElement('img');
+            logoEl.id = 'bannerSponsorLogo';
+            logoEl.className = 'gfx-sponsor-logo';
+            bannerEl.appendChild(logoEl);
+          }
+          if (logoEl.src !== state.meetingInfo.sponsorLogo) {
+            logoEl.src = state.meetingInfo.sponsorLogo;
+          }
+        } else if (logoEl) {
+          logoEl.remove();
+        }
       } else {
         bannerEl.classList.add('gfx-hidden');
       }
@@ -86,6 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (leaderboardEl) {
       if (state.visibleElements && state.visibleElements.leaderboard && currentLeaderboard && currentLeaderboard.length > 0) {
         leaderboardEl.classList.remove('gfx-hidden');
+        const catBadge = document.getElementById('lbCategory');
+        if (catBadge && state.meetingInfo && state.meetingInfo.category) {
+          catBadge.innerText = state.meetingInfo.category;
+        }
         const listContainer = document.getElementById('lbList');
         if (listContainer) {
           const lbHtml = currentLeaderboard.slice(0, 10).map(item => `
@@ -133,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 5. Ticker - Smooth Endless Marquee without Animation Reset
+    // 5. Ticker - Smooth Continuous Marquee
     if (tickerEl) {
       if (state.visibleElements && state.visibleElements.ticker && state.tickerItems && state.tickerItems.length > 0) {
         tickerEl.classList.remove('gfx-hidden');
@@ -150,7 +173,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const fullTickerHtml = itemsHtml + itemsHtml;
           if (fullTickerHtml !== lastTickerHtml) {
-            tickerWrapper.innerHTML = fullTickerHtml;
+            // Check if wrapper is empty (initial render)
+            if (!tickerWrapper.innerHTML.trim()) {
+              tickerWrapper.innerHTML = fullTickerHtml;
+            } else {
+              // Update inner items without triggering animation reset if item count matches
+              const existingItems = tickerWrapper.querySelectorAll('.gfx-ticker-item');
+              const tempContainer = document.createElement('div');
+              tempContainer.innerHTML = fullTickerHtml;
+              const newItems = tempContainer.querySelectorAll('.gfx-ticker-item');
+
+              if (existingItems.length === newItems.length) {
+                existingItems.forEach((oldItem, idx) => {
+                  if (oldItem.innerHTML !== newItems[idx].innerHTML) {
+                    oldItem.innerHTML = newItems[idx].innerHTML;
+                  }
+                });
+              } else {
+                tickerWrapper.innerHTML = fullTickerHtml;
+              }
+            }
             lastTickerHtml = fullTickerHtml;
           }
         }
@@ -165,36 +207,81 @@ document.addEventListener('DOMContentLoaded', () => {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  // 1. BroadcastChannel (Same Machine)
+  function applyStateUpdate(incomingPayload) {
+    if (!incomingPayload) return;
+    const incomingTs = incomingPayload.timestamp || 0;
+    
+    // Ignore stale updates if we already received a newer state
+    if (incomingTs > 0 && incomingTs < lastStateTimestamp) {
+      return;
+    }
+    
+    if (incomingTs > 0) {
+      lastStateTimestamp = incomingTs;
+    }
+
+    state = { ...state, ...incomingPayload };
+    render();
+  }
+
+  // 1. BroadcastChannel (Same Machine - Instant)
   channel.onmessage = (event) => {
     if (event.data && event.data.type === 'GFX_UPDATE') {
-      state = { ...state, ...event.data.payload };
-      render();
+      applyStateUpdate(event.data.payload);
     }
   };
 
-  // 2. Server Polling (For Cross-Machine Network OBS / vMix Overlays)
+  // 2. Server-Sent Events (SSE) Stream for Zero-Latency Network Sync
+  let sseSource = null;
+  function connectSSE() {
+    try {
+      sseSource = new EventSource('/api/gfx-stream');
+      sseSource.onmessage = (event) => {
+        if (event.data) {
+          try {
+            const data = JSON.parse(event.data);
+            if (data && Object.keys(data).length > 0) {
+              applyStateUpdate(data);
+            }
+          } catch (e) {}
+        }
+      };
+
+      sseSource.onerror = () => {
+        // Fallback to HTTP polling if SSE connection fails
+        if (sseSource) sseSource.close();
+        setTimeout(connectSSE, 5000);
+      };
+    } catch (e) {
+      // Fallback HTTP polling if EventSource is unsupported
+      setInterval(pollNetworkState, 1000);
+    }
+  }
+
+  // 3. Fallback HTTP Polling
   async function pollNetworkState() {
     try {
       const res = await fetch('/api/gfx-state');
       if (res.ok) {
         const data = await res.json();
         if (data && Object.keys(data).length > 0) {
-          state = { ...state, ...data };
-          render();
+          applyStateUpdate(data);
         }
       }
     } catch (e) {}
   }
 
-  setInterval(pollNetworkState, 500);
+  // Initialize SSE connection
+  connectSSE();
 
+  // Load initial cached local storage state
   try {
     const saved = localStorage.getItem('mika_gfx_state');
     if (saved) {
-      state = { ...state, ...JSON.parse(saved) };
+      applyStateUpdate(JSON.parse(saved));
     }
   } catch (e) {}
 
   render();
 });
+
