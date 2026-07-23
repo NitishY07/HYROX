@@ -29,7 +29,7 @@ class RaceSimulator {
       { bib: '299', name: 'Alexandre Dubois', club: 'Paris Athletics', nat: 'FRA', pace: '4:18 /km', split: '5.2km', baseOffset: 45.2 }
     ];
 
-    // HYROX Doubles & Battle of Gyms Teams
+    // HYROX Doubles & Battle of Gyms Teams (10 Teams)
     this.doublesAthletes = [
       { bib: 'D-501', name: 'Rohan Sharma & Vikramaditya Singh', club: 'Delhi CrossFit Gym (BOG)', nat: 'IND', pace: '3:30 /km', split: 'Sled Push 50m', baseOffset: 0 },
       { bib: 'D-504', name: 'Marcus Vance & David Miller', club: 'Red Bull Performance Gym', nat: 'GBR', pace: '3:34 /km', split: 'SkiErg 1000m', baseOffset: 3.8 },
@@ -37,7 +37,10 @@ class RaceSimulator {
       { bib: 'D-520', name: 'Karan Malhotra & Priya Deshmukh', club: 'Mumbai Striders Gym', nat: 'IND', pace: '3:42 /km', split: 'Rowing 1000m', baseOffset: 11.5 },
       { bib: 'D-533', name: 'Kenji Sato & Antoine Dubois', club: 'Tokyo Fitness Arena', nat: 'JPN', pace: '3:46 /km', split: 'Farmers Carry', baseOffset: 16.0 },
       { bib: 'D-540', name: 'Amit Kumar & Rahul Verma', club: 'FitZone Delhi Gym', nat: 'IND', pace: '3:50 /km', split: 'Sled Pull 50m', baseOffset: 20.4 },
-      { bib: 'D-555', name: 'John Smith & Liam Taylor', club: 'London Iron Gym', nat: 'GBR', pace: '3:55 /km', split: 'Wall Balls 100', baseOffset: 25.1 }
+      { bib: 'D-555', name: 'John Smith & Liam Taylor', club: 'London Iron Gym', nat: 'GBR', pace: '3:55 /km', split: 'Wall Balls 100', baseOffset: 25.1 },
+      { bib: 'D-560', name: 'Priya Sharma & Vikram Malhotra', club: 'FitNation India Gym', nat: 'IND', pace: '3:58 /km', split: 'Sandbag Lunges 100m', baseOffset: 28.5 },
+      { bib: 'D-572', name: 'Alexandre Dubois & Claire Laurent', club: 'Paris Endurance Club', nat: 'FRA', pace: '4:02 /km', split: 'Roxzone Transition', baseOffset: 32.0 },
+      { bib: 'D-590', name: 'Rohan Verma & Kabir Das', club: 'Delhi Steel Gym', nat: 'IND', pace: '4:06 /km', split: 'Finish Line', baseOffset: 36.8 }
     ];
 
     this.athletes = this.doublesAthletes;
