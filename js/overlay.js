@@ -87,9 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Dynamic clock calculation if startTimeMs is present (immune to background tab throttling)
+    const isTimerEnabled = state.visibleElements && state.visibleElements.showTimer === true;
+
+    // Dynamic clock calculation ONLY if showTimer is explicitly enabled
     let currentLeaderboard = state.leaderboard || [];
-    if (state.mode === 'sim' && state.startTimeMs) {
+    if (state.mode === 'sim' && isTimerEnabled && state.startTimeMs) {
       const elapsedSec = Math.floor((Date.now() - state.startTimeMs) / 1000);
       currentLeaderboard = currentLeaderboard.map((item, index) => {
         const baseOffset = index === 0 ? 0 : index * 4.2;
@@ -120,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="gfx-athlete-club">${escapeHtml(item.club || item.nat || '')}</div>
               </div>
               <div class="gfx-time-col">
-                <div class="gfx-time-val">${item.time || '--:--'}</div>
+                ${(isTimerEnabled && item.time) ? `<div class="gfx-time-val">${item.time}</div>` : ''}
                 <div class="gfx-time-delta">${item.delta || ''}</div>
               </div>
             </div>
@@ -150,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (b) b.innerText = `BIB #${a.bib || '---'} • ${a.nat || 'IND'}`;
         if (n) n.innerText = a.name || 'SELECT ATHLETE';
         if (m) m.innerText = `${a.club || 'Club'} • Pace: ${a.pace || 'N/A'}`;
-        if (tm) tm.innerText = a.time || '00:00';
+        if (tm) tm.innerText = (isTimerEnabled && a.time) ? a.time : '';
       } else {
         lowerThirdEl.classList.add('gfx-hidden');
       }
@@ -167,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="bib">#${item.bib}</span>
               <span class="name">${escapeHtml(item.name)}</span>
               <span class="split">${escapeHtml(item.checkpoint)}</span>
-              <span class="time">${item.time}</span>
+              ${(isTimerEnabled && item.time) ? `<span class="time">${item.time}</span>` : ''}
             </div>
           `).join('');
 
