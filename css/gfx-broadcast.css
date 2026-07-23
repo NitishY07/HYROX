@@ -537,7 +537,7 @@ body.gfx-overlay-body {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  animation: ticker-scroll 25s linear infinite;
+  animation: ticker-scroll 60s linear infinite;
   will-change: transform;
 }
 

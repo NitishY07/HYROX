@@ -36,12 +36,12 @@ class RaceSimulator {
       { bib: '299', name: 'Alexandre Dubois', club: 'Paris Athletics', nat: 'FRA', pace: '4:18 /km', split: '5.2km', baseOffset: 45.2 }
     ];
 
-    this.splitEvents = [
-      { bib: '101', name: 'Rohan Sharma', checkpoint: 'Split 3 (5.2km)', time: '00:19:30' },
-      { bib: '108', name: 'Vikramaditya Singh', checkpoint: 'Split 3 (5.2km)', time: '00:19:34' },
-      { bib: '142', name: 'Marcus Vance', checkpoint: 'Split 3 (5.2km)', time: '00:19:38' },
-      { bib: '205', name: 'Arjun Mehta', checkpoint: 'Split 3 (5.2km)', time: '00:19:42' },
-      { bib: '119', name: 'David Miller', checkpoint: 'Split 3 (5.2km)', time: '00:19:46' }
+    this.splitEventsRaw = [
+      { bib: '101', name: 'Rohan Sharma', checkpoint: 'Split 3 (5.2km)', offsetSec: 75 },
+      { bib: '108', name: 'Vikramaditya Singh', checkpoint: 'Split 3 (5.2km)', offsetSec: 71 },
+      { bib: '142', name: 'Marcus Vance', checkpoint: 'Split 3 (5.2km)', offsetSec: 67 },
+      { bib: '205', name: 'Arjun Mehta', checkpoint: 'Split 3 (5.2km)', offsetSec: 63 },
+      { bib: '119', name: 'David Miller', checkpoint: 'Split 3 (5.2km)', offsetSec: 59 }
     ];
   }
 
@@ -51,7 +51,6 @@ class RaceSimulator {
     this.timerInterval = setInterval(() => {
       this.elapsedSeconds += 1;
       
-      // Periodically simulate minor runner rank shuffle or split crossing
       if (Math.random() < 0.15) {
         this.simulateSplitCrossing();
       }
@@ -100,6 +99,15 @@ class RaceSimulator {
     });
   }
 
+  get splitEvents() {
+    return this.splitEventsRaw.map(event => ({
+      bib: event.bib,
+      name: event.name,
+      checkpoint: event.checkpoint,
+      time: this.formatTime(Math.max(0, this.elapsedSeconds - event.offsetSec))
+    }));
+  }
+
   simulateSplitCrossing() {
     const randomAthlete = this.athletes[Math.floor(Math.random() * this.athletes.length)];
     const splits = ['CheckPoint 1 (2km)', 'CheckPoint 2 (4km)', 'CheckPoint 3 (6km)', 'Final Stretch (7.5km)'];
@@ -109,12 +117,12 @@ class RaceSimulator {
       bib: randomAthlete.bib,
       name: randomAthlete.name,
       checkpoint: randomSplit,
-      time: this.formatTime(this.elapsedSeconds)
+      offsetSec: 0
     };
 
-    this.splitEvents.unshift(newEvent);
-    if (this.splitEvents.length > 10) {
-      this.splitEvents.pop();
+    this.splitEventsRaw.unshift(newEvent);
+    if (this.splitEventsRaw.length > 10) {
+      this.splitEventsRaw.pop();
     }
   }
 }
