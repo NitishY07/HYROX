@@ -1,6 +1,7 @@
 /**
  * Standalone Broadcast Overlay Controller (overlay.js)
  * Supports local BroadcastChannel AND Cross-Machine Network Sync via /api/gfx-state.
+ * Uses real wall-clock timestamps (Date.now()) for 100% background tab throttling immunity in OBS/vMix!
  */
 document.addEventListener('DOMContentLoaded', () => {
   const channel = new BroadcastChannel('mika_gfx_channel');
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // State
   let state = {
     mode: 'sim',
+    startTimeMs: null,
     theme: 'theme-sportvot',
     position: 'pos-top-left',
     visibleElements: {
@@ -34,6 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
     spotlightAthlete: null,
     tickerItems: []
   };
+
+  function formatTime(totalSec) {
+    const hrs = Math.floor(totalSec / 3600);
+    const mins = Math.floor((totalSec % 3600) / 60);
+    const secs = Math.floor(totalSec % 60);
+    
+    const pMins = String(mins).padStart(2, '0');
+    const pSecs = String(secs).padStart(2, '0');
+    
+    if (hrs > 0) {
+      return `${String(hrs).padStart(2, '0')}:${pMins}:${pSecs}`;
+    }
+    return `${pMins}:${pSecs}`;
+  }
 
   function render() {
     // 1. Theme & Position
@@ -52,13 +68,27 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Dynamic clock calculation if startTimeMs is present (immune to background tab throttling)
+    let currentLeaderboard = state.leaderboard || [];
+    if (state.mode === 'sim' && state.startTimeMs) {
+      const elapsedSec = Math.floor((Date.now() - state.startTimeMs) / 1000);
+      currentLeaderboard = currentLeaderboard.map((item, index) => {
+        const baseOffset = index === 0 ? 0 : index * 4.2;
+        const itemSec = Math.max(0, elapsedSec + baseOffset);
+        return {
+          ...item,
+          time: formatTime(itemSec)
+        };
+      });
+    }
+
     // 3. Leaderboard
     if (leaderboardEl) {
-      if (state.visibleElements && state.visibleElements.leaderboard && state.leaderboard && state.leaderboard.length > 0) {
+      if (state.visibleElements && state.visibleElements.leaderboard && currentLeaderboard && currentLeaderboard.length > 0) {
         leaderboardEl.classList.remove('gfx-hidden');
         const listContainer = document.getElementById('lbList');
         if (listContainer) {
-          const lbHtml = state.leaderboard.slice(0, 10).map(item => `
+          const lbHtml = currentLeaderboard.slice(0, 10).map(item => `
             <div class="gfx-lb-item pos-${item.rank}">
               <div class="gfx-rank-num">${item.rank}</div>
               <div class="gfx-bib-tag">#${item.bib || '000'}</div>
@@ -118,7 +148,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           `).join('');
 
-          // Only update DOM if ticker items changed, so keyframe animation scrolls continuously without resetting!
           const fullTickerHtml = itemsHtml + itemsHtml;
           if (fullTickerHtml !== lastTickerHtml) {
             tickerWrapper.innerHTML = fullTickerHtml;

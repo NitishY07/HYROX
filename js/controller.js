@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function syncState() {
     const payload = {
       mode: state.mode,
+      startTimeMs: simulator.startTimeMs,
       theme: state.theme,
       position: state.position,
       visibleElements: state.visibleElements,

@@ -1,6 +1,7 @@
 /**
  * Dynamic Live Race Simulator for SportVot / Mika Timing GFX
  * Generates realistic live sports timing data when offline or in test mode.
+ * Uses real wall-clock timestamps (Date.now()) so timers NEVER pause when switching tabs!
  */
 class RaceSimulator {
   constructor() {
@@ -20,7 +21,8 @@ class RaceSimulator {
     ];
 
     this.selectedRaceId = 'RACE-01';
-    this.elapsedSeconds = 1245; // Start around 20m 45s
+    // Initialize base start timestamp (start 1245s / ~20m 45s ago)
+    this.startTimeMs = Date.now() - (1245 * 1000);
     this.timerInterval = null;
 
     this.athletes = [
@@ -36,7 +38,6 @@ class RaceSimulator {
       { bib: '299', name: 'Alexandre Dubois', club: 'Paris Athletics', nat: 'FRA', pace: '4:18 /km', split: '5.2km', baseOffset: 45.2 }
     ];
 
-    // Distinct realistic split crossing timestamps for each athlete
     this.splitEventsList = [
       { bib: '101', name: 'Rohan Sharma', checkpoint: 'Split 3 (5.2km)', time: '19:30' },
       { bib: '108', name: 'Vikramaditya Singh', checkpoint: 'Split 3 (5.2km)', time: '19:34' },
@@ -48,12 +49,22 @@ class RaceSimulator {
     ];
   }
 
+  // Dynamic elapsed seconds calculation based on system clock (immune to tab throttling)
+  get elapsedSeconds() {
+    if (!this.startTimeMs) {
+      this.startTimeMs = Date.now() - (1245 * 1000);
+    }
+    return Math.floor((Date.now() - this.startTimeMs) / 1000);
+  }
+
+  set elapsedSeconds(sec) {
+    this.startTimeMs = Date.now() - (sec * 1000);
+  }
+
   start() {
     if (this.timerInterval) clearInterval(this.timerInterval);
     this.active = true;
     this.timerInterval = setInterval(() => {
-      this.elapsedSeconds += 1;
-      
       // Periodically add new realistic split crossing event
       if (Math.random() < 0.12) {
         this.simulateSplitCrossing();
