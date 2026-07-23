@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedEventKey: null,
     theme: 'theme-sportvot',
     position: 'pos-top-left',
+    nameFormat: 'full',
     visibleElements: {
       banner: true,
       leaderboard: true,
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleClubs = document.getElementById('toggleClubs');
 
   const themeSelect = document.getElementById('themeSelect');
+  const nameFormatSelect = document.getElementById('nameFormatSelect');
   const posSelect = document.getElementById('posSelect');
   const athleteSearchInput = document.getElementById('athleteSearchInput');
   const athleteSpotlightSelect = document.getElementById('athleteSpotlightSelect');
@@ -80,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
       startTimeMs: simulator.startTimeMs,
       theme: state.theme,
       position: state.position,
+      nameFormat: state.nameFormat,
       visibleElements: state.visibleElements,
       meetingInfo: state.meetingInfo,
       leaderboard: state.leaderboard,
@@ -403,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleClubs) toggleClubs.addEventListener('change', () => { state.visibleElements.showClubs = toggleClubs.checked; syncState(); });
 
   if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; syncState(); });
+  if (nameFormatSelect) nameFormatSelect.addEventListener('change', () => { state.nameFormat = nameFormatSelect.value; syncState(); });
   if (posSelect) posSelect.addEventListener('change', () => { state.position = posSelect.value; syncState(); });
 
   if (sponsorLogoInput) {

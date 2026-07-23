@@ -31,13 +31,13 @@ class RaceSimulator {
 
     // HYROX Doubles & Battle of Gyms Teams
     this.doublesAthletes = [
-      { bib: 'D-501', name: 'Rohan Sharma & Vikramaditya Singh', club: 'Delhi CrossFit Gym (BOG)', nat: 'IND', pace: '3:30 /km', split: '800m', baseOffset: 0 },
-      { bib: 'D-504', name: 'Marcus Vance & David Miller', club: 'Red Bull Performance Gym', nat: 'GBR', pace: '3:34 /km', split: '800m', baseOffset: 3.8 },
-      { bib: 'D-512', name: 'Arjun Mehta & Siddharth Patel', club: 'HYROX India HQ Gym', nat: 'IND', pace: '3:38 /km', split: '800m', baseOffset: 7.2 },
-      { bib: 'D-520', name: 'Karan Malhotra & Priya Deshmukh', club: 'Mumbai Striders Gym', nat: 'IND', pace: '3:42 /km', split: '800m', baseOffset: 11.5 },
-      { bib: 'D-533', name: 'Kenji Sato & Antoine Dubois', club: 'Tokyo Fitness Arena', nat: 'JPN', pace: '3:46 /km', split: '800m', baseOffset: 16.0 },
-      { bib: 'D-540', name: 'Amit Kumar & Rahul Verma', club: 'FitZone Delhi Gym', nat: 'IND', pace: '3:50 /km', split: '800m', baseOffset: 20.4 },
-      { bib: 'D-555', name: 'John Smith & Liam Taylor', club: 'London Iron Gym', nat: 'GBR', pace: '3:55 /km', split: '800m', baseOffset: 25.1 }
+      { bib: 'D-501', name: 'Rohan Sharma & Vikramaditya Singh', club: 'Delhi CrossFit Gym (BOG)', nat: 'IND', pace: '3:30 /km', split: 'Sled Push 50m', baseOffset: 0 },
+      { bib: 'D-504', name: 'Marcus Vance & David Miller', club: 'Red Bull Performance Gym', nat: 'GBR', pace: '3:34 /km', split: 'SkiErg 1000m', baseOffset: 3.8 },
+      { bib: 'D-512', name: 'Arjun Mehta & Siddharth Patel', club: 'HYROX India HQ Gym', nat: 'IND', pace: '3:38 /km', split: 'Burpee Broad Jump', baseOffset: 7.2 },
+      { bib: 'D-520', name: 'Karan Malhotra & Priya Deshmukh', club: 'Mumbai Striders Gym', nat: 'IND', pace: '3:42 /km', split: 'Rowing 1000m', baseOffset: 11.5 },
+      { bib: 'D-533', name: 'Kenji Sato & Antoine Dubois', club: 'Tokyo Fitness Arena', nat: 'JPN', pace: '3:46 /km', split: 'Farmers Carry', baseOffset: 16.0 },
+      { bib: 'D-540', name: 'Amit Kumar & Rahul Verma', club: 'FitZone Delhi Gym', nat: 'IND', pace: '3:50 /km', split: 'Sled Pull 50m', baseOffset: 20.4 },
+      { bib: 'D-555', name: 'John Smith & Liam Taylor', club: 'London Iron Gym', nat: 'GBR', pace: '3:55 /km', split: 'Wall Balls 100', baseOffset: 25.1 }
     ];
 
     this.athletes = this.doublesAthletes;

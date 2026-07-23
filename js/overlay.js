@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="gfx-lb-item pos-${item.rank}">
               <div class="gfx-rank-num">${item.rank}</div>
               <div class="gfx-athlete-details">
-                <div class="gfx-athlete-name">${escapeHtml(item.name || 'Athlete')}</div>
+                <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
                 <div class="gfx-athlete-club">
                   ${(isClubsEnabled && (item.club || item.nat)) ? `<span>${escapeHtml(item.club || item.nat || '')}</span>` : ''}
                   ${item.split ? `<span class="gfx-split-badge">${escapeHtml(item.split)}</span>` : ''}
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tm = document.getElementById('ltTime');
         if (r) r.innerText = a.rank ? `#${a.rank}` : '--';
         if (b) b.innerText = `${a.nat || 'IND'}`;
-        if (n) n.innerText = a.name || 'SELECT ATHLETE';
+        if (n) n.innerText = formatAthleteName(a.name, state.nameFormat);
         if (m) m.innerText = `${a.club || 'Club'} • Pace: ${a.pace || 'N/A'}`;
         if (tm) tm.innerText = (isTimerEnabled && a.time) ? a.time : '';
       } else {
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tickerWrapper) {
           const itemsHtml = state.tickerItems.map(item => `
             <div class="gfx-ticker-item">
-              <span class="name">${escapeHtml(item.name)}</span>
+              <span class="name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</span>
               <span class="split">${escapeHtml(item.checkpoint)}</span>
               ${(isTimerEnabled && item.time) ? `<span class="time">${item.time}</span>` : ''}
             </div>
@@ -204,6 +204,40 @@ document.addEventListener('DOMContentLoaded', () => {
         tickerEl.classList.add('gfx-hidden');
       }
     }
+  }
+
+  function formatAthleteName(nameStr, format) {
+    if (!nameStr) return 'Athlete';
+    if (!format || format === 'full') return nameStr;
+
+    const parseSingleName = (singleName) => {
+      const trimmed = singleName.trim();
+      const parts = trimmed.split(/\s+/);
+      if (parts.length <= 1) return trimmed;
+
+      const lastName = parts[parts.length - 1];
+      const firstName = parts.slice(0, parts.length - 1).join(' ');
+
+      if (format === 'initial') {
+        // Handle names that already have initials like R. Sharma
+        if (firstName.length === 1 || (firstName.length === 2 && firstName.endsWith('.'))) {
+          return `${firstName.charAt(0).toUpperCase()}. ${lastName}`;
+        }
+        const initial = firstName.charAt(0).toUpperCase();
+        return `${initial}. ${lastName}`;
+      } else if (format === 'last') {
+        return lastName;
+      }
+      return trimmed;
+    };
+
+    if (nameStr.includes('&')) {
+      return nameStr.split('&').map(parseSingleName).join(' & ');
+    } else if (nameStr.toLowerCase().includes(' and ')) {
+      return nameStr.split(/ and /i).map(parseSingleName).join(' & ');
+    }
+
+    return parseSingleName(nameStr);
   }
 
   function escapeHtml(str) {
