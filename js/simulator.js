@@ -31,13 +31,13 @@ class RaceSimulator {
 
     // HYROX Doubles & Battle of Gyms Teams
     this.doublesAthletes = [
-      { bib: 'D-501', name: 'R. Sharma & V. Singh', club: 'Delhi CrossFit Gym (BOG)', nat: 'IND', pace: '3:30 /km', split: '800m', baseOffset: 0 },
-      { bib: 'D-504', name: 'M. Vance & D. Miller', club: 'Red Bull Performance Gym', nat: 'GBR', pace: '3:34 /km', split: '800m', baseOffset: 3.8 },
-      { bib: 'D-512', name: 'A. Mehta & S. Patel', club: 'HYROX India HQ Gym', nat: 'IND', pace: '3:38 /km', split: '800m', baseOffset: 7.2 },
-      { bib: 'D-520', name: 'K. Malhotra & P. Deshmukh', club: 'Mumbai Striders Gym', nat: 'IND', pace: '3:42 /km', split: '800m', baseOffset: 11.5 },
-      { bib: 'D-533', name: 'K. Sato & A. Dubois', club: 'Tokyo Fitness Arena', nat: 'JPN', pace: '3:46 /km', split: '800m', baseOffset: 16.0 },
-      { bib: 'D-540', name: 'A. Kumar & R. Verma', club: 'FitZone Delhi Gym', nat: 'IND', pace: '3:50 /km', split: '800m', baseOffset: 20.4 },
-      { bib: 'D-555', name: 'J. Smith & L. Taylor', club: 'London Iron Gym', nat: 'GBR', pace: '3:55 /km', split: '800m', baseOffset: 25.1 }
+      { bib: 'D-501', name: 'Rohan Sharma & Vikramaditya Singh', club: 'Delhi CrossFit Gym (BOG)', nat: 'IND', pace: '3:30 /km', split: '800m', baseOffset: 0 },
+      { bib: 'D-504', name: 'Marcus Vance & David Miller', club: 'Red Bull Performance Gym', nat: 'GBR', pace: '3:34 /km', split: '800m', baseOffset: 3.8 },
+      { bib: 'D-512', name: 'Arjun Mehta & Siddharth Patel', club: 'HYROX India HQ Gym', nat: 'IND', pace: '3:38 /km', split: '800m', baseOffset: 7.2 },
+      { bib: 'D-520', name: 'Karan Malhotra & Priya Deshmukh', club: 'Mumbai Striders Gym', nat: 'IND', pace: '3:42 /km', split: '800m', baseOffset: 11.5 },
+      { bib: 'D-533', name: 'Kenji Sato & Antoine Dubois', club: 'Tokyo Fitness Arena', nat: 'JPN', pace: '3:46 /km', split: '800m', baseOffset: 16.0 },
+      { bib: 'D-540', name: 'Amit Kumar & Rahul Verma', club: 'FitZone Delhi Gym', nat: 'IND', pace: '3:50 /km', split: '800m', baseOffset: 20.4 },
+      { bib: 'D-555', name: 'John Smith & Liam Taylor', club: 'London Iron Gym', nat: 'GBR', pace: '3:55 /km', split: '800m', baseOffset: 25.1 }
     ];
 
     this.athletes = this.doublesAthletes;
@@ -46,10 +46,10 @@ class RaceSimulator {
     this.timerInterval = null;
 
     this.splitEventsList = [
-      { bib: 'D-501', name: 'R. Sharma & V. Singh', checkpoint: 'Sled Push (200m)', time: '04:12' },
-      { bib: 'D-504', name: 'M. Vance & D. Miller', checkpoint: 'Sled Push (200m)', time: '04:16' },
-      { bib: 'D-512', name: 'A. Mehta & S. Patel', checkpoint: 'SkiErg (400m)', time: '04:20' },
-      { bib: 'D-520', name: 'K. Malhotra & P. Deshmukh', checkpoint: 'SkiErg (400m)', time: '04:25' }
+      { bib: 'D-501', name: 'Rohan Sharma & Vikramaditya Singh', checkpoint: 'Sled Push (200m)', time: '04:12' },
+      { bib: 'D-504', name: 'Marcus Vance & David Miller', checkpoint: 'Sled Push (200m)', time: '04:16' },
+      { bib: 'D-512', name: 'Arjun Mehta & Siddharth Patel', checkpoint: 'SkiErg (400m)', time: '04:20' },
+      { bib: 'D-520', name: 'Karan Malhotra & Priya Deshmukh', checkpoint: 'SkiErg (400m)', time: '04:25' }
     ];
   }
 
@@ -59,9 +59,9 @@ class RaceSimulator {
     if (upper.includes('DOUBLES') || upper.includes('BATTLE') || upper.includes('GYM') || upper.includes('BOG')) {
       this.athletes = this.doublesAthletes;
       this.splitEventsList = [
-        { bib: 'D-501', name: 'R. Sharma & V. Singh', checkpoint: 'Battle of Gyms Heat 1', time: '04:12' },
-        { bib: 'D-504', name: 'M. Vance & D. Miller', checkpoint: 'Battle of Gyms Heat 1', time: '04:16' },
-        { bib: 'D-512', name: 'A. Mehta & S. Patel', checkpoint: 'Sled Push (200m)', time: '04:20' }
+        { bib: 'D-501', name: 'Rohan Sharma & Vikramaditya Singh', checkpoint: 'Battle of Gyms Heat 1', time: '04:12' },
+        { bib: 'D-504', name: 'Marcus Vance & David Miller', checkpoint: 'Battle of Gyms Heat 1', time: '04:16' },
+        { bib: 'D-512', name: 'Arjun Mehta & Siddharth Patel', checkpoint: 'Sled Push (200m)', time: '04:20' }
       ];
     } else {
       this.athletes = this.singlesAthletes;
