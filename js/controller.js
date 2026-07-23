@@ -34,8 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     spotlightAthlete: null,
     tickerItems: [],
     meetingInfo: {
-      title: 'DELHI CHAMPIONSHIP 2026',
-      meta: 'HYROX • Day 2 • Live',
+      title: 'DELHI - 25.07.2026 - DAY 2',
+      meta: 'BATTLE OF GYMS • Live',
+      category: 'BATTLE OF GYMS',
       sponsorLogo: ''
     }
   };
