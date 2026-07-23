@@ -205,15 +205,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const results = await api.getRaceResults(state.selectedRaceId, state.selectedMeetingId, state.selectedEventKey);
         if (results && results.length > 0) {
           simulator.stop();
-          state.leaderboard = results.map((r, i) => ({
-            rank: i + 1,
-            bib: r.bib || r.idParticipant || `B${i+1}`,
-            name: `${r.firstname || ''} ${r.lastname || r.nameText || 'Participant'}`.trim(),
-            club: r.clubname || r.nation || '',
-            nat: r.nation || 'IND',
-            time: r.timeText || r.time || '00:00',
-            delta: i === 0 ? 'LEADER' : `+${i * 3.5}s`
-          }));
+          state.leaderboard = results.map((r, i) => {
+            const firstName = r.firstname || r.first_name || r.fname || '';
+            const lastName = r.lastname || r.last_name || r.lname || r.nameText || r.name || '';
+            const fullName = `${firstName} ${lastName}`.trim() || r.nameText || r.name || `Athlete #${i+1}`;
+            
+            return {
+              rank: r.rank || r.position || i + 1,
+              bib: r.bib || r.idParticipant || `B${i+1}`,
+              name: fullName,
+              club: r.clubname || r.club || r.nation || '',
+              nat: r.nation || 'IND',
+              time: r.timeText || r.time || r.splitTime || '',
+              delta: i === 0 ? 'LEADER' : (r.delta || `+${(i * 3.5).toFixed(1)}s`)
+            };
+          });
+
+          state.tickerItems = results.map(r => {
+            const firstName = r.firstname || r.first_name || r.fname || '';
+            const lastName = r.lastname || r.last_name || r.lname || r.nameText || r.name || '';
+            const fullName = `${firstName} ${lastName}`.trim() || r.nameText || r.name || 'Participant';
+            return {
+              bib: r.bib || r.idParticipant || '00',
+              name: fullName,
+              checkpoint: r.splitName || r.checkpointName || r.checkpoint || r.split || 'Checkpoint',
+              time: r.splitTime || r.timeText || ''
+            };
+          });
+
           updateSpotlightSelectOptions();
           syncState();
         } else {
