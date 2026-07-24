@@ -1046,7 +1046,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 .theme-starting-list.pos-bottom-grid .gfx-lb-event-bar {
   background: transparent !important;
   border: none !important;
-  padding: 0 0 10px 0 !important;
+  padding: 0 0 10px 15px !important;
   margin: 0 !important;
   display: flex !important;
   align-items: center !important;
@@ -1076,16 +1076,19 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   color: #FFFFFF !important;
   font-family: 'Brutel', sans-serif !important;
   font-weight: 900 !important;
-  font-size: 15px !important;
+  font-size: 14px !important;
   letter-spacing: 1.5px !important;
-  padding: 6px 18px !important;
+  padding: 6px 16px !important;
   border-radius: 4px !important;
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   height: 34px !important;
   box-sizing: border-box !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
   margin-bottom: 4px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  line-height: 1 !important;
 }
 
 .pos-bottom-grid .gfx-lb-header,
