@@ -222,10 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (results && results.length > 0) {
           simulator.stop();
           state.leaderboard = results.map((r, i) => {
+            const rawNameText = r.nameText || r.name || r.displayName || '';
             const firstName = r.firstname || r.first_name || r.fname || '';
-            const rawLastName = r.lastname || r.last_name || r.lname || r.nameText || r.name || '';
+            const rawLastName = r.lastname || r.last_name || r.lname || '';
             const lastName = rawLastName === '.' ? '' : rawLastName;
-            const fullName = `${firstName} ${lastName}`.trim() || r.nameText || r.name || `Athlete #${i+1}`;
+            const constructed = `${firstName} ${lastName}`.trim();
+            const fullName = rawNameText || constructed || `Athlete #${i+1}`;
             
             return {
               rank: r.rank || r.position || i + 1,
@@ -240,10 +242,12 @@ document.addEventListener('DOMContentLoaded', () => {
           });
 
           state.tickerItems = results.map(r => {
+            const rawNameText = r.nameText || r.name || r.displayName || '';
             const firstName = r.firstname || r.first_name || r.fname || '';
-            const rawLastName = r.lastname || r.last_name || r.lname || r.nameText || r.name || '';
+            const rawLastName = r.lastname || r.last_name || r.lname || '';
             const lastName = rawLastName === '.' ? '' : rawLastName;
-            const fullName = `${firstName} ${lastName}`.trim() || r.nameText || r.name || 'Participant';
+            const constructed = `${firstName} ${lastName}`.trim();
+            const fullName = rawNameText || constructed || 'Participant';
             return {
               bib: r.bib || r.startNo || r.idParticipant || '00',
               name: fullName,
