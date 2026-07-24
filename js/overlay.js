@@ -110,9 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
         leaderboardEl.classList.remove('gfx-hidden');
         const isStartingListTheme = (state.theme === 'theme-starting-list');
         const isSignatureBroadcastTheme = (state.theme !== 'theme-starting-list');
+        const isBottomGrid = (state.position === 'pos-bottom-grid');
         const hasLiveTimes = currentLeaderboard.some(item => item.time || (item.split && item.split !== 'REGISTERED'));
 
-        // If 2nd GFX option (SportVot Broadcast Theme) is selected OR if live times exist:
+        // Determine mode
         const isLiveTimerMode = isSignatureBroadcastTheme || hasLiveTimes;
 
         if (isLiveTimerMode) {
@@ -128,19 +129,25 @@ document.addEventListener('DOMContentLoaded', () => {
           catBadge.innerText = isLiveTimerMode ? 'TIME' : 'TEAM';
         }
 
+        let headerText = 'STARTING LIST';
+        if (state.meetingInfo?.eventTitle && !/^HYROX$/i.test(state.meetingInfo.eventTitle)) {
+          headerText = state.meetingInfo.eventTitle;
+        } else if (!isLiveTimerMode) {
+          headerText = 'STARTING LIST';
+        } else if (state.meetingInfo?.category && !/^HYROX/i.test(state.meetingInfo.category)) {
+          headerText = state.meetingInfo.category;
+        } else if (state.meetingInfo?.title && !/^HYROX/i.test(state.meetingInfo.title)) {
+          headerText = state.meetingInfo.title;
+        }
+        headerText = headerText.replace(/\s*•\s*Live/i, '').trim();
+
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
-          let headerText = 'STARTING LIST';
-          if (state.meetingInfo?.eventTitle && !/^HYROX$/i.test(state.meetingInfo.eventTitle)) {
-            headerText = state.meetingInfo.eventTitle;
-          } else if (!isLiveTimerMode) {
-            headerText = 'STARTING LIST';
-          } else if (state.meetingInfo?.category && !/^HYROX/i.test(state.meetingInfo.category)) {
-            headerText = state.meetingInfo.category;
-          } else if (state.meetingInfo?.title && !/^HYROX/i.test(state.meetingInfo.title)) {
-            headerText = state.meetingInfo.title;
+          if (isBottomGrid) {
+            eventBar.innerHTML = `<span class="gfx-grid-station-num">05</span><span class="gfx-grid-station-pill">${escapeHtml(headerText)} [${isLiveTimerMode ? 'result' : 'startlist'}]</span>`;
+          } else {
+            eventBar.innerText = headerText.toUpperCase();
           }
-          eventBar.innerText = headerText.replace(/\s*•\s*Live/i, '').toUpperCase();
         }
 
         const titleEl = document.getElementById('lbTitle') || document.querySelector('.gfx-lb-title');
@@ -180,8 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ];
 
             let displayList = [...currentLeaderboard];
-            if (displayList.length < 15) {
-              for (let i = displayList.length; i < 15; i++) {
+            const maxPlayerCount = isBottomGrid ? 12 : 15;
+            if (displayList.length < maxPlayerCount) {
+              for (let i = displayList.length; i < maxPlayerCount; i++) {
                 const sample = sampleAthletes[i % sampleAthletes.length];
                 displayList.push({
                   rank: i + 1,
@@ -193,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
 
-            const rowLimit = 15;
+            const rowLimit = maxPlayerCount;
             const lbHtml = displayList.slice(0, rowLimit).map((item, idx) => {
               const rankNum = item.rank || (idx + 1);
               const formattedRank = String(rankNum).padStart(2, '0');
@@ -236,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const isLeader = (rankNum === 1 || String(formattedRank) === '01');
 
               let deltaText = '';
-              if (isLiveTimerMode) {
+              if (isLiveTimerMode && !isBottomGrid) {
                 deltaText = item.delta || '';
                 if (!deltaText) {
                   if (isLeader) {
@@ -248,12 +256,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
               }
 
+              const flagSvg = isBottomGrid ? `<svg class="gfx-flag-icon" viewBox="0 0 640 480" width="18" height="13" style="border-radius: 2px; flex-shrink: 0;"><path fill="#AA151B" d="M0 0h640v480H0z"/><path fill="#F1BF00" d="M0 120h640v240H0z"/></svg>` : '';
+
               return `
                 <div class="gfx-lb-item pos-${rankNum}">
                   <div class="gfx-rank-num">${formattedRank}</div>
                   <div class="gfx-athlete-details">
+                    ${flagSvg}
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
-                    ${(splitText && splitText !== 'REGISTERED') ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
+                    ${(splitText && splitText !== 'REGISTERED' && !isBottomGrid) ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
                   </div>
                   <div class="gfx-time-col">
                     <div class="gfx-time-val">${escapeHtml(rightColText.toUpperCase())}</div>

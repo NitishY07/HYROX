@@ -1012,3 +1012,168 @@ body.gfx-overlay-body {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+/* ==========================================================================
+   5. BOTTOM 3-ROW GRID POSITION (Reference Image 4-Column x 3-Row Layout)
+   ========================================================================== */
+.pos-bottom-grid .gfx-sidebar-stack {
+  position: absolute !important;
+  top: auto !important;
+  bottom: 80px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 60px) !important;
+  max-width: 1440px !important;
+  gap: 0 !important;
+}
+
+.pos-bottom-grid #gfxBanner {
+  display: none !important;
+}
+
+.pos-bottom-grid .gfx-leaderboard-box {
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.pos-bottom-grid .gfx-lb-event-bar {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 0 10px 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.pos-bottom-grid .gfx-grid-station-num {
+  background: #25262A !important;
+  color: #FFFFFF !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  padding: 4px 12px !important;
+  border-radius: 6px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 32px !important;
+  box-sizing: border-box !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.pos-bottom-grid .gfx-grid-station-pill {
+  background: #ECEFF1 !important;
+  color: #111111 !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 15px !important;
+  padding: 4px 16px !important;
+  border-radius: 6px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: 32px !important;
+  box-sizing: border-box !important;
+  border: 1px solid #CCCCCC !important;
+}
+
+.pos-bottom-grid .gfx-lb-header {
+  display: none !important;
+}
+
+.pos-bottom-grid .gfx-lb-list {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px 14px !important;
+  width: 100% !important;
+  border-left: 2.5px solid rgba(255, 255, 255, 0.6) !important;
+  padding-left: 12px !important;
+  box-sizing: border-box !important;
+}
+
+.pos-bottom-grid .gfx-lb-item {
+  display: grid !important;
+  grid-template-columns: 36px 1fr 140px !important;
+  height: 36px !important;
+  background: #FFFFFF !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  border: 1px solid #D5D5D5 !important;
+  align-items: center !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5) !important;
+}
+
+.pos-bottom-grid .gfx-rank-num {
+  background: transparent !important;
+  color: #111111 !important;
+  border: none !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 14px !important;
+  height: 100% !important;
+  border-right: 1px solid #E0E0E0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0 !important;
+}
+
+.pos-bottom-grid .gfx-athlete-details {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 8px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+}
+
+.pos-bottom-grid .gfx-athlete-name {
+  color: #111111 !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+  letter-spacing: 0.2px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin: 0 !important;
+  display: block !important;
+}
+
+.pos-bottom-grid .gfx-time-col {
+  background: #EAEAEA !important;
+  border: none !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-left: 1px solid #D5D5D5 !important;
+  padding: 0 6px !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+}
+
+.pos-bottom-grid .gfx-time-val {
+  color: #111111 !important;
+  font-family: 'BrutalType', 'Brutel', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 11px !important;
+  letter-spacing: 0.3px !important;
+  white-space: nowrap !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  word-break: break-word !important;
+  line-height: 1.15 !important;
+}
