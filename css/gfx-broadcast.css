@@ -116,18 +116,18 @@
   --gfx-border: rgba(0, 0, 0, 0.2);
 }
 
-/* 5. STARTING LIST THEME (Clean Black & White Boxed Table Layout) */
+/* 5. STARTING LIST THEME (Exact Black & White Boxed Table Layout) */
 .theme-starting-list {
   --gfx-font-main: 'Brutel', 'Montserrat', sans-serif;
 }
 
 .theme-starting-list .gfx-leaderboard-box {
   width: 100%;
-  background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-  padding: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
+  padding: 30px 35px 25px 35px;
   box-sizing: border-box;
 }
 
@@ -136,46 +136,54 @@
   color: #FFFFFF;
   font-family: 'Brutel', sans-serif;
   font-weight: 900;
-  font-size: 26px;
+  font-size: 34px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   border-bottom: none;
-  padding: 0 0 10px 0;
+  padding: 0 0 16px 0;
 }
 
 .theme-starting-list .gfx-lb-header {
   background: transparent;
-  padding: 6px 0 10px 0;
-  border-bottom: 2px solid #FFFFFF;
+  padding: 0 0 8px 0;
+  border-bottom: none;
+  display: grid;
+  grid-template-columns: 36px 1fr 180px;
+  gap: 6px;
+  align-items: center;
 }
 
 .theme-starting-list .gfx-lb-title {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 900;
   color: #FFFFFF;
   letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .theme-starting-list .gfx-lb-category {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 900;
   background: transparent;
   color: #FFFFFF;
   padding: 0;
   letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .theme-starting-list .gfx-lb-list {
-  gap: 4px;
+  gap: 5px;
   background: transparent;
-  padding: 8px 0 0 0;
+  padding: 6px 0 0 0;
 }
 
 .theme-starting-list .gfx-lb-item {
   display: grid;
-  grid-template-columns: 36px 1fr 140px;
-  gap: 4px;
-  height: 38px;
+  grid-template-columns: 36px 1fr 180px;
+  gap: 6px;
+  height: 36px;
   background: transparent;
   border: none;
 }
@@ -186,8 +194,11 @@
   font-family: 'Brutel', sans-serif;
   font-weight: 900;
   font-size: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-starting-list .gfx-athlete-details {
@@ -195,6 +206,7 @@
   padding-left: 12px;
   justify-content: center;
   border: 1px solid #FFFFFF;
+  box-sizing: border-box;
 }
 
 .theme-starting-list .gfx-athlete-name {
@@ -218,6 +230,7 @@
   border: 1px solid #FFFFFF;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .theme-starting-list .gfx-time-val,
@@ -280,6 +293,15 @@ body.gfx-overlay-body {
 .pos-top-right .gfx-sidebar-stack {
   left: auto;
   right: 30px;
+}
+
+/* Center Stage Full Screen Alignment */
+.pos-center-stage .gfx-sidebar-stack {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 920px;
+  max-width: 95vw;
 }
 
 /* ==========================================================================
