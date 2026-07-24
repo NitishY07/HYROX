@@ -141,7 +141,7 @@ class MikaTimingAPI {
       const data = await this.request(`/meetinginfo/meeting/${meetingId}/participations/basic`);
       if (data && data.participations && data.participations.length > 0) {
         const filtered = data.participations.filter(p => !key || p.eventKey === key || p.idRace === idRace);
-        return filtered.length > 0 ? filtered : data.participations;
+        return (filtered && filtered.length > 0) ? filtered : data.participations;
       }
     } catch (e4) {}
 
