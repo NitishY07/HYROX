@@ -209,6 +209,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function startLivePolling() {
+    if (simSyncInterval) {
+      clearInterval(simSyncInterval);
+      simSyncInterval = null;
+    }
     if (livePollInterval) clearInterval(livePollInterval);
     
     const pollFn = async () => {
@@ -384,14 +388,13 @@ document.addEventListener('DOMContentLoaded', () => {
       state.meetingInfo.meta = `${raceName} • Live`;
       state.meetingInfo.category = raceName;
 
-      simulator.setCategory(raceName);
-      state.leaderboard = simulator.getLeaderboardData();
-      state.tickerItems = simulator.splitEvents;
-
-      updateSpotlightSelectOptions();
-      syncState();
-
-      if (state.mode === 'live') {
+      if (state.mode === 'sim') {
+        simulator.setCategory(raceName);
+        state.leaderboard = simulator.getLeaderboardData();
+        state.tickerItems = simulator.splitEvents;
+        updateSpotlightSelectOptions();
+        syncState();
+      } else if (state.mode === 'live') {
         startLivePolling();
       }
     });
@@ -409,14 +412,13 @@ document.addEventListener('DOMContentLoaded', () => {
       state.meetingInfo.meta = `${eventName} • Live`;
       state.meetingInfo.category = eventName;
 
-      simulator.setCategory(eventName);
-      state.leaderboard = simulator.getLeaderboardData();
-      state.tickerItems = simulator.splitEvents;
-
-      updateSpotlightSelectOptions();
-      syncState();
-
-      if (state.mode === 'live') {
+      if (state.mode === 'sim') {
+        simulator.setCategory(eventName);
+        state.leaderboard = simulator.getLeaderboardData();
+        state.tickerItems = simulator.splitEvents;
+        updateSpotlightSelectOptions();
+        syncState();
+      } else if (state.mode === 'live') {
         startLivePolling();
       }
     });
