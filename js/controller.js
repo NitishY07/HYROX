@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedRaceId: null,
     selectedEventKey: null,
     theme: 'theme-starting-list',
-    position: 'pos-center-stage',
+    position: 'pos-bottom-grid',
     nameFormat: 'full',
     allowSimFallback: false,
     visibleElements: {
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
       eventKey: eventSelect ? eventSelect.value : '',
       nameFormat: nameFormatSelect ? nameFormatSelect.value : 'full',
       theme: themeSelect ? themeSelect.value : 'theme-starting-list',
-      position: posSelect ? posSelect.value : 'pos-center-stage'
+      position: posSelect ? posSelect.value : 'pos-bottom-grid'
     };
     try {
       localStorage.setItem('mika_control_panel_config', JSON.stringify(configData));
