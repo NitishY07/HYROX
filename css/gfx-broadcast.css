@@ -197,9 +197,30 @@
   text-align: center !important;
 }
 
+.theme-starting-list .gfx-lb-header {
+  background: transparent !important;
+  padding: 0 0 12px 0 !important;
+  border: none !important;
+  display: grid !important;
+  grid-template-columns: 46px 1fr 160px !important;
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+.theme-starting-list .gfx-lb-title {
+  color: #FFFFFF !important;
+  font-family: 'BrutalType', 'Brutel', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  grid-column: 2 !important;
+  text-align: center !important;
+}
+
 .theme-starting-list .gfx-lb-category {
   color: #FFFFFF !important;
-  font-family: 'Brutel', sans-serif !important;
+  font-family: 'BrutalType', 'Brutel', sans-serif !important;
   font-weight: 800 !important;
   font-size: 14px !important;
   letter-spacing: 1.5px !important;
@@ -214,16 +235,16 @@
 .theme-starting-list .gfx-lb-list {
   display: flex !important;
   flex-direction: column !important;
-  gap: 5px !important;
+  gap: 6px !important;
   background: transparent !important;
   padding: 0 !important;
 }
 
 .theme-starting-list .gfx-lb-item {
   display: grid !important;
-  grid-template-columns: 40px 1fr 240px !important;
-  gap: 8px !important;
-  height: 38px !important;
+  grid-template-columns: 46px 1fr 160px !important;
+  gap: 10px !important;
+  height: 42px !important;
   background: transparent !important;
   border: none !important;
 }
@@ -234,10 +255,10 @@
 .theme-starting-list .gfx-lb-item.pos-3 .gfx-rank-num {
   background: #000000 !important;
   color: #FFFFFF !important;
-  border: 1px solid #FFFFFF !important;
-  font-family: 'Brutel', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 14px !important;
+  border: 1.5px solid #FFFFFF !important;
+  font-family: 'BrutalType', 'Brutel', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
   box-shadow: none !important;
   display: flex !important;
   align-items: center !important;
@@ -248,8 +269,8 @@
 
 .theme-starting-list .gfx-athlete-details {
   background: #FFFFFF !important;
-  border: 1px solid #FFFFFF !important;
-  padding: 0 0 0 14px !important;
+  border: 1.5px solid #FFFFFF !important;
+  padding: 0 16px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
@@ -257,21 +278,23 @@
   border-radius: 0 !important;
   height: 100% !important;
   width: 100% !important;
+  overflow: hidden !important;
 }
 
 .theme-starting-list .gfx-athlete-name {
   color: #000000 !important;
-  font-family: 'Brutel', sans-serif !important;
+  font-family: 'BrutalType', 'Brutel', sans-serif !important;
   font-weight: 800 !important;
-  font-size: 13px !important;
-  letter-spacing: 0.5px !important;
+  font-size: 13.5px !important;
+  letter-spacing: 0.3px !important;
   text-transform: uppercase !important;
   text-shadow: none !important;
-  line-height: 1.2 !important;
-  display: flex !important;
-  align-items: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
   width: 100% !important;
-  height: 100% !important;
+  line-height: 40px !important;
 }
 
 .theme-starting-list .gfx-athlete-club {
@@ -280,25 +303,28 @@
 
 .theme-starting-list .gfx-time-col {
   background: #FFFFFF !important;
-  border: 1px solid #FFFFFF !important;
-  padding: 0 10px !important;
+  border: 1.5px solid #FFFFFF !important;
+  padding: 0 12px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   clip-path: none !important;
   box-sizing: border-box !important;
   border-radius: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
 }
 
 .theme-starting-list .gfx-time-val,
 .theme-starting-list .gfx-time-delta {
   color: #000000 !important;
-  font-family: 'Brutel', sans-serif !important;
+  font-family: 'BrutalType', 'Brutel', sans-serif !important;
   font-weight: 800 !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
   text-align: center !important;
+  white-space: nowrap !important;
 }
 
 /* Standalone Overlay Container */
@@ -506,7 +532,7 @@ body.gfx-overlay-body {
   padding: 0 0 12px 0 !important;
   border: none !important;
   display: grid !important;
-  grid-template-columns: 46px 1fr 280px !important;
+  grid-template-columns: 46px 1fr 160px !important;
   gap: 10px !important;
   align-items: center !important;
 }
@@ -546,7 +572,7 @@ body.gfx-overlay-body {
 
 .gfx-lb-item {
   display: grid !important;
-  grid-template-columns: 46px 1fr 280px !important;
+  grid-template-columns: 46px 1fr 160px !important;
   gap: 10px !important;
   height: 42px !important;
   background: transparent !important;
@@ -574,7 +600,7 @@ body.gfx-overlay-body {
 .gfx-athlete-details {
   background: #FFFFFF !important;
   border: 1.5px solid #FFFFFF !important;
-  padding: 0 0 0 16px !important;
+  padding: 0 16px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
@@ -582,21 +608,23 @@ body.gfx-overlay-body {
   border-radius: 0 !important;
   height: 100% !important;
   width: 100% !important;
+  overflow: hidden !important;
 }
 
 .gfx-athlete-name {
   color: #000000 !important;
   font-family: 'BrutalType', 'Brutel', sans-serif !important;
   font-weight: 800 !important;
-  font-size: 14px !important;
-  letter-spacing: 0.5px !important;
+  font-size: 13.5px !important;
+  letter-spacing: 0.3px !important;
   text-transform: uppercase !important;
   text-shadow: none !important;
-  line-height: 1.2 !important;
-  display: flex !important;
-  align-items: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
   width: 100% !important;
-  height: 100% !important;
+  line-height: 40px !important;
 }
 
 .gfx-athlete-club {
@@ -626,6 +654,7 @@ body.gfx-overlay-body {
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
   text-align: center !important;
+  white-space: nowrap !important;
 }
 
 /* ==========================================================================
