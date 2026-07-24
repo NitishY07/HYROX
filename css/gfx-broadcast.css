@@ -202,7 +202,7 @@
   padding: 0 0 12px 0 !important;
   border: none !important;
   display: grid !important;
-  grid-template-columns: 46px 1fr 160px !important;
+  grid-template-columns: 46px 1fr 115px !important;
   gap: 10px !important;
   align-items: center !important;
 }
@@ -242,17 +242,14 @@
 
 .theme-starting-list .gfx-lb-item {
   display: grid !important;
-  grid-template-columns: 46px 1fr 180px !important;
+  grid-template-columns: 46px 1fr 115px !important;
   gap: 10px !important;
   height: 52px !important;
   background: transparent !important;
   border: none !important;
 }
 
-.theme-starting-list .gfx-rank-num,
-.theme-starting-list .gfx-lb-item.pos-1 .gfx-rank-num,
-.theme-starting-list .gfx-lb-item.pos-2 .gfx-rank-num,
-.theme-starting-list .gfx-lb-item.pos-3 .gfx-rank-num {
+.theme-starting-list .gfx-rank-num {
   background: #000000 !important;
   color: #FFFFFF !important;
   border: 1.5px solid #FFFFFF !important;
@@ -265,6 +262,12 @@
   justify-content: center !important;
   box-sizing: border-box !important;
   border-radius: 0 !important;
+}
+
+.theme-starting-list .gfx-lb-item.pos-1 .gfx-rank-num {
+  background: #000000 !important;
+  color: #FFD700 !important;
+  border: 1.5px solid #FFD700 !important;
 }
 
 .theme-starting-list .gfx-athlete-details {
@@ -280,6 +283,10 @@
   height: 100% !important;
   width: 100% !important;
   overflow: hidden !important;
+}
+
+.theme-starting-list .gfx-lb-item.pos-1 .gfx-athlete-details {
+  border: 1.5px solid #FFD700 !important;
 }
 
 .theme-starting-list .gfx-athlete-name {
@@ -312,6 +319,21 @@
   text-transform: uppercase !important;
   letter-spacing: 0.5px !important;
   margin-top: 1px !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+}
+
+.theme-starting-list .gfx-leader-badge {
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  color: #000000 !important;
+  background: #FFD700 !important;
+  border: 1px solid #D4AF37 !important;
+  padding: 1px 6px !important;
+  border-radius: 3px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  margin-left: 6px !important;
   line-height: 1 !important;
   display: inline-block !important;
 }
@@ -551,7 +573,7 @@ body.gfx-overlay-body {
   padding: 0 0 12px 0 !important;
   border: none !important;
   display: grid !important;
-  grid-template-columns: 46px 1fr 160px !important;
+  grid-template-columns: 46px 1fr 115px !important;
   gap: 10px !important;
   align-items: center !important;
 }
@@ -591,17 +613,14 @@ body.gfx-overlay-body {
 
 .gfx-lb-item {
   display: grid !important;
-  grid-template-columns: 46px 1fr 180px !important;
+  grid-template-columns: 46px 1fr 115px !important;
   gap: 10px !important;
   height: 52px !important;
   background: transparent !important;
   border: none !important;
 }
 
-.gfx-rank-num,
-.gfx-lb-item.pos-1 .gfx-rank-num,
-.gfx-lb-item.pos-2 .gfx-rank-num,
-.gfx-lb-item.pos-3 .gfx-rank-num {
+.gfx-rank-num {
   background: #000000 !important;
   color: #FFFFFF !important;
   border: 1.5px solid #FFFFFF !important;
@@ -614,6 +633,12 @@ body.gfx-overlay-body {
   justify-content: center !important;
   box-sizing: border-box !important;
   border-radius: 0 !important;
+}
+
+.gfx-lb-item.pos-1 .gfx-rank-num {
+  background: #000000 !important;
+  color: #FFD700 !important;
+  border: 1.5px solid #FFD700 !important;
 }
 
 .gfx-athlete-details {
@@ -629,6 +654,10 @@ body.gfx-overlay-body {
   height: 100% !important;
   width: 100% !important;
   overflow: hidden !important;
+}
+
+.gfx-lb-item.pos-1 .gfx-athlete-details {
+  border: 1.5px solid #FFD700 !important;
 }
 
 .gfx-athlete-name {

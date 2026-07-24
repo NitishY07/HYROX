@@ -199,13 +199,17 @@ document.addEventListener('DOMContentLoaded', () => {
               }
 
               const fullName = formatAthleteName(item.name, state.nameFormat);
+              const isLeader = (rankNum === 1 || String(formattedRank) === '01');
 
               return `
                 <div class="gfx-lb-item pos-${rankNum}">
                   <div class="gfx-rank-num">${formattedRank}</div>
                   <div class="gfx-athlete-details">
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
-                    ${(splitText && splitText !== 'REGISTERED') ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
+                    <div style="display: flex; align-items: center; gap: 4px; width: 100%;">
+                      ${(splitText && splitText !== 'REGISTERED') ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
+                      ${isLeader ? `<div class="gfx-leader-badge">LEADER</div>` : ''}
+                    </div>
                   </div>
                   <div class="gfx-time-col">
                     <div class="gfx-time-val">${escapeHtml(rightColText.toUpperCase())}</div>
