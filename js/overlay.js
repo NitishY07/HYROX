@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Leaderboard
     if (leaderboardEl) {
-      if (state.visibleElements && state.visibleElements.leaderboard && currentLeaderboard && currentLeaderboard.length > 0) {
+      if (state.visibleElements && state.visibleElements.leaderboard) {
         leaderboardEl.classList.remove('gfx-hidden');
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar && state.meetingInfo) {
@@ -118,26 +118,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const listContainer = document.getElementById('lbList');
         if (listContainer) {
-          const lbHtml = currentLeaderboard.slice(0, 10).map(item => `
-            <div class="gfx-lb-item pos-${item.rank}">
-              <div class="gfx-rank-num">${item.rank}</div>
-              <div class="gfx-athlete-details">
-                <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
-                <div class="gfx-athlete-club">
-                  ${(isClubsEnabled && (item.club || item.nat)) ? `<span>${escapeHtml(item.club || item.nat || '')}</span>` : ''}
-                  ${item.split ? `<span class="gfx-split-badge">${escapeHtml(item.split)}</span>` : ''}
+          if (!currentLeaderboard || currentLeaderboard.length === 0) {
+            const emptyHtml = `
+              <div class="gfx-lb-item" style="grid-template-columns: 1fr; justify-content: center; text-align: center; color: #CBD5E1; font-weight: 800; font-size: 13px; letter-spacing: 1px; padding: 18px;">
+                AWAITING LIVE RACE START...
+              </div>
+            `;
+            if (emptyHtml !== lastLeaderboardHtml) {
+              listContainer.innerHTML = emptyHtml;
+              lastLeaderboardHtml = emptyHtml;
+            }
+          } else {
+            const lbHtml = currentLeaderboard.slice(0, 10).map(item => `
+              <div class="gfx-lb-item pos-${item.rank}">
+                <div class="gfx-rank-num">${item.rank}</div>
+                <div class="gfx-athlete-details">
+                  <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
+                  <div class="gfx-athlete-club">
+                    ${(isClubsEnabled && (item.club || item.nat)) ? `<span>${escapeHtml(item.club || item.nat || '')}</span>` : ''}
+                    ${item.split ? `<span class="gfx-split-badge">${escapeHtml(item.split)}</span>` : ''}
+                  </div>
+                </div>
+                <div class="gfx-time-col">
+                  ${(isTimerEnabled && item.time) ? `<div class="gfx-time-val">${item.time}</div>` : ''}
+                  <div class="gfx-time-delta">${item.delta || ''}</div>
                 </div>
               </div>
-              <div class="gfx-time-col">
-                ${(isTimerEnabled && item.time) ? `<div class="gfx-time-val">${item.time}</div>` : ''}
-                <div class="gfx-time-delta">${item.delta || ''}</div>
-              </div>
-            </div>
-          `).join('');
+            `).join('');
 
-          if (lbHtml !== lastLeaderboardHtml) {
-            listContainer.innerHTML = lbHtml;
-            lastLeaderboardHtml = lbHtml;
+            if (lbHtml !== lastLeaderboardHtml) {
+              listContainer.innerHTML = lbHtml;
+              lastLeaderboardHtml = lbHtml;
+            }
           }
         }
       } else {

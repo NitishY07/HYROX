@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     theme: 'theme-sportvot',
     position: 'pos-top-left',
     nameFormat: 'full',
+    allowSimFallback: false,
     visibleElements: {
       banner: true,
       leaderboard: true,
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const connectBtn = document.getElementById('connectBtn');
   const connectionStatus = document.getElementById('connectionStatus');
   const modeToggle = document.getElementById('modeToggle');
+  const simFallbackToggle = document.getElementById('simFallbackToggle');
 
   const meetingSelect = document.getElementById('meetingSelect');
   const raceSelect = document.getElementById('raceSelect');
@@ -83,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
       theme: state.theme,
       position: state.position,
       nameFormat: state.nameFormat,
+      allowSimFallback: state.allowSimFallback,
       visibleElements: state.visibleElements,
       meetingInfo: state.meetingInfo,
       leaderboard: state.leaderboard,
@@ -163,8 +166,13 @@ document.addEventListener('DOMContentLoaded', () => {
       updateStatus(`Connection Error: ${err.message}`, 'error');
       
       if (state.mode === 'live') {
-        console.warn('Live API connection failed. Activating timer fallback.');
-        startSimulatorSync();
+        if (state.allowSimFallback) {
+          startSimulatorSync();
+        } else {
+          simulator.stop();
+          state.leaderboard = [];
+          syncState();
+        }
       }
     }
   }
@@ -241,11 +249,30 @@ document.addEventListener('DOMContentLoaded', () => {
           updateSpotlightSelectOptions();
           syncState();
         } else {
-          startSimulatorSync();
+          if (state.allowSimFallback) {
+            startSimulatorSync();
+          } else {
+            simulator.stop();
+            state.leaderboard = [];
+            state.tickerItems = [
+              { bib: 'LIVE', name: 'Mika Timing Live Feed Connected', checkpoint: 'Awaiting Race Start', time: '' }
+            ];
+            updateSpotlightSelectOptions();
+            syncState();
+          }
         }
       } catch (err) {
         console.info('Live results endpoint info:', err.message);
-        startSimulatorSync();
+        if (state.allowSimFallback) {
+          startSimulatorSync();
+        } else {
+          simulator.stop();
+          state.leaderboard = [];
+          state.tickerItems = [
+            { bib: 'LIVE', name: 'Mika Timing Live Feed Connected', checkpoint: 'Awaiting Race Start', time: '' }
+          ];
+          syncState();
+        }
       }
     };
 
@@ -397,6 +424,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (connectBtn) connectBtn.addEventListener('click', connectAPI);
   if (modeToggle) modeToggle.addEventListener('change', updateMode);
+  if (simFallbackToggle) {
+    simFallbackToggle.addEventListener('change', () => {
+      state.allowSimFallback = simFallbackToggle.checked;
+      if (state.mode === 'live') {
+        startLivePolling();
+      }
+    });
+  }
 
   if (toggleBanner) toggleBanner.addEventListener('change', () => { state.visibleElements.banner = toggleBanner.checked; syncState(); });
   if (toggleLeaderboard) toggleLeaderboard.addEventListener('change', () => { state.visibleElements.leaderboard = toggleLeaderboard.checked; syncState(); });
