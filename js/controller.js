@@ -230,6 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let result = rawNameText || constructed || `Athlete #${fallbackIndex+1}`;
             result = result.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
+
+            if (result.includes(',') && !result.includes('&')) {
+              const parts = result.split(',');
+              if (parts.length === 2) {
+                result = `${parts[1].trim()} ${parts[0].trim()}`;
+              }
+            }
+
             return result || `Athlete #${fallbackIndex+1}`;
           };
 
