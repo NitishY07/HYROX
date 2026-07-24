@@ -152,6 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
               const rankNum = item.rank || (idx + 1);
               const formattedRank = String(rankNum).padStart(2, '0');
               let rightColText = '';
+              let splitText = item.split || '';
+
               if (item.time) {
                 rightColText = item.time;
               } else if (item.split && item.split !== 'REGISTERED') {
@@ -164,11 +166,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 rightColText = teamName;
               }
 
+              const fullName = formatAthleteName(item.name, state.nameFormat);
+
               return `
                 <div class="gfx-lb-item pos-${rankNum}">
                   <div class="gfx-rank-num">${formattedRank}</div>
                   <div class="gfx-athlete-details">
-                    <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
+                    <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
+                    ${(splitText && splitText !== 'REGISTERED') ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
                   </div>
                   <div class="gfx-time-col">
                     <div class="gfx-time-val">${escapeHtml(rightColText.toUpperCase())}</div>
