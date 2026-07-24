@@ -221,18 +221,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const results = await api.getRaceResults(state.selectedRaceId, state.selectedMeetingId, state.selectedEventKey);
         if (results && results.length > 0) {
           simulator.stop();
-          state.leaderboard = results.map((r, i) => {
+          const cleanName = (r, fallbackIndex) => {
             const rawNameText = r.nameText || r.name || r.displayName || '';
-            const firstName = r.firstname || r.first_name || r.fname || '';
-            const rawLastName = r.lastname || r.last_name || r.lname || '';
-            const lastName = rawLastName === '.' ? '' : rawLastName;
+            const firstName = (r.firstname || r.first_name || r.fname || '').trim();
+            const rawLastName = (r.lastname || r.last_name || r.lname || '').trim();
+            const lastName = (rawLastName === '.' || rawLastName === ',') ? '' : rawLastName;
             const constructed = `${firstName} ${lastName}`.trim();
-            const fullName = rawNameText || constructed || `Athlete #${i+1}`;
             
+            let result = rawNameText || constructed || `Athlete #${fallbackIndex+1}`;
+            result = result.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
+            return result || `Athlete #${fallbackIndex+1}`;
+          };
+
+          state.leaderboard = results.map((r, i) => {
             return {
               rank: r.rank || r.position || i + 1,
               bib: r.bib || r.startNo || r.idParticipant || `B${i+1}`,
-              name: fullName,
+              name: cleanName(r, i),
               club: r.startGroup || r.clubname || r.club || r.raceTitle || r.nation || '',
               nat: r.nationality || r.nation || 'IND',
               split: r.splitName || r.checkpointName || r.checkpoint || r.split || (r.startGroup ? 'REGISTERED' : ''),
@@ -241,16 +246,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
           });
 
-          state.tickerItems = results.map(r => {
-            const rawNameText = r.nameText || r.name || r.displayName || '';
-            const firstName = r.firstname || r.first_name || r.fname || '';
-            const rawLastName = r.lastname || r.last_name || r.lname || '';
-            const lastName = rawLastName === '.' ? '' : rawLastName;
-            const constructed = `${firstName} ${lastName}`.trim();
-            const fullName = rawNameText || constructed || 'Participant';
+          state.tickerItems = results.map((r, i) => {
             return {
               bib: r.bib || r.startNo || r.idParticipant || '00',
-              name: fullName,
+              name: cleanName(r, i),
               checkpoint: r.splitName || r.checkpointName || r.checkpoint || r.split || r.startGroup || 'Registered Participant',
               time: r.splitTime || r.timeText || ''
             };
