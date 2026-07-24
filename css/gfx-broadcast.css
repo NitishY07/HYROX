@@ -1072,18 +1072,20 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
 
 .pos-bottom-grid .gfx-grid-station-pill,
 .theme-starting-list.pos-bottom-grid .gfx-grid-station-pill {
-  background: #ECEFF1 !important;
-  color: #111111 !important;
+  background: #111111 !important;
+  color: #FFFFFF !important;
   font-family: 'Brutel', sans-serif !important;
-  font-weight: 800 !important;
+  font-weight: 900 !important;
   font-size: 15px !important;
-  padding: 4px 16px !important;
-  border-radius: 6px !important;
+  letter-spacing: 1.5px !important;
+  padding: 6px 18px !important;
+  border-radius: 4px !important;
   display: inline-flex !important;
   align-items: center !important;
-  height: 32px !important;
+  height: 34px !important;
   box-sizing: border-box !important;
-  border: 1px solid #CCCCCC !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  margin-bottom: 4px !important;
 }
 
 .pos-bottom-grid .gfx-lb-header,
@@ -1097,7 +1099,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
   grid-template-columns: repeat(4, 1fr) !important;
   gap: 8px 14px !important;
   width: 100% !important;
-  border-left: 2.5px solid rgba(255, 255, 255, 0.6) !important;
+  border-left: 3px solid rgba(255, 255, 255, 0.8) !important;
   padding-left: 12px !important;
   box-sizing: border-box !important;
 }
@@ -1106,7 +1108,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
 .theme-starting-list.pos-bottom-grid .gfx-lb-item {
   display: grid !important;
   grid-template-columns: 36px 1fr 140px !important;
-  height: 36px !important;
+  height: 40px !important;
   background: #FFFFFF !important;
   border-radius: 4px !important;
   overflow: hidden !important;
@@ -1117,7 +1119,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
 
 .pos-bottom-grid .gfx-rank-num,
 .theme-starting-list.pos-bottom-grid .gfx-rank-num {
-  background: transparent !important;
+  background: #F4F4F4 !important;
   color: #111111 !important;
   border: none !important;
   font-family: 'Brutel', sans-serif !important;
@@ -1133,7 +1135,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
 
 .pos-bottom-grid .gfx-athlete-details,
 .theme-starting-list.pos-bottom-grid .gfx-athlete-details {
-  background: transparent !important;
+  background: #FFFFFF !important;
   border: none !important;
   padding: 0 8px !important;
   display: flex !important;
@@ -1147,11 +1149,11 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
 
 .pos-bottom-grid .gfx-athlete-name,
 .theme-starting-list.pos-bottom-grid .gfx-athlete-name {
-  color: #111111 !important;
+  color: #000000 !important;
   font-family: 'Brutel', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 11.5px !important;
-  letter-spacing: 0.2px !important;
+  font-weight: 900 !important;
+  font-size: 12.5px !important;
+  letter-spacing: 0.1px !important;
   text-transform: uppercase !important;
   white-space: nowrap !important;
   overflow: hidden !important;
@@ -1179,7 +1181,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
   color: #111111 !important;
   font-family: 'BrutalType', 'Brutel', sans-serif !important;
   font-weight: 900 !important;
-  font-size: 11px !important;
+  font-size: 11.5px !important;
   letter-spacing: 0.3px !important;
   white-space: nowrap !important;
   text-transform: uppercase !important;

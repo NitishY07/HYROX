@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
           if (isBottomGrid) {
-            eventBar.innerHTML = `<span class="gfx-grid-station-num">05</span><span class="gfx-grid-station-pill">${escapeHtml(headerText)} [${isLiveTimerMode ? 'result' : 'startlist'}]</span>`;
+            eventBar.innerHTML = `<span class="gfx-grid-station-pill">STARTING LIST</span>`;
           } else {
             eventBar.innerText = headerText.toUpperCase();
           }
@@ -202,6 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const rowLimit = maxPlayerCount;
+            const displayMode = state.displayContent || 'both';
+
             const lbHtml = displayList.slice(0, rowLimit).map((item, idx) => {
               const rankNum = item.rank || (idx + 1);
               const formattedRank = String(rankNum).padStart(2, '0');
@@ -216,14 +218,11 @@ document.addEventListener('DOMContentLoaded', () => {
               ];
 
               if (isLiveTimerMode) {
-                // Live Race Timer Mode (2nd GFX option / SportVot Broadcast Theme):
-                // Strictly use exact timing returned from API in live mode
                 rightColText = item.time || (state.mode === 'sim' ? sampleAthletes[idx % sampleAthletes.length].time : '');
                 if (!splitText || splitText === 'REGISTERED') {
                   splitText = (state.mode === 'sim') ? sampleAthletes[idx % sampleAthletes.length].split : (item.split || '');
                 }
               } else {
-                // Pre-Race Starting List Mode (1st GFX option / Starting List Theme):
                 let teamName = item.club || item.nat || '';
                 if (!teamName || /^\d{1,2}:\d{2}/.test(teamName) || /HYROX/i.test(teamName)) {
                   teamName = sampleGyms[idx % sampleGyms.length];
@@ -258,18 +257,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
               const flagSvg = isBottomGrid ? `<svg class="gfx-flag-icon" viewBox="0 0 640 480" width="18" height="13" style="border-radius: 2px; flex-shrink: 0;"><path fill="#AA151B" d="M0 0h640v480H0z"/><path fill="#F1BF00" d="M0 120h640v240H0z"/></svg>` : '';
 
-              return `
-                <div class="gfx-lb-item pos-${rankNum}">
-                  <div class="gfx-rank-num">${formattedRank}</div>
+              const showPlayers = (displayMode === 'both' || displayMode === 'players');
+              const showTeams = (displayMode === 'both' || displayMode === 'teams');
+
+              let itemStyle = '';
+              if (isBottomGrid) {
+                if (displayMode === 'players') {
+                  itemStyle = 'grid-template-columns: 36px 1fr !important;';
+                } else if (displayMode === 'teams') {
+                  itemStyle = 'grid-template-columns: 36px 1fr !important;';
+                } else {
+                  itemStyle = 'grid-template-columns: 36px 1.4fr 1fr !important;';
+                }
+              }
+
+              let mainContentHtml = '';
+              if (displayMode === 'teams') {
+                mainContentHtml = `
+                  <div class="gfx-athlete-details">
+                    <div class="gfx-athlete-name" style="font-weight: 900; color: #111111;">${escapeHtml(rightColText.toUpperCase())}</div>
+                  </div>
+                `;
+              } else {
+                mainContentHtml = `
                   <div class="gfx-athlete-details">
                     ${flagSvg}
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
                     ${(splitText && splitText !== 'REGISTERED' && !isBottomGrid) ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
                   </div>
-                  <div class="gfx-time-col">
-                    <div class="gfx-time-val">${escapeHtml(rightColText.toUpperCase())}</div>
-                    ${deltaText ? `<div class="gfx-time-delta ${isLeader ? 'is-leader' : ''}">${escapeHtml(deltaText.toUpperCase())}</div>` : ''}
-                  </div>
+                `;
+              }
+
+              const rightColHtml = (showTeams && displayMode === 'both') ? `
+                <div class="gfx-time-col">
+                  <div class="gfx-time-val">${escapeHtml(rightColText.toUpperCase())}</div>
+                  ${deltaText ? `<div class="gfx-time-delta ${isLeader ? 'is-leader' : ''}">${escapeHtml(deltaText.toUpperCase())}</div>` : ''}
+                </div>
+              ` : '';
+
+              return `
+                <div class="gfx-lb-item pos-${rankNum}" style="${itemStyle}">
+                  <div class="gfx-rank-num">${formattedRank}</div>
+                  ${mainContentHtml}
+                  ${rightColHtml}
                 </div>
               `;
             }).join('');

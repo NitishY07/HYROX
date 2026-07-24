@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     theme: 'theme-starting-list',
     position: 'pos-bottom-grid',
     nameFormat: 'full',
+    displayContent: 'both',
     allowSimFallback: false,
     visibleElements: {
       banner: true,
@@ -64,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleClubs = document.getElementById('toggleClubs');
 
   const themeSelect = document.getElementById('themeSelect');
+  const displayContentSelect = document.getElementById('displayContentSelect');
   const nameFormatSelect = document.getElementById('nameFormatSelect');
   const posSelect = document.getElementById('posSelect');
   const athleteSearchInput = document.getElementById('athleteSearchInput');
@@ -85,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
       theme: state.theme,
       position: state.position,
       nameFormat: state.nameFormat,
+      displayContent: state.displayContent,
       allowSimFallback: state.allowSimFallback,
       visibleElements: state.visibleElements,
       meetingInfo: state.meetingInfo,
@@ -408,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
       raceId: raceSelect ? raceSelect.value : '',
       eventKey: eventSelect ? eventSelect.value : '',
       nameFormat: nameFormatSelect ? nameFormatSelect.value : 'full',
+      displayContent: displayContentSelect ? displayContentSelect.value : 'both',
       theme: themeSelect ? themeSelect.value : 'theme-starting-list',
       position: posSelect ? posSelect.value : 'pos-bottom-grid'
     };
@@ -432,6 +436,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (config.nameFormat && nameFormatSelect) {
           nameFormatSelect.value = config.nameFormat;
           state.nameFormat = config.nameFormat;
+        }
+        if (config.displayContent && displayContentSelect) {
+          displayContentSelect.value = config.displayContent;
+          state.displayContent = config.displayContent;
         }
         if (config.theme && themeSelect) {
           themeSelect.value = config.theme;
@@ -555,6 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleClubs) toggleClubs.addEventListener('change', () => { state.visibleElements.showClubs = toggleClubs.checked; saveControlPanelSettings(); syncState(); });
 
   if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; saveControlPanelSettings(); syncState(); });
+  if (displayContentSelect) displayContentSelect.addEventListener('change', () => { state.displayContent = displayContentSelect.value; saveControlPanelSettings(); syncState(); });
   if (nameFormatSelect) nameFormatSelect.addEventListener('change', () => { state.nameFormat = nameFormatSelect.value; saveControlPanelSettings(); syncState(); });
   if (posSelect) posSelect.addEventListener('change', () => { state.position = posSelect.value; saveControlPanelSettings(); syncState(); });
 
