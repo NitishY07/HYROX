@@ -21,14 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
     position: 'pos-bottom-grid',
     nameFormat: 'full',
     displayContent: 'both',
+    gridMode: 'startlist',
+    raceClockTime: '00:03:31',
     allowSimFallback: false,
     visibleElements: {
-      banner: true,
+      banner: false,
       leaderboard: true,
       lowerThird: false,
       ticker: true,
       showTimer: false,
-      showClubs: true
+      showClubs: true,
+      raceClock: true
     },
     meetings: [],
     races: [],
@@ -58,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const eventSelect = document.getElementById('eventSelect');
 
   const toggleGridGfx = document.getElementById('toggleGridGfx');
+  const toggleRaceClock = document.getElementById('toggleRaceClock');
   const toggleBanner = document.getElementById('toggleBanner');
   const toggleLeaderboard = document.getElementById('toggleLeaderboard');
   const toggleLowerThird = document.getElementById('toggleLowerThird');
@@ -66,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleClubs = document.getElementById('toggleClubs');
 
   const themeSelect = document.getElementById('themeSelect');
+  const gridModeSelect = document.getElementById('gridModeSelect');
   const displayContentSelect = document.getElementById('displayContentSelect');
   const nameFormatSelect = document.getElementById('nameFormatSelect');
   const posSelect = document.getElementById('posSelect');
@@ -89,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
       position: state.position,
       nameFormat: state.nameFormat,
       displayContent: state.displayContent,
+      gridMode: state.gridMode,
+      raceClockTime: state.raceClockTime,
       allowSimFallback: state.allowSimFallback,
       visibleElements: state.visibleElements,
       meetingInfo: state.meetingInfo,
@@ -301,6 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
           });
 
+          state.raceClockTime = (results[0]?.timeText || results[0]?.time || '00:03:31');
           updateSpotlightSelectOptions();
           syncState();
         } else {
@@ -353,6 +361,14 @@ document.addEventListener('DOMContentLoaded', () => {
     simSyncInterval = setInterval(() => {
       state.leaderboard = simulator.getLeaderboardData();
       state.tickerItems = simulator.splitEvents;
+
+      if (simulator.startTimeMs) {
+        const elapsedSec = Math.floor((Date.now() - simulator.startTimeMs) / 1000);
+        const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+        const secs = String(elapsedSec % 60).padStart(2, '0');
+        const hrs = Math.floor(elapsedSec / 3600);
+        state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+      }
       
       if (!state.spotlightAthlete && state.leaderboard.length > 0) {
         state.spotlightAthlete = state.leaderboard[0];
@@ -413,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       eventKey: eventSelect ? eventSelect.value : '',
       nameFormat: nameFormatSelect ? nameFormatSelect.value : 'full',
       displayContent: displayContentSelect ? displayContentSelect.value : 'both',
+      gridMode: gridModeSelect ? gridModeSelect.value : 'startlist',
       theme: themeSelect ? themeSelect.value : 'theme-starting-list',
       position: posSelect ? posSelect.value : 'pos-bottom-grid'
     };
@@ -441,6 +458,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (config.displayContent && displayContentSelect) {
           displayContentSelect.value = config.displayContent;
           state.displayContent = config.displayContent;
+        }
+        if (config.gridMode && gridModeSelect) {
+          gridModeSelect.value = config.gridMode;
+          state.gridMode = config.gridMode;
         }
         if (config.theme && themeSelect) {
           themeSelect.value = config.theme;
@@ -577,6 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (toggleRaceClock) toggleRaceClock.addEventListener('change', () => { state.visibleElements.raceClock = toggleRaceClock.checked; saveControlPanelSettings(); syncState(); });
   if (toggleBanner) toggleBanner.addEventListener('change', () => { state.visibleElements.banner = toggleBanner.checked; saveControlPanelSettings(); syncState(); });
   if (toggleLeaderboard) toggleLeaderboard.addEventListener('change', () => { state.visibleElements.leaderboard = toggleLeaderboard.checked; saveControlPanelSettings(); syncState(); });
   if (toggleLowerThird) toggleLowerThird.addEventListener('change', () => { state.visibleElements.lowerThird = toggleLowerThird.checked; saveControlPanelSettings(); syncState(); });
@@ -585,6 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleClubs) toggleClubs.addEventListener('change', () => { state.visibleElements.showClubs = toggleClubs.checked; saveControlPanelSettings(); syncState(); });
 
   if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; saveControlPanelSettings(); syncState(); });
+  if (gridModeSelect) gridModeSelect.addEventListener('change', () => { state.gridMode = gridModeSelect.value; saveControlPanelSettings(); syncState(); });
   if (displayContentSelect) displayContentSelect.addEventListener('change', () => { state.displayContent = displayContentSelect.value; saveControlPanelSettings(); syncState(); });
   if (nameFormatSelect) nameFormatSelect.addEventListener('change', () => { state.nameFormat = nameFormatSelect.value; saveControlPanelSettings(); syncState(); });
   if (posSelect) posSelect.addEventListener('change', () => { state.position = posSelect.value; saveControlPanelSettings(); syncState(); });
@@ -645,7 +668,9 @@ document.addEventListener('DOMContentLoaded', () => {
       state.visibleElements.leaderboard = newState;
       state.visibleElements.lowerThird = false;
       state.visibleElements.ticker = newState;
+      state.visibleElements.raceClock = newState;
       if (toggleGridGfx) toggleGridGfx.checked = newState;
+      if (toggleRaceClock) toggleRaceClock.checked = newState;
       if (toggleBanner) toggleBanner.checked = newState;
       if (toggleLeaderboard) toggleLeaderboard.checked = newState;
       if (toggleLowerThird) toggleLowerThird.checked = false;
@@ -665,6 +690,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (toggleGridGfx) {
           toggleGridGfx.checked = !toggleGridGfx.checked;
           toggleGridGfx.dispatchEvent(new Event('change'));
+        }
+        break;
+      case 't':
+      case 'T':
+        if (toggleRaceClock) {
+          toggleRaceClock.checked = !toggleRaceClock.checked;
+          state.visibleElements.raceClock = toggleRaceClock.checked;
+          syncState();
         }
         break;
       case '1':

@@ -10,7 +10,18 @@ let currentGfxState = {
   theme: 'theme-starting-list',
   position: 'pos-bottom-grid',
   displayContent: 'both',
+  gridMode: 'startlist',
+  raceClockTime: '00:03:31',
   nameFormat: 'full',
+  visibleElements: {
+    banner: false,
+    leaderboard: true,
+    lowerThird: false,
+    ticker: true,
+    showTimer: false,
+    showClubs: true,
+    raceClock: true
+  },
   timestamp: Date.now()
 };
 

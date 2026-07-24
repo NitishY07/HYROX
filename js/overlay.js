@@ -222,7 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 'KONGFIT', 'CROSSFIT 9ONE', 'FITNESS FIRST'
               ];
 
-              if (isLiveTimerMode) {
+              const isGridLiveSplits = (state.gridMode === 'livesplits');
+
+              if (isGridLiveSplits || isLiveTimerMode) {
                 rightColText = item.time || (state.mode === 'sim' ? sampleAthletes[idx % sampleAthletes.length].time : '');
                 if (!splitText || splitText === 'REGISTERED') {
                   splitText = (state.mode === 'sim') ? sampleAthletes[idx % sampleAthletes.length].split : (item.split || '');
@@ -287,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainContentHtml = `
                   <div class="gfx-athlete-details">
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
-                    ${(splitText && splitText !== 'REGISTERED' && !isBottomGrid) ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
+                    ${(splitText && splitText !== 'REGISTERED') ? `<div class="gfx-split-badge" style="font-size: 10px; font-weight: 800; color: #EAB308;">${escapeHtml(splitText)}</div>` : ''}
                   </div>
                 `;
               }
@@ -339,7 +341,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 5. Ticker - Smooth Continuous Marquee
+    // 5. Top-Right HYROX Broadcast Race Clock (Reference Image 2 Design)
+    const raceClockEl = document.getElementById('gfxRaceClock');
+    const clockValEl = document.getElementById('gfxClockVal');
+    if (raceClockEl) {
+      if (state.visibleElements && state.visibleElements.raceClock !== false) {
+        raceClockEl.classList.remove('gfx-hidden');
+        if (clockValEl) {
+          clockValEl.innerText = state.raceClockTime || '00:03:31';
+        }
+      } else {
+        raceClockEl.classList.add('gfx-hidden');
+      }
+    }
+
+    // 6. Ticker - Smooth Continuous Marquee
     if (tickerEl) {
       if (state.visibleElements && state.visibleElements.ticker && state.tickerItems && state.tickerItems.length > 0) {
         tickerEl.classList.remove('gfx-hidden');

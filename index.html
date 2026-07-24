@@ -70,6 +70,17 @@
             </label>
           </div>
 
+          <div class="toggle-row" style="background: rgba(255, 215, 0, 0.08); padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.3); margin-bottom: 12px;">
+            <div class="toggle-label">
+              <span class="key-badge" style="background: #FFD700; color: #000; font-weight: 900;">T</span>
+              <span style="font-weight: 900; color: #FFD700; font-size: 14.5px;">Top-Right HYROX Race Clock</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggleRaceClock" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
           <div class="toggle-row">
             <div class="toggle-label">
               <span class="key-badge">1</span>
@@ -165,11 +176,18 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="gridModeSelect">Grid Mode (Starting List vs Live Splits)</label>
+            <select id="gridModeSelect">
+              <option value="startlist" selected>Pre-Race Starting List (Team/Gym Names)</option>
+              <option value="livesplits">Live Race Mode (Station Splits &amp; Split Times from API)</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="displayContentSelect">Grid Card Content Display</label>
             <select id="displayContentSelect">
-              <option value="both" selected>Both Players &amp; Team Name</option>
+              <option value="both" selected>Both Players &amp; Team Name / Live Time</option>
               <option value="players">Players Name Only</option>
-              <option value="teams">Team Name Only</option>
+              <option value="teams">Team Name / Live Time Only</option>
             </select>
           </div>
           <div class="form-group">
