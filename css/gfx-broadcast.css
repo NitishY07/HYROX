@@ -1264,3 +1264,43 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   display: inline-block !important;
   margin-top: -1px !important;
 }
+
+.gfx-race-clock.pos-clock-top-right {
+  top: 30px !important;
+  right: 30px !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+.gfx-race-clock.pos-clock-top-left {
+  top: 30px !important;
+  left: 30px !important;
+  bottom: auto !important;
+  right: auto !important;
+  transform: none !important;
+}
+
+.gfx-race-clock.pos-clock-bottom-right {
+  bottom: 80px !important;
+  right: 30px !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+.gfx-race-clock.pos-clock-bottom-left {
+  bottom: 80px !important;
+  left: 30px !important;
+  top: auto !important;
+  right: auto !important;
+  transform: none !important;
+}
+
+.gfx-race-clock.pos-clock-top-center {
+  top: 30px !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translateX(-50%) !important;
+}

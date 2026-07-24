@@ -347,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (raceClockEl) {
       if (state.visibleElements && state.visibleElements.raceClock !== false) {
         raceClockEl.classList.remove('gfx-hidden');
+        raceClockEl.className = `gfx-race-clock gfx-animated ${state.raceClockPosition || 'pos-clock-top-right'}`;
         if (clockValEl) {
           clockValEl.innerText = state.raceClockTime || '00:03:31';
         }
