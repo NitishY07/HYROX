@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
               }
 
-              const flagSvg = isBottomGrid ? `<svg class="gfx-flag-icon" viewBox="0 0 640 480" width="18" height="13" style="border-radius: 2px; flex-shrink: 0;"><path fill="#AA151B" d="M0 0h640v480H0z"/><path fill="#F1BF00" d="M0 120h640v240H0z"/></svg>` : '';
+              const flagSvg = '';
 
               const showPlayers = (displayMode === 'both' || displayMode === 'players');
               const showTeams = (displayMode === 'both' || displayMode === 'teams');
@@ -263,11 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
               let itemStyle = '';
               if (isBottomGrid) {
                 if (displayMode === 'players') {
-                  itemStyle = 'grid-template-columns: 36px 1fr !important;';
+                  itemStyle = 'grid-template-columns: 42px 1fr !important;';
                 } else if (displayMode === 'teams') {
-                  itemStyle = 'grid-template-columns: 36px 1fr !important;';
+                  itemStyle = 'grid-template-columns: 42px 1fr !important;';
                 } else {
-                  itemStyle = 'grid-template-columns: 36px 1.4fr 1fr !important;';
+                  itemStyle = 'grid-template-columns: 42px 1.6fr 1fr !important;';
                 }
               }
 
@@ -275,13 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
               if (displayMode === 'teams') {
                 mainContentHtml = `
                   <div class="gfx-athlete-details">
-                    <div class="gfx-athlete-name" style="font-weight: 900; color: #111111;">${escapeHtml(rightColText.toUpperCase())}</div>
+                    <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml(rightColText.toUpperCase())}</div>
                   </div>
                 `;
               } else {
                 mainContentHtml = `
                   <div class="gfx-athlete-details">
-                    ${flagSvg}
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
                     ${(splitText && splitText !== 'REGISTERED' && !isBottomGrid) ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
                   </div>

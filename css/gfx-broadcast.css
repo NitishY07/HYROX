@@ -1107,8 +1107,8 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
 .pos-bottom-grid .gfx-lb-item,
 .theme-starting-list.pos-bottom-grid .gfx-lb-item {
   display: grid !important;
-  grid-template-columns: 36px 1fr 140px !important;
-  height: 40px !important;
+  grid-template-columns: 42px 1.6fr 1fr !important;
+  height: 48px !important;
   background: #FFFFFF !important;
   border-radius: 4px !important;
   overflow: hidden !important;
@@ -1124,7 +1124,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
   border: none !important;
   font-family: 'Brutel', sans-serif !important;
   font-weight: 900 !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
   height: 100% !important;
   border-right: 1px solid #E0E0E0 !important;
   display: flex !important;
@@ -1137,7 +1137,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
 .theme-starting-list.pos-bottom-grid .gfx-athlete-details {
   background: #FFFFFF !important;
   border: none !important;
-  padding: 0 8px !important;
+  padding: 0 10px !important;
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
@@ -1152,8 +1152,8 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
   color: #000000 !important;
   font-family: 'Brutel', sans-serif !important;
   font-weight: 900 !important;
-  font-size: 12.5px !important;
-  letter-spacing: 0.1px !important;
+  font-size: 14.5px !important;
+  letter-spacing: 0px !important;
   text-transform: uppercase !important;
   white-space: nowrap !important;
   overflow: hidden !important;
@@ -1171,7 +1171,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
   align-items: center !important;
   justify-content: center !important;
   border-left: 1px solid #D5D5D5 !important;
-  padding: 0 6px !important;
+  padding: 0 8px !important;
   border-radius: 0 !important;
   width: 100% !important;
 }
@@ -1181,7 +1181,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item {
   color: #111111 !important;
   font-family: 'BrutalType', 'Brutel', sans-serif !important;
   font-weight: 900 !important;
-  font-size: 11.5px !important;
+  font-size: 13px !important;
   letter-spacing: 0.3px !important;
   white-space: nowrap !important;
   text-transform: uppercase !important;
