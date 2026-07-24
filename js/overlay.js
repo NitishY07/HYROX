@@ -90,19 +90,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const isTimerEnabled = state.visibleElements && state.visibleElements.showTimer === true;
     const isClubsEnabled = !state.visibleElements || state.visibleElements.showClubs !== false;
 
-    // Dynamic clock calculation in both SIM and LIVE modes
+    // Dynamic clock calculation ONLY in SIM mode
     let currentLeaderboard = state.leaderboard || [];
-    const baseStartTime = state.startTimeMs || (window.gfxRaceStartTime = window.gfxRaceStartTime || Date.now());
-    const elapsedSec = Math.floor((Date.now() - baseStartTime) / 1000);
-    
-    currentLeaderboard = currentLeaderboard.map((item, index) => {
-      const baseOffset = index === 0 ? 0 : index * 4;
-      const itemSec = Math.max(0, elapsedSec + baseOffset);
-      return {
-        ...item,
-        time: item.time && /^\d{1,2}:\d{2}/.test(item.time) ? item.time : formatTime(itemSec)
-      };
-    });
+    if (state.mode === 'sim' && isTimerEnabled && state.startTimeMs) {
+      const elapsedSec = Math.floor((Date.now() - state.startTimeMs) / 1000);
+      currentLeaderboard = currentLeaderboard.map((item, index) => {
+        const baseOffset = index === 0 ? 0 : index * 4.2;
+        const itemSec = Math.max(0, elapsedSec + baseOffset);
+        return {
+          ...item,
+          time: formatTime(itemSec)
+        };
+      });
+    }
 
     // 3. Leaderboard
     if (leaderboardEl) {
@@ -209,9 +209,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
               if (isLiveTimerMode) {
                 // Live Race Timer Mode (2nd GFX option / SportVot Broadcast Theme):
-                rightColText = item.time || sampleAthletes[idx % sampleAthletes.length].time;
+                // Strictly use exact timing returned from API in live mode
+                rightColText = item.time || (state.mode === 'sim' ? sampleAthletes[idx % sampleAthletes.length].time : '');
                 if (!splitText || splitText === 'REGISTERED') {
-                  splitText = sampleAthletes[idx % sampleAthletes.length].split;
+                  splitText = (state.mode === 'sim') ? sampleAthletes[idx % sampleAthletes.length].split : (item.split || '');
                 }
               } else {
                 // Pre-Race Starting List Mode (1st GFX option / Starting List Theme):
