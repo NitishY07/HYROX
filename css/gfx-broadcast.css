@@ -227,6 +227,8 @@
   justify-content: flex-start !important;
   box-sizing: border-box !important;
   border-radius: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
 }
 
 .theme-starting-list .gfx-athlete-name {
@@ -237,6 +239,11 @@
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
   text-shadow: none !important;
+  line-height: 1.2 !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .theme-starting-list .gfx-athlete-club {

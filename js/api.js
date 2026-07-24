@@ -136,16 +136,13 @@ class MikaTimingAPI {
       } catch (e3) {}
     }
 
-    // 4. Return Registered Participations from Production API (guarantee 10 participants)
+    // 4. Return Registered Participations from Production API (guarantee all participants)
     try {
       const data = await this.request(`/meetinginfo/meeting/${meetingId}/participations/basic`);
       if (data && data.participations && data.participations.length > 0) {
         const filtered = data.participations.filter(p => !key || p.eventKey === key || p.idRace === idRace);
-        if (filtered.length >= 10) return filtered.slice(0, 10);
-        
-        // Supplement up to 10 using other registered meeting participants
         const remaining = data.participations.filter(p => !filtered.some(f => f.idParticipant === p.idParticipant));
-        return [...filtered, ...remaining].slice(0, 10);
+        return [...filtered, ...remaining];
       }
     } catch (e4) {}
 
