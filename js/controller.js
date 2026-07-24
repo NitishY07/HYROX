@@ -82,16 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const openOverlayBtn = document.getElementById('openOverlayBtn');
   const networkUrlsContainer = document.getElementById('networkUrlsContainer');
 
-  const startRaceClockBtn = document.getElementById('startRaceClockBtn');
-  const pauseRaceClockBtn = document.getElementById('pauseRaceClockBtn');
-  const resetRaceClockBtn = document.getElementById('resetRaceClockBtn');
-  const customClockInput = document.getElementById('customClockInput');
-  const setCustomClockBtn = document.getElementById('setCustomClockBtn');
-
   let livePollInterval = null;
   let simSyncInterval = null;
-  let manualClockInterval = null;
-  let manualClockSec = 211;
 
   /**
    * Sync State across BroadcastChannel, LocalStorage, AND Server Network API
@@ -616,54 +608,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleTicker) toggleTicker.addEventListener('change', () => { state.visibleElements.ticker = toggleTicker.checked; saveControlPanelSettings(); syncState(); });
   if (toggleTimer) toggleTimer.addEventListener('change', () => { state.visibleElements.showTimer = toggleTimer.checked; saveControlPanelSettings(); syncState(); });
   if (toggleClubs) toggleClubs.addEventListener('change', () => { state.visibleElements.showClubs = toggleClubs.checked; saveControlPanelSettings(); syncState(); });
-
-  function updateManualClockDisplay() {
-    const mins = String(Math.floor(manualClockSec / 60)).padStart(2, '0');
-    const secs = String(manualClockSec % 60).padStart(2, '0');
-    const hrs = Math.floor(manualClockSec / 3600);
-    state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
-    syncState();
-  }
-
-  if (startRaceClockBtn) {
-    startRaceClockBtn.addEventListener('click', () => {
-      if (manualClockInterval) clearInterval(manualClockInterval);
-      manualClockInterval = setInterval(() => {
-        manualClockSec++;
-        updateManualClockDisplay();
-      }, 1000);
-    });
-  }
-
-  if (pauseRaceClockBtn) {
-    pauseRaceClockBtn.addEventListener('click', () => {
-      if (manualClockInterval) {
-        clearInterval(manualClockInterval);
-        manualClockInterval = null;
-      }
-    });
-  }
-
-  if (resetRaceClockBtn) {
-    resetRaceClockBtn.addEventListener('click', () => {
-      if (manualClockInterval) {
-        clearInterval(manualClockInterval);
-        manualClockInterval = null;
-      }
-      manualClockSec = 0;
-      updateManualClockDisplay();
-    });
-  }
-
-  if (setCustomClockBtn && customClockInput) {
-    setCustomClockBtn.addEventListener('click', () => {
-      const val = customClockInput.value.trim();
-      if (val) {
-        state.raceClockTime = val;
-        syncState();
-      }
-    });
-  }
 
   if (raceClockPosSelect) {
     raceClockPosSelect.addEventListener('change', () => {
