@@ -108,11 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (leaderboardEl) {
       if (state.visibleElements && state.visibleElements.leaderboard) {
         leaderboardEl.classList.remove('gfx-hidden');
-        const isStartingList = state.theme === 'theme-starting-list';
+        const isStartingListTheme = state.theme === 'theme-starting-list';
+        const hasLiveTimes = currentLeaderboard.some(item => item.time || (item.split && item.split !== 'REGISTERED'));
+
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
-          if (isStartingList) {
-            eventBar.innerText = 'STARTING LIST';
+          if (isStartingListTheme) {
+            eventBar.innerText = hasLiveTimes ? (state.meetingInfo?.category || 'LEADERBOARD') : 'STARTING LIST';
           } else if (state.meetingInfo) {
             eventBar.innerText = (state.meetingInfo.category || state.meetingInfo.meta || 'EVENT NAME').replace(/\s*•\s*Live/i, '').toUpperCase();
           }
@@ -120,8 +122,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const catBadge = document.getElementById('lbCategory');
         if (catBadge) {
-          if (isStartingList) {
-            catBadge.innerText = 'TEAM';
+          if (isStartingListTheme) {
+            catBadge.innerText = hasLiveTimes ? 'TIME' : 'TEAM';
           } else if (state.meetingInfo && state.meetingInfo.category) {
             catBadge.innerText = state.meetingInfo.category;
           }
@@ -129,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const titleEl = document.querySelector('.gfx-lb-title');
         if (titleEl) {
-          if (isStartingList) {
+          if (isStartingListTheme) {
             titleEl.innerText = 'ATHLETES';
           } else if (state.meetingInfo && state.meetingInfo.title) {
             titleEl.innerText = state.meetingInfo.title;
@@ -158,14 +160,23 @@ document.addEventListener('DOMContentLoaded', () => {
               'KONGFIT', 'CROSSFIT 9ONE', 'FITNESS FIRST'
             ];
 
-            const rowLimit = isStartingList ? 15 : 10;
+            const rowLimit = isStartingListTheme ? 15 : 10;
             const lbHtml = currentLeaderboard.slice(0, rowLimit).map((item, idx) => {
               const formattedRank = String(item.rank).padStart(2, '0');
-              if (isStartingList) {
-                let teamName = item.club || item.nat || '';
-                if (!teamName || /^\d{1,2}:\d{2}/.test(teamName) || /HYROX/i.test(teamName)) {
-                  teamName = sampleGyms[idx % sampleGyms.length];
+              if (isStartingListTheme) {
+                let rightColText = '';
+                if (item.time) {
+                  rightColText = item.time;
+                } else if (item.split && item.split !== 'REGISTERED') {
+                  rightColText = item.split;
+                } else {
+                  let teamName = item.club || item.nat || '';
+                  if (!teamName || /^\d{1,2}:\d{2}/.test(teamName) || /HYROX/i.test(teamName)) {
+                    teamName = sampleGyms[idx % sampleGyms.length];
+                  }
+                  rightColText = teamName;
                 }
+
                 return `
                   <div class="gfx-lb-item pos-${item.rank}">
                     <div class="gfx-rank-num">${formattedRank}</div>
@@ -173,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
                     </div>
                     <div class="gfx-time-col">
-                      <div class="gfx-time-val">${escapeHtml(teamName.toUpperCase())}</div>
+                      <div class="gfx-time-val">${escapeHtml(rightColText.toUpperCase())}</div>
                     </div>
                   </div>
                 `;
