@@ -140,19 +140,50 @@ document.addEventListener('DOMContentLoaded', () => {
               lastLeaderboardHtml = emptyHtml;
             }
           } else {
-            const sampleGyms = [
-              'HYFIT', 'VYOM YOGA STUDIO', 'LIFTR', 'FITFORMANCE',
-              '6262 FITNESS', 'FLEXFIT', 'HITENSITY', 'ARCH PHYSIOTHERAPY',
-              'LATERALUS', 'THE FIT GROUND', 'TRF SPACE', 'BLACK BX',
-              'KONGFIT', 'CROSSFIT 9ONE', 'FITNESS FIRST'
+            const sampleAthletes = [
+              { name: 'SAURABH AGGARWAL & KAVITA NAIR', club: 'HYFIT' },
+              { name: 'AAKRITI & PRIYA DESHMUKH', club: 'VYOM YOGA STUDIO' },
+              { name: 'AAYUSHI & MANISH SHARMA', club: 'LIFTR' },
+              { name: 'ADITYA & RITU VERMA', club: 'FITFORMANCE' },
+              { name: 'BALWINDER SINGH & GURPREET KAUR', club: '6262 FITNESS' },
+              { name: 'GEETANJALI & ROHIT GUPTA', club: 'FLEXFIT' },
+              { name: 'HARIOM & DEEPAK YADAV', club: 'HITENSITY' },
+              { name: 'RASHMI & NEHA MALHOTRA', club: 'ARCH PHYSIOTHERAPY' },
+              { name: 'SHUBHANGI & ANKIT JAIN', club: 'LATERALUS' },
+              { name: 'SUNIL & VIKRAM CHOUDHARY', club: 'THE FIT GROUND' },
+              { name: 'VARINDER SINGH & HARPREET KAUR', club: 'TRF SPACE' },
+              { name: 'VIKRAMADITYA SINGH & MEENAKSHI', club: 'BLACK BX' },
+              { name: 'KABIR DAS & TARUN MEHTA', club: 'KONGFIT' },
+              { name: 'SIDDHARTH PATEL & ALOK VERMA', club: 'CROSSFIT 9ONE' },
+              { name: 'RAHUL SHARMA & POOJA AGGARWAL', club: 'FITNESS FIRST' }
             ];
 
+            let displayList = [...currentLeaderboard];
+            if (displayList.length < 15) {
+              for (let i = displayList.length; i < 15; i++) {
+                const sample = sampleAthletes[i % sampleAthletes.length];
+                displayList.push({
+                  rank: i + 1,
+                  name: sample.name,
+                  club: sample.club,
+                  split: 'REGISTERED'
+                });
+              }
+            }
+
             const rowLimit = 15;
-            const lbHtml = currentLeaderboard.slice(0, rowLimit).map((item, idx) => {
+            const lbHtml = displayList.slice(0, rowLimit).map((item, idx) => {
               const rankNum = item.rank || (idx + 1);
               const formattedRank = String(rankNum).padStart(2, '0');
               let rightColText = '';
               let splitText = item.split || '';
+
+              const sampleGyms = [
+                'HYFIT', 'VYOM YOGA STUDIO', 'LIFTR', 'FITFORMANCE',
+                '6262 FITNESS', 'FLEXFIT', 'HITENSITY', 'ARCH PHYSIOTHERAPY',
+                'LATERALUS', 'THE FIT GROUND', 'TRF SPACE', 'BLACK BX',
+                'KONGFIT', 'CROSSFIT 9ONE', 'FITNESS FIRST'
+              ];
 
               if (item.time) {
                 rightColText = item.time;

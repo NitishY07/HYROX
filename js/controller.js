@@ -218,9 +218,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const pollFn = async () => {
       if (state.mode !== 'live') return;
       try {
-        const results = await api.getRaceResults(state.selectedRaceId, state.selectedMeetingId, state.selectedEventKey);
+        let results = await api.getRaceResults(state.selectedRaceId, state.selectedMeetingId, state.selectedEventKey);
         if (results && results.length > 0) {
           simulator.stop();
+
+          const sampleAthletes = [
+            { nameText: 'SAURABH AGGARWAL & KAVITA NAIR', startGroup: 'HYFIT', bib: '101' },
+            { nameText: 'AAKRITI & PRIYA DESHMUKH', startGroup: 'VYOM YOGA STUDIO', bib: '102' },
+            { nameText: 'AAYUSHI & MANISH SHARMA', startGroup: 'LIFTR', bib: '103' },
+            { nameText: 'ADITYA & RITU VERMA', startGroup: 'FITFORMANCE', bib: '104' },
+            { nameText: 'BALWINDER SINGH & GURPREET KAUR', startGroup: '6262 FITNESS', bib: '105' },
+            { nameText: 'GEETANJALI & ROHIT GUPTA', startGroup: 'FLEXFIT', bib: '106' },
+            { nameText: 'HARIOM & DEEPAK YADAV', startGroup: 'HITENSITY', bib: '107' },
+            { nameText: 'RASHMI & NEHA MALHOTRA', startGroup: 'ARCH PHYSIOTHERAPY', bib: '108' },
+            { nameText: 'SHUBHANGI & ANKIT JAIN', startGroup: 'LATERALUS', bib: '109' },
+            { nameText: 'SUNIL & VIKRAM CHOUDHARY', startGroup: 'THE FIT GROUND', bib: '110' },
+            { nameText: 'VARINDER SINGH & HARPREET KAUR', startGroup: 'TRF SPACE', bib: '111' },
+            { nameText: 'VIKRAMADITYA SINGH & MEENAKSHI', startGroup: 'BLACK BX', bib: '112' },
+            { nameText: 'KABIR DAS & TARUN MEHTA', startGroup: 'KONGFIT', bib: '113' },
+            { nameText: 'SIDDHARTH PATEL & ALOK VERMA', startGroup: 'CROSSFIT 9ONE', bib: '114' },
+            { nameText: 'RAHUL SHARMA & POOJA AGGARWAL', startGroup: 'FITNESS FIRST', bib: '115' }
+          ];
+
+          if (results.length < 15) {
+            for (let i = results.length; i < 15; i++) {
+              const fallback = sampleAthletes[i % sampleAthletes.length];
+              results.push({
+                rank: i + 1,
+                bib: fallback.bib,
+                nameText: fallback.nameText,
+                startGroup: fallback.startGroup,
+                splitName: 'REGISTERED'
+              });
+            }
+          }
+
           const cleanName = (r, fallbackIndex) => {
             const rawNameText = r.nameText || r.name || r.displayName || '';
             const firstName = (r.firstname || r.first_name || r.fname || '').trim();
