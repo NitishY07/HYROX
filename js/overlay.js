@@ -113,15 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
-          eventBar.innerText = (state.meetingInfo?.category || state.meetingInfo?.title || 'BATTLE OF GYMS').replace(/\s*•\s*Live/i, '').toUpperCase();
+          const headerText = state.meetingInfo?.category || state.meetingInfo?.title || 'STARTING LIST';
+          eventBar.innerText = headerText.replace(/\s*•\s*Live/i, '').toUpperCase();
         }
 
         const catBadge = document.getElementById('lbCategory');
         if (catBadge) {
-          catBadge.innerText = hasLiveTimes ? 'TIME' : 'TEAM / GYM';
+          catBadge.innerText = hasLiveTimes ? 'TIME' : 'TEAM';
         }
 
-        const titleEl = document.querySelector('.gfx-lb-title');
+        const titleEl = document.getElementById('lbTitle') || document.querySelector('.gfx-lb-title');
         if (titleEl) {
           titleEl.innerText = 'ATHLETES';
         }
@@ -148,7 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const rowLimit = 15;
             const lbHtml = currentLeaderboard.slice(0, rowLimit).map((item, idx) => {
-              const formattedRank = String(item.rank || idx + 1).padStart(2, '0');
+              const rankNum = item.rank || (idx + 1);
+              const formattedRank = String(rankNum).padStart(2, '0');
               let rightColText = '';
               if (item.time) {
                 rightColText = item.time;
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
               }
 
               return `
-                <div class="gfx-lb-item pos-${item.rank || (idx + 1)}">
+                <div class="gfx-lb-item pos-${rankNum}">
                   <div class="gfx-rank-num">${formattedRank}</div>
                   <div class="gfx-athlete-details">
                     <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
