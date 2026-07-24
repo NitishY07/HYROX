@@ -108,14 +108,36 @@ document.addEventListener('DOMContentLoaded', () => {
     if (leaderboardEl) {
       if (state.visibleElements && state.visibleElements.leaderboard) {
         leaderboardEl.classList.remove('gfx-hidden');
+        const isStartingList = state.theme === 'theme-starting-list';
         const eventBar = document.getElementById('lbEventBar');
-        if (eventBar && state.meetingInfo) {
-          eventBar.innerText = (state.meetingInfo.category || state.meetingInfo.meta || 'EVENT NAME').replace(/\s*•\s*Live/i, '').toUpperCase();
+        if (eventBar) {
+          if (isStartingList) {
+            eventBar.innerText = 'STARTING LIST';
+          } else if (state.meetingInfo) {
+            eventBar.innerText = (state.meetingInfo.category || state.meetingInfo.meta || 'EVENT NAME').replace(/\s*•\s*Live/i, '').toUpperCase();
+          }
         }
+
         const catBadge = document.getElementById('lbCategory');
-        if (catBadge && state.meetingInfo && state.meetingInfo.category) {
-          catBadge.innerText = state.meetingInfo.category;
+        if (catBadge) {
+          if (isStartingList) {
+            catBadge.innerText = 'TEAM';
+          } else if (state.meetingInfo && state.meetingInfo.category) {
+            catBadge.innerText = state.meetingInfo.category;
+          }
         }
+
+        const titleEl = document.querySelector('.gfx-lb-title');
+        if (titleEl) {
+          if (isStartingList) {
+            titleEl.innerText = 'ATHLETES';
+          } else if (state.meetingInfo && state.meetingInfo.title) {
+            titleEl.innerText = state.meetingInfo.title;
+          } else {
+            titleEl.innerText = 'LEADERBOARD';
+          }
+        }
+
         const listContainer = document.getElementById('lbList');
         if (listContainer) {
           if (!currentLeaderboard || currentLeaderboard.length === 0) {
@@ -129,22 +151,41 @@ document.addEventListener('DOMContentLoaded', () => {
               lastLeaderboardHtml = emptyHtml;
             }
           } else {
-            const lbHtml = currentLeaderboard.slice(0, 10).map(item => `
-              <div class="gfx-lb-item pos-${item.rank}">
-                <div class="gfx-rank-num">${item.rank}</div>
-                <div class="gfx-athlete-details">
-                  <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
-                  <div class="gfx-athlete-club">
-                    ${(isClubsEnabled && (item.club || item.nat)) ? `<span>${escapeHtml(item.club || item.nat || '')}</span>` : ''}
-                    ${item.split ? `<span class="gfx-split-badge">${escapeHtml(item.split)}</span>` : ''}
+            const rowLimit = isStartingList ? 15 : 10;
+            const lbHtml = currentLeaderboard.slice(0, rowLimit).map(item => {
+              const formattedRank = String(item.rank).padStart(2, '0');
+              if (isStartingList) {
+                const teamName = item.club || item.nat || 'TEAM';
+                return `
+                  <div class="gfx-lb-item pos-${item.rank}">
+                    <div class="gfx-rank-num">${formattedRank}</div>
+                    <div class="gfx-athlete-details">
+                      <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
+                    </div>
+                    <div class="gfx-time-col">
+                      <div class="gfx-time-val">${escapeHtml(teamName)}</div>
+                    </div>
+                  </div>
+                `;
+              }
+
+              return `
+                <div class="gfx-lb-item pos-${item.rank}">
+                  <div class="gfx-rank-num">${item.rank}</div>
+                  <div class="gfx-athlete-details">
+                    <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
+                    <div class="gfx-athlete-club">
+                      ${(isClubsEnabled && (item.club || item.nat)) ? `<span>${escapeHtml(item.club || item.nat || '')}</span>` : ''}
+                      ${item.split ? `<span class="gfx-split-badge">${escapeHtml(item.split)}</span>` : ''}
+                    </div>
+                  </div>
+                  <div class="gfx-time-col">
+                    ${(isTimerEnabled && item.time) ? `<div class="gfx-time-val">${item.time}</div>` : ''}
+                    <div class="gfx-time-delta">${item.delta || ''}</div>
                   </div>
                 </div>
-                <div class="gfx-time-col">
-                  ${(isTimerEnabled && item.time) ? `<div class="gfx-time-val">${item.time}</div>` : ''}
-                  <div class="gfx-time-delta">${item.delta || ''}</div>
-                </div>
-              </div>
-            `).join('');
+              `;
+            }).join('');
 
             if (lbHtml !== lastLeaderboardHtml) {
               listContainer.innerHTML = lbHtml;
@@ -247,10 +288,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return trimmed;
     };
 
-    if (nameStr.includes('&')) {
-      return nameStr.split('&').map(parseSingleName).join(' & ');
+    if (nameStr.includes('/')) {
+      return nameStr.split('/').map(parseSingleName).join('/');
+    } else if (nameStr.includes('&')) {
+      return nameStr.split('&').map(parseSingleName).join('/');
     } else if (nameStr.toLowerCase().includes(' and ')) {
-      return nameStr.split(/ and /i).map(parseSingleName).join(' & ');
+      return nameStr.split(/ and /i).map(parseSingleName).join('/');
     }
 
     return parseSingleName(nameStr);

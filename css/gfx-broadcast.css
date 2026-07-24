@@ -116,6 +116,119 @@
   --gfx-border: rgba(0, 0, 0, 0.2);
 }
 
+/* 5. STARTING LIST THEME (Clean Black & White Boxed Table Layout) */
+.theme-starting-list {
+  --gfx-font-main: 'Brutel', 'Montserrat', sans-serif;
+}
+
+.theme-starting-list .gfx-leaderboard-box {
+  width: 100%;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.theme-starting-list .gfx-lb-event-bar {
+  background: transparent;
+  color: #FFFFFF;
+  font-family: 'Brutel', sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: none;
+  padding: 0 0 10px 0;
+}
+
+.theme-starting-list .gfx-lb-header {
+  background: transparent;
+  padding: 6px 0 10px 0;
+  border-bottom: 2px solid #FFFFFF;
+}
+
+.theme-starting-list .gfx-lb-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 1.5px;
+}
+
+.theme-starting-list .gfx-lb-category {
+  font-size: 13px;
+  font-weight: 800;
+  background: transparent;
+  color: #FFFFFF;
+  padding: 0;
+  letter-spacing: 1.5px;
+}
+
+.theme-starting-list .gfx-lb-list {
+  gap: 4px;
+  background: transparent;
+  padding: 8px 0 0 0;
+}
+
+.theme-starting-list .gfx-lb-item {
+  display: grid;
+  grid-template-columns: 36px 1fr 140px;
+  gap: 4px;
+  height: 38px;
+  background: transparent;
+  border: none;
+}
+
+.theme-starting-list .gfx-rank-num {
+  background: #000000;
+  color: #FFFFFF;
+  font-family: 'Brutel', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
+}
+
+.theme-starting-list .gfx-athlete-details {
+  background: #FFFFFF;
+  padding-left: 12px;
+  justify-content: center;
+  border: 1px solid #FFFFFF;
+}
+
+.theme-starting-list .gfx-athlete-name {
+  color: #000000;
+  font-family: 'Brutel', sans-serif;
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+}
+
+.theme-starting-list .gfx-athlete-club {
+  display: none;
+}
+
+.theme-starting-list .gfx-time-col {
+  background: #FFFFFF;
+  color: #000000;
+  clip-path: none;
+  padding: 0 10px;
+  border: 1px solid #FFFFFF;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-starting-list .gfx-time-val,
+.theme-starting-list .gfx-time-delta {
+  color: #000000;
+  font-family: 'Brutel', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
 /* Standalone Overlay Container */
 body.gfx-overlay-body {
   margin: 0;
