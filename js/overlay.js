@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let state = {
     mode: 'sim',
     startTimeMs: null,
-    theme: 'theme-sportvot',
-    position: 'pos-top-left',
+    theme: 'theme-starting-list',
+    position: 'pos-center-stage',
     visibleElements: {
       banner: true,
       leaderboard: true,

@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedMeetingId: null,
     selectedRaceId: null,
     selectedEventKey: null,
-    theme: 'theme-sportvot',
-    position: 'pos-top-left',
+    theme: 'theme-starting-list',
+    position: 'pos-center-stage',
     nameFormat: 'full',
     allowSimFallback: false,
     visibleElements: {
@@ -374,8 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
       raceId: raceSelect ? raceSelect.value : '',
       eventKey: eventSelect ? eventSelect.value : '',
       nameFormat: nameFormatSelect ? nameFormatSelect.value : 'full',
-      theme: themeSelect ? themeSelect.value : 'theme-sportvot',
-      position: posSelect ? posSelect.value : 'pos-top-left'
+      theme: themeSelect ? themeSelect.value : 'theme-starting-list',
+      position: posSelect ? posSelect.value : 'pos-center-stage'
     };
     try {
       localStorage.setItem('mika_control_panel_config', JSON.stringify(configData));
