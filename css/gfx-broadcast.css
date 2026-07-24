@@ -242,11 +242,54 @@
 
 .theme-starting-list .gfx-lb-item {
   display: grid !important;
-  grid-template-columns: 46px 1fr 115px !important;
+  grid-template-columns: 46px 1fr 125px !important;
   gap: 10px !important;
   height: 52px !important;
   background: transparent !important;
   border: none !important;
+}
+
+/* Dynamic Column Widths & Wrapping for Team Mode vs Timer Mode */
+.mode-team .gfx-lb-header,
+.mode-team .gfx-lb-item,
+.theme-starting-list.mode-team .gfx-lb-header,
+.theme-starting-list.mode-team .gfx-lb-item {
+  grid-template-columns: 46px 1fr 220px !important;
+}
+
+.mode-team .gfx-time-col,
+.theme-starting-list.mode-team .gfx-time-col {
+  padding: 4px 8px !important;
+}
+
+.mode-team .gfx-time-val,
+.theme-starting-list.mode-team .gfx-time-val {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  text-align: center !important;
+  line-height: 1.15 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  width: 100% !important;
+}
+
+.mode-timer .gfx-lb-header,
+.mode-timer .gfx-lb-item,
+.theme-starting-list.mode-timer .gfx-lb-header,
+.theme-starting-list.mode-timer .gfx-lb-item {
+  grid-template-columns: 46px 1fr 125px !important;
+}
+
+.mode-timer .gfx-time-val,
+.theme-starting-list.mode-timer .gfx-time-val {
+  font-size: 15px !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  line-height: 1.1 !important;
 }
 
 .theme-starting-list .gfx-rank-num {

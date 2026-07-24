@@ -111,6 +111,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const isStartingListTheme = state.theme === 'theme-starting-list';
         const hasLiveTimes = currentLeaderboard.some(item => item.time || (item.split && item.split !== 'REGISTERED'));
 
+        if (hasLiveTimes) {
+          leaderboardEl.classList.remove('mode-team');
+          leaderboardEl.classList.add('mode-timer');
+        } else {
+          leaderboardEl.classList.remove('mode-timer');
+          leaderboardEl.classList.add('mode-team');
+        }
+
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
           const headerText = state.meetingInfo?.category || state.meetingInfo?.title || 'STARTING LIST';
