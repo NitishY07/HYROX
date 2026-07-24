@@ -58,7 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function render() {
     // 1. Theme & Position
-    document.body.className = `gfx-overlay-body ${state.theme || 'theme-sportvot'} ${state.position || 'pos-top-left'}`;
+    if (!state.theme || state.theme === 'theme-starting-list') {
+      state.position = 'pos-bottom-grid';
+    }
+    document.body.className = `gfx-overlay-body ${state.theme || 'theme-starting-list'} ${state.position || 'pos-bottom-grid'}`;
 
     // 2. Banner
     if (bannerEl) {

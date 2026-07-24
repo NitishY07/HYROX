@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const raceSelect = document.getElementById('raceSelect');
   const eventSelect = document.getElementById('eventSelect');
 
+  const toggleGridGfx = document.getElementById('toggleGridGfx');
   const toggleBanner = document.getElementById('toggleBanner');
   const toggleLeaderboard = document.getElementById('toggleLeaderboard');
   const toggleLowerThird = document.getElementById('toggleLowerThird');
@@ -555,6 +556,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (toggleGridGfx) {
+    toggleGridGfx.addEventListener('change', () => {
+      const isGridOn = toggleGridGfx.checked;
+      if (isGridOn) {
+        state.theme = 'theme-starting-list';
+        state.position = 'pos-bottom-grid';
+        state.visibleElements.leaderboard = true;
+        state.visibleElements.banner = false;
+        state.visibleElements.lowerThird = false;
+        if (themeSelect) themeSelect.value = 'theme-starting-list';
+        if (posSelect) posSelect.value = 'pos-bottom-grid';
+        if (toggleBanner) toggleBanner.checked = false;
+        if (toggleLeaderboard) toggleLeaderboard.checked = false;
+      } else {
+        state.visibleElements.leaderboard = false;
+      }
+      saveControlPanelSettings();
+      syncState();
+    });
+  }
+
   if (toggleBanner) toggleBanner.addEventListener('change', () => { state.visibleElements.banner = toggleBanner.checked; saveControlPanelSettings(); syncState(); });
   if (toggleLeaderboard) toggleLeaderboard.addEventListener('change', () => { state.visibleElements.leaderboard = toggleLeaderboard.checked; saveControlPanelSettings(); syncState(); });
   if (toggleLowerThird) toggleLowerThird.addEventListener('change', () => { state.visibleElements.lowerThird = toggleLowerThird.checked; saveControlPanelSettings(); syncState(); });
@@ -623,6 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.visibleElements.leaderboard = newState;
       state.visibleElements.lowerThird = false;
       state.visibleElements.ticker = newState;
+      if (toggleGridGfx) toggleGridGfx.checked = newState;
       if (toggleBanner) toggleBanner.checked = newState;
       if (toggleLeaderboard) toggleLeaderboard.checked = newState;
       if (toggleLowerThird) toggleLowerThird.checked = false;
@@ -637,6 +660,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
 
     switch (e.key) {
+      case 'g':
+      case 'G':
+        if (toggleGridGfx) {
+          toggleGridGfx.checked = !toggleGridGfx.checked;
+          toggleGridGfx.dispatchEvent(new Event('change'));
+        }
+        break;
       case '1':
         if (toggleBanner) { toggleBanner.checked = !toggleBanner.checked; state.visibleElements.banner = toggleBanner.checked; syncState(); }
         break;
