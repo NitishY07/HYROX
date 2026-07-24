@@ -90,19 +90,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const isTimerEnabled = state.visibleElements && state.visibleElements.showTimer === true;
     const isClubsEnabled = !state.visibleElements || state.visibleElements.showClubs !== false;
 
-    // Dynamic clock calculation ONLY if showTimer is explicitly enabled
+    // Dynamic clock calculation in both SIM and LIVE modes
     let currentLeaderboard = state.leaderboard || [];
-    if (state.mode === 'sim' && isTimerEnabled && state.startTimeMs) {
-      const elapsedSec = Math.floor((Date.now() - state.startTimeMs) / 1000);
-      currentLeaderboard = currentLeaderboard.map((item, index) => {
-        const baseOffset = index === 0 ? 0 : index * 4.2;
-        const itemSec = Math.max(0, elapsedSec + baseOffset);
-        return {
-          ...item,
-          time: formatTime(itemSec)
-        };
-      });
-    }
+    const baseStartTime = state.startTimeMs || (window.gfxRaceStartTime = window.gfxRaceStartTime || Date.now());
+    const elapsedSec = Math.floor((Date.now() - baseStartTime) / 1000);
+    
+    currentLeaderboard = currentLeaderboard.map((item, index) => {
+      const baseOffset = index === 0 ? 0 : index * 4;
+      const itemSec = Math.max(0, elapsedSec + baseOffset);
+      return {
+        ...item,
+        time: item.time && /^\d{1,2}:\d{2}/.test(item.time) ? item.time : formatTime(itemSec)
+      };
+    });
 
     // 3. Leaderboard
     if (leaderboardEl) {
@@ -455,5 +455,6 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (e) {}
 
   render();
+  setInterval(render, 1000);
 });
 
