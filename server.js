@@ -6,7 +6,13 @@ const os = require('os');
 const { URL } = require('url');
 
 const PORT = process.env.PORT || 3000;
-let currentGfxState = {};
+let currentGfxState = {
+  theme: 'theme-starting-list',
+  position: 'pos-bottom-grid',
+  displayContent: 'both',
+  nameFormat: 'full',
+  timestamp: Date.now()
+};
 
 // SSE Clients Registry
 const sseClients = new Set();

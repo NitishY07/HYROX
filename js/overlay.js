@@ -22,7 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     mode: 'sim',
     startTimeMs: null,
     theme: 'theme-starting-list',
-    position: 'pos-center-stage',
+    position: 'pos-bottom-grid',
+    displayContent: 'both',
+    nameFormat: 'full',
     visibleElements: {
       banner: true,
       leaderboard: true,
@@ -421,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function applyStateUpdate(incomingPayload) {
-    if (!incomingPayload) return;
+    if (!incomingPayload || Object.keys(incomingPayload).length === 0) return;
     const incomingTs = incomingPayload.timestamp || 0;
     
     // Ignore stale updates if we already received a newer state
@@ -433,7 +435,16 @@ document.addEventListener('DOMContentLoaded', () => {
       lastStateTimestamp = incomingTs;
     }
 
+    const prevPosition = state.position || 'pos-bottom-grid';
+    const prevTheme = state.theme || 'theme-starting-list';
+    const prevDisplayContent = state.displayContent || 'both';
+
     state = { ...state, ...incomingPayload };
+    
+    if (!state.position) state.position = prevPosition;
+    if (!state.theme) state.theme = prevTheme;
+    if (!state.displayContent) state.displayContent = prevDisplayContent;
+
     render();
   }
 
