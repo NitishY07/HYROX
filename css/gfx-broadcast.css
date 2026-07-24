@@ -121,125 +121,149 @@
   --gfx-font-main: 'Brutel', 'Montserrat', sans-serif;
 }
 
+.theme-starting-list #gfxBanner {
+  display: none !important;
+}
+
 .theme-starting-list .gfx-leaderboard-box {
   width: 100%;
-  background: rgba(0, 0, 0, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 0;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95);
-  padding: 30px 35px 25px 35px;
-  box-sizing: border-box;
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95) !important;
+  padding: 35px 45px 30px 45px !important;
+  box-sizing: border-box !important;
 }
 
 .theme-starting-list .gfx-lb-event-bar {
-  background: transparent;
-  color: #FFFFFF;
-  font-family: 'Brutel', sans-serif;
-  font-weight: 900;
-  font-size: 34px;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  border-bottom: none;
-  padding: 0 0 16px 0;
+  background: transparent !important;
+  color: #FFFFFF !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 38px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 3px !important;
+  border-bottom: none !important;
+  padding: 0 0 20px 0 !important;
+  margin: 0 !important;
 }
 
 .theme-starting-list .gfx-lb-header {
-  background: transparent;
-  padding: 0 0 8px 0;
-  border-bottom: none;
-  display: grid;
-  grid-template-columns: 36px 1fr 180px;
-  gap: 6px;
-  align-items: center;
+  background: transparent !important;
+  padding: 0 0 10px 0 !important;
+  border: none !important;
+  display: grid !important;
+  grid-template-columns: 40px 1fr 240px !important;
+  gap: 8px !important;
+  align-items: center !important;
 }
 
 .theme-starting-list .gfx-lb-title {
-  font-size: 13px;
-  font-weight: 900;
-  color: #FFFFFF;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  text-align: center;
+  color: #FFFFFF !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  grid-column: 2 !important;
+  text-align: center !important;
 }
 
 .theme-starting-list .gfx-lb-category {
-  font-size: 13px;
-  font-weight: 900;
-  background: transparent;
-  color: #FFFFFF;
-  padding: 0;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  text-align: center;
+  color: #FFFFFF !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  grid-column: 3 !important;
+  text-align: center !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
 }
 
 .theme-starting-list .gfx-lb-list {
-  gap: 5px;
-  background: transparent;
-  padding: 6px 0 0 0;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  background: transparent !important;
+  padding: 0 !important;
 }
 
 .theme-starting-list .gfx-lb-item {
-  display: grid;
-  grid-template-columns: 36px 1fr 180px;
-  gap: 6px;
-  height: 36px;
-  background: transparent;
-  border: none;
+  display: grid !important;
+  grid-template-columns: 40px 1fr 240px !important;
+  gap: 8px !important;
+  height: 38px !important;
+  background: transparent !important;
+  border: none !important;
 }
 
-.theme-starting-list .gfx-rank-num {
-  background: #000000;
-  color: #FFFFFF;
-  font-family: 'Brutel', sans-serif;
-  font-weight: 900;
-  font-size: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.theme-starting-list .gfx-rank-num,
+.theme-starting-list .gfx-lb-item.pos-1 .gfx-rank-num,
+.theme-starting-list .gfx-lb-item.pos-2 .gfx-rank-num,
+.theme-starting-list .gfx-lb-item.pos-3 .gfx-rank-num {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 14px !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
 }
 
 .theme-starting-list .gfx-athlete-details {
-  background: #FFFFFF;
-  padding-left: 12px;
-  justify-content: center;
-  border: 1px solid #FFFFFF;
-  box-sizing: border-box;
+  background: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+  padding: 0 0 0 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
 }
 
 .theme-starting-list .gfx-athlete-name {
-  color: #000000;
-  font-family: 'Brutel', sans-serif;
-  font-weight: 800;
-  font-size: 12.5px;
-  letter-spacing: 0.5px;
-  text-shadow: none;
+  color: #000000 !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  text-shadow: none !important;
 }
 
 .theme-starting-list .gfx-athlete-club {
-  display: none;
+  display: none !important;
 }
 
 .theme-starting-list .gfx-time-col {
-  background: #FFFFFF;
-  color: #000000;
-  clip-path: none;
-  padding: 0 10px;
-  border: 1px solid #FFFFFF;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
+  background: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+  padding: 0 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  clip-path: none !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
 }
 
 .theme-starting-list .gfx-time-val,
 .theme-starting-list .gfx-time-delta {
-  color: #000000;
-  font-family: 'Brutel', sans-serif;
-  font-size: 12px;
-  font-weight: 800;
-  text-align: center;
+  color: #000000 !important;
+  font-family: 'Brutel', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
 }
 
 /* Standalone Overlay Container */

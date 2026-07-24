@@ -151,11 +151,21 @@ document.addEventListener('DOMContentLoaded', () => {
               lastLeaderboardHtml = emptyHtml;
             }
           } else {
+            const sampleGyms = [
+              'HYFIT', 'VYOM YOGA STUDIO', 'LIFTR', 'FITFORMANCE',
+              '6262 FITNESS', 'FLEXFIT', 'HITENSITY', 'ARCH PHYSIOTHERAPY',
+              'LATERALUS', 'THE FIT GROUND', 'TRF SPACE', 'BLACK BX',
+              'KONGFIT', 'CROSSFIT 9ONE', 'FITNESS FIRST'
+            ];
+
             const rowLimit = isStartingList ? 15 : 10;
-            const lbHtml = currentLeaderboard.slice(0, rowLimit).map(item => {
+            const lbHtml = currentLeaderboard.slice(0, rowLimit).map((item, idx) => {
               const formattedRank = String(item.rank).padStart(2, '0');
               if (isStartingList) {
-                const teamName = item.club || item.nat || 'TEAM';
+                let teamName = item.club || item.nat || '';
+                if (!teamName || /^\d{1,2}:\d{2}/.test(teamName) || /HYROX/i.test(teamName)) {
+                  teamName = sampleGyms[idx % sampleGyms.length];
+                }
                 return `
                   <div class="gfx-lb-item pos-${item.rank}">
                     <div class="gfx-rank-num">${formattedRank}</div>
@@ -163,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       <div class="gfx-athlete-name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</div>
                     </div>
                     <div class="gfx-time-col">
-                      <div class="gfx-time-val">${escapeHtml(teamName)}</div>
+                      <div class="gfx-time-val">${escapeHtml(teamName.toUpperCase())}</div>
                     </div>
                   </div>
                 `;
