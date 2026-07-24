@@ -345,8 +345,9 @@
 .theme-starting-list .gfx-time-col {
   background: #FFFFFF !important;
   border: 1.5px solid #FFFFFF !important;
-  padding: 0 12px !important;
+  padding: 2px 6px !important;
   display: flex !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   clip-path: none !important;
@@ -356,16 +357,34 @@
   width: 100% !important;
 }
 
-.theme-starting-list .gfx-time-val,
-.theme-starting-list .gfx-time-delta {
+.theme-starting-list .gfx-time-val {
   color: #000000 !important;
   font-family: 'BrutalType', 'Brutel', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 14px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
   text-align: center !important;
+  line-height: 1.1 !important;
   white-space: nowrap !important;
+}
+
+.theme-starting-list .gfx-time-delta {
+  color: #0088CC !important;
+  font-family: 'BrutalType', 'Brutel', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 10px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  margin-top: 2px !important;
+  white-space: nowrap !important;
+}
+
+.theme-starting-list .gfx-time-delta.is-leader {
+  color: #00A896 !important;
+  font-weight: 900 !important;
 }
 
 /* Standalone Overlay Container */
@@ -701,8 +720,9 @@ body.gfx-overlay-body {
 .gfx-time-col {
   background: #FFFFFF !important;
   border: 1.5px solid #FFFFFF !important;
-  padding: 0 12px !important;
+  padding: 2px 6px !important;
   display: flex !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   clip-path: none !important;
@@ -712,16 +732,34 @@ body.gfx-overlay-body {
   width: 100% !important;
 }
 
-.gfx-time-val,
-.gfx-time-delta {
+.gfx-time-val {
   color: #000000 !important;
   font-family: 'BrutalType', 'Brutel', sans-serif !important;
-  font-weight: 800 !important;
-  font-size: 14px !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
   text-align: center !important;
+  line-height: 1.1 !important;
   white-space: nowrap !important;
+}
+
+.gfx-time-delta {
+  color: #0088CC !important;
+  font-family: 'BrutalType', 'Brutel', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 10px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  line-height: 1 !important;
+  margin-top: 2px !important;
+  white-space: nowrap !important;
+}
+
+.gfx-time-delta.is-leader {
+  color: #00A896 !important;
+  font-weight: 900 !important;
 }
 
 /* ==========================================================================

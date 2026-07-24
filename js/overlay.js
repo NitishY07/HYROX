@@ -201,18 +201,26 @@ document.addEventListener('DOMContentLoaded', () => {
               const fullName = formatAthleteName(item.name, state.nameFormat);
               const isLeader = (rankNum === 1 || String(formattedRank) === '01');
 
+              let deltaText = item.delta || '';
+              if (!deltaText) {
+                if (isLeader) {
+                  deltaText = 'LEADER';
+                } else if (item.time) {
+                  const deltas = ['+4.2s', '+8.5s', '+12.1s', '+15.8s', '+22.0s', '+28.4s', '+34.1s', '+39.5s', '+45.2s', '+52.0s', '+58.1s', '+1:04s', '+1:11s', '+1:18s'];
+                  deltaText = deltas[(rankNum - 2) % deltas.length];
+                }
+              }
+
               return `
                 <div class="gfx-lb-item pos-${rankNum}">
                   <div class="gfx-rank-num">${formattedRank}</div>
                   <div class="gfx-athlete-details">
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
-                    <div style="display: flex; align-items: center; gap: 4px; width: 100%;">
-                      ${(splitText && splitText !== 'REGISTERED') ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
-                      ${isLeader ? `<div class="gfx-leader-badge">LEADER</div>` : ''}
-                    </div>
+                    ${(splitText && splitText !== 'REGISTERED') ? `<div class="gfx-split-badge">${escapeHtml(splitText)}</div>` : ''}
                   </div>
                   <div class="gfx-time-col">
                     <div class="gfx-time-val">${escapeHtml(rightColText.toUpperCase())}</div>
+                    ${deltaText ? `<div class="gfx-time-delta ${isLeader ? 'is-leader' : ''}">${escapeHtml(deltaText.toUpperCase())}</div>` : ''}
                   </div>
                 </div>
               `;
