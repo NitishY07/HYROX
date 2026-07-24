@@ -355,6 +355,54 @@ document.addEventListener('DOMContentLoaded', () => {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  function saveControlPanelSettings() {
+    const configData = {
+      envPreset: envPresetSelect ? envPresetSelect.value : 'prod',
+      apiHost: apiHostInput ? apiHostInput.value.trim() : '',
+      apiKey: apiKeyInput ? apiKeyInput.value.trim() : '',
+      mode: modeToggle ? modeToggle.checked : false,
+      simFallback: simFallbackToggle ? simFallbackToggle.checked : false,
+      meetingId: meetingSelect ? meetingSelect.value : '',
+      raceId: raceSelect ? raceSelect.value : '',
+      eventKey: eventSelect ? eventSelect.value : '',
+      nameFormat: nameFormatSelect ? nameFormatSelect.value : 'full',
+      theme: themeSelect ? themeSelect.value : 'theme-sportvot',
+      position: posSelect ? posSelect.value : 'pos-top-left'
+    };
+    try {
+      localStorage.setItem('mika_control_panel_config', JSON.stringify(configData));
+    } catch (e) {}
+  }
+
+  function loadControlPanelSettings() {
+    try {
+      const savedConfig = localStorage.getItem('mika_control_panel_config');
+      if (savedConfig) {
+        const config = JSON.parse(savedConfig);
+        if (config.envPreset && envPresetSelect) envPresetSelect.value = config.envPreset;
+        if (config.apiHost && apiHostInput) apiHostInput.value = config.apiHost;
+        if (config.apiKey && apiKeyInput) apiKeyInput.value = config.apiKey;
+        if (typeof config.mode === 'boolean' && modeToggle) modeToggle.checked = config.mode;
+        if (typeof config.simFallback === 'boolean' && simFallbackToggle) {
+          simFallbackToggle.checked = config.simFallback;
+          state.allowSimFallback = config.simFallback;
+        }
+        if (config.nameFormat && nameFormatSelect) {
+          nameFormatSelect.value = config.nameFormat;
+          state.nameFormat = config.nameFormat;
+        }
+        if (config.theme && themeSelect) {
+          themeSelect.value = config.theme;
+          state.theme = config.theme;
+        }
+        if (config.position && posSelect) {
+          posSelect.value = config.position;
+          state.position = config.position;
+        }
+      }
+    } catch (e) {}
+  }
+
   // Event Listeners
   if (envPresetSelect) {
     envPresetSelect.addEventListener('change', () => {
@@ -363,9 +411,9 @@ document.addEventListener('DOMContentLoaded', () => {
         apiKeyInput.value = 'sportvot';
       } else if (envPresetSelect.value === 'prod') {
         apiHostInput.value = 'https://apihub.mikatiming.net/ah/rest/appapi';
-        apiKeyInput.value = '';
-        apiKeyInput.placeholder = 'Enter Production API Key';
+        apiKeyInput.value = 'sportvot-vhzj2id';
       }
+      saveControlPanelSettings();
     });
   }
 
@@ -429,31 +477,48 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (connectBtn) connectBtn.addEventListener('click', connectAPI);
-  if (modeToggle) modeToggle.addEventListener('change', updateMode);
+  const saveConfigBtn = document.getElementById('saveConfigBtn');
+  if (saveConfigBtn) {
+    saveConfigBtn.addEventListener('click', () => {
+      saveControlPanelSettings();
+      syncState();
+      updateStatus('Settings & API Credentials Saved Successfully!', 'success');
+    });
+  }
+
+  if (connectBtn) connectBtn.addEventListener('click', () => {
+    saveControlPanelSettings();
+    connectAPI();
+  });
+  if (modeToggle) modeToggle.addEventListener('change', () => {
+    saveControlPanelSettings();
+    updateMode();
+  });
   if (simFallbackToggle) {
     simFallbackToggle.addEventListener('change', () => {
       state.allowSimFallback = simFallbackToggle.checked;
+      saveControlPanelSettings();
       if (state.mode === 'live') {
         startLivePolling();
       }
     });
   }
 
-  if (toggleBanner) toggleBanner.addEventListener('change', () => { state.visibleElements.banner = toggleBanner.checked; syncState(); });
-  if (toggleLeaderboard) toggleLeaderboard.addEventListener('change', () => { state.visibleElements.leaderboard = toggleLeaderboard.checked; syncState(); });
-  if (toggleLowerThird) toggleLowerThird.addEventListener('change', () => { state.visibleElements.lowerThird = toggleLowerThird.checked; syncState(); });
-  if (toggleTicker) toggleTicker.addEventListener('change', () => { state.visibleElements.ticker = toggleTicker.checked; syncState(); });
-  if (toggleTimer) toggleTimer.addEventListener('change', () => { state.visibleElements.showTimer = toggleTimer.checked; syncState(); });
-  if (toggleClubs) toggleClubs.addEventListener('change', () => { state.visibleElements.showClubs = toggleClubs.checked; syncState(); });
+  if (toggleBanner) toggleBanner.addEventListener('change', () => { state.visibleElements.banner = toggleBanner.checked; saveControlPanelSettings(); syncState(); });
+  if (toggleLeaderboard) toggleLeaderboard.addEventListener('change', () => { state.visibleElements.leaderboard = toggleLeaderboard.checked; saveControlPanelSettings(); syncState(); });
+  if (toggleLowerThird) toggleLowerThird.addEventListener('change', () => { state.visibleElements.lowerThird = toggleLowerThird.checked; saveControlPanelSettings(); syncState(); });
+  if (toggleTicker) toggleTicker.addEventListener('change', () => { state.visibleElements.ticker = toggleTicker.checked; saveControlPanelSettings(); syncState(); });
+  if (toggleTimer) toggleTimer.addEventListener('change', () => { state.visibleElements.showTimer = toggleTimer.checked; saveControlPanelSettings(); syncState(); });
+  if (toggleClubs) toggleClubs.addEventListener('change', () => { state.visibleElements.showClubs = toggleClubs.checked; saveControlPanelSettings(); syncState(); });
 
-  if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; syncState(); });
-  if (nameFormatSelect) nameFormatSelect.addEventListener('change', () => { state.nameFormat = nameFormatSelect.value; syncState(); });
-  if (posSelect) posSelect.addEventListener('change', () => { state.position = posSelect.value; syncState(); });
+  if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; saveControlPanelSettings(); syncState(); });
+  if (nameFormatSelect) nameFormatSelect.addEventListener('change', () => { state.nameFormat = nameFormatSelect.value; saveControlPanelSettings(); syncState(); });
+  if (posSelect) posSelect.addEventListener('change', () => { state.position = posSelect.value; saveControlPanelSettings(); syncState(); });
 
   if (sponsorLogoInput) {
     sponsorLogoInput.addEventListener('input', () => {
       state.meetingInfo.sponsorLogo = sponsorLogoInput.value.trim();
+      saveControlPanelSettings();
       syncState();
     });
   }
@@ -540,6 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Boot
+  loadControlPanelSettings();
   loadNetworkUrls();
   updateMode();
   connectAPI();
