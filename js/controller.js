@@ -223,21 +223,21 @@ document.addEventListener('DOMContentLoaded', () => {
           simulator.stop();
 
           const sampleAthletes = [
-            { nameText: 'SAURABH AGGARWAL & KAVITA NAIR', startGroup: 'HYFIT', bib: '101' },
-            { nameText: 'AAKRITI & PRIYA DESHMUKH', startGroup: 'VYOM YOGA STUDIO', bib: '102' },
-            { nameText: 'AAYUSHI & MANISH SHARMA', startGroup: 'LIFTR', bib: '103' },
-            { nameText: 'ADITYA & RITU VERMA', startGroup: 'FITFORMANCE', bib: '104' },
-            { nameText: 'BALWINDER SINGH & GURPREET KAUR', startGroup: '6262 FITNESS', bib: '105' },
-            { nameText: 'GEETANJALI & ROHIT GUPTA', startGroup: 'FLEXFIT', bib: '106' },
-            { nameText: 'HARIOM & DEEPAK YADAV', startGroup: 'HITENSITY', bib: '107' },
-            { nameText: 'RASHMI & NEHA MALHOTRA', startGroup: 'ARCH PHYSIOTHERAPY', bib: '108' },
-            { nameText: 'SHUBHANGI & ANKIT JAIN', startGroup: 'LATERALUS', bib: '109' },
-            { nameText: 'SUNIL & VIKRAM CHOUDHARY', startGroup: 'THE FIT GROUND', bib: '110' },
-            { nameText: 'VARINDER SINGH & HARPREET KAUR', startGroup: 'TRF SPACE', bib: '111' },
-            { nameText: 'VIKRAMADITYA SINGH & MEENAKSHI', startGroup: 'BLACK BX', bib: '112' },
-            { nameText: 'KABIR DAS & TARUN MEHTA', startGroup: 'KONGFIT', bib: '113' },
-            { nameText: 'SIDDHARTH PATEL & ALOK VERMA', startGroup: 'CROSSFIT 9ONE', bib: '114' },
-            { nameText: 'RAHUL SHARMA & POOJA AGGARWAL', startGroup: 'FITNESS FIRST', bib: '115' }
+            { nameText: 'SAURABH AGGARWAL & KAVITA NAIR', startGroup: 'HYFIT', bib: '101', splitName: 'SLED PUSH 50M', timeText: '36:19' },
+            { nameText: 'MARCUS VANCE & DAVID MILLER', startGroup: 'VYOM YOGA STUDIO', bib: '102', splitName: 'SKIERG 1000M', timeText: '36:22' },
+            { nameText: 'AAYUSHI & MANISH SHARMA', startGroup: 'LIFTR', bib: '103', splitName: 'BURPEE BROAD JUMP', timeText: '36:26' },
+            { nameText: 'ADITYA & RITU VERMA', startGroup: 'FITFORMANCE', bib: '104', splitName: 'ROWING 1000M', timeText: '36:30' },
+            { nameText: 'BALWINDER SINGH & GURPREET KAUR', startGroup: '6262 FITNESS', bib: '105', splitName: 'FARMERS CARRY', timeText: '36:35' },
+            { nameText: 'GEETANJALI & ROHIT GUPTA', startGroup: 'FLEXFIT', bib: '106', splitName: 'SLED PULL 50M', timeText: '36:39' },
+            { nameText: 'HARIOM & DEEPAK YADAV', startGroup: 'HITENSITY', bib: '107', splitName: 'WALL BALLS 100', timeText: '36:44' },
+            { nameText: 'RASHMI & NEHA MALHOTRA', startGroup: 'ARCH PHYSIOTHERAPY', bib: '108', splitName: 'SANDBAG LUNGES 100M', timeText: '36:47' },
+            { nameText: 'SHUBHANGI & ANKIT JAIN', startGroup: 'LATERALUS', bib: '109', splitName: 'ROXZONE TRANSITION', timeText: '36:51' },
+            { nameText: 'SUNIL & VIKRAM CHOUDHARY', startGroup: 'THE FIT GROUND', bib: '110', splitName: 'FINISH LINE', timeText: '36:55' },
+            { nameText: 'VARINDER SINGH & HARPREET KAUR', startGroup: 'TRF SPACE', bib: '111', splitName: 'RUN 1 1000M', timeText: '37:02' },
+            { nameText: 'VIKRAMADITYA SINGH & MEENAKSHI', startGroup: 'BLACK BX', bib: '112', splitName: 'SLED PUSH 50M', timeText: '37:08' },
+            { nameText: 'KABIR DAS & TARUN MEHTA', startGroup: 'KONGFIT', bib: '113', splitName: 'SKIERG 1000M', timeText: '37:14' },
+            { nameText: 'SIDDHARTH PATEL & ALOK VERMA', startGroup: 'CROSSFIT 9ONE', bib: '114', splitName: 'BURPEE BROAD JUMP', timeText: '37:20' },
+            { nameText: 'RAHUL SHARMA & POOJA AGGARWAL', startGroup: 'FITNESS FIRST', bib: '115', splitName: 'ROWING 1000M', timeText: '37:25' }
           ];
 
           if (results.length < 15) {
@@ -248,7 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 bib: fallback.bib,
                 nameText: fallback.nameText,
                 startGroup: fallback.startGroup,
-                splitName: 'REGISTERED'
+                splitName: fallback.splitName,
+                timeText: fallback.timeText
               });
             }
           }

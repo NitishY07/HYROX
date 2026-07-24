@@ -141,21 +141,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           } else {
             const sampleAthletes = [
-              { name: 'SAURABH AGGARWAL & KAVITA NAIR', club: 'HYFIT' },
-              { name: 'AAKRITI & PRIYA DESHMUKH', club: 'VYOM YOGA STUDIO' },
-              { name: 'AAYUSHI & MANISH SHARMA', club: 'LIFTR' },
-              { name: 'ADITYA & RITU VERMA', club: 'FITFORMANCE' },
-              { name: 'BALWINDER SINGH & GURPREET KAUR', club: '6262 FITNESS' },
-              { name: 'GEETANJALI & ROHIT GUPTA', club: 'FLEXFIT' },
-              { name: 'HARIOM & DEEPAK YADAV', club: 'HITENSITY' },
-              { name: 'RASHMI & NEHA MALHOTRA', club: 'ARCH PHYSIOTHERAPY' },
-              { name: 'SHUBHANGI & ANKIT JAIN', club: 'LATERALUS' },
-              { name: 'SUNIL & VIKRAM CHOUDHARY', club: 'THE FIT GROUND' },
-              { name: 'VARINDER SINGH & HARPREET KAUR', club: 'TRF SPACE' },
-              { name: 'VIKRAMADITYA SINGH & MEENAKSHI', club: 'BLACK BX' },
-              { name: 'KABIR DAS & TARUN MEHTA', club: 'KONGFIT' },
-              { name: 'SIDDHARTH PATEL & ALOK VERMA', club: 'CROSSFIT 9ONE' },
-              { name: 'RAHUL SHARMA & POOJA AGGARWAL', club: 'FITNESS FIRST' }
+              { name: 'SAURABH AGGARWAL & KAVITA NAIR', club: 'HYFIT', split: 'SLED PUSH 50M', time: '36:19' },
+              { name: 'MARCUS VANCE & DAVID MILLER', club: 'VYOM YOGA STUDIO', split: 'SKIERG 1000M', time: '36:22' },
+              { name: 'AAYUSHI & MANISH SHARMA', club: 'LIFTR', split: 'BURPEE BROAD JUMP', time: '36:26' },
+              { name: 'ADITYA & RITU VERMA', club: 'FITFORMANCE', split: 'ROWING 1000M', time: '36:30' },
+              { name: 'BALWINDER SINGH & GURPREET KAUR', club: '6262 FITNESS', split: 'FARMERS CARRY', time: '36:35' },
+              { name: 'GEETANJALI & ROHIT GUPTA', club: 'FLEXFIT', split: 'SLED PULL 50M', time: '36:39' },
+              { name: 'HARIOM & DEEPAK YADAV', club: 'HITENSITY', split: 'WALL BALLS 100', time: '36:44' },
+              { name: 'RASHMI & NEHA MALHOTRA', club: 'ARCH PHYSIOTHERAPY', split: 'SANDBAG LUNGES 100M', time: '36:47' },
+              { name: 'SHUBHANGI & ANKIT JAIN', club: 'LATERALUS', split: 'ROXZONE TRANSITION', time: '36:51' },
+              { name: 'SUNIL & VIKRAM CHOUDHARY', club: 'THE FIT GROUND', split: 'FINISH LINE', time: '36:55' },
+              { name: 'VARINDER SINGH & HARPREET KAUR', club: 'TRF SPACE', split: 'RUN 1 1000M', time: '37:02' },
+              { name: 'VIKRAMADITYA SINGH & MEENAKSHI', club: 'BLACK BX', split: 'SLED PUSH 50M', time: '37:08' },
+              { name: 'KABIR DAS & TARUN MEHTA', club: 'KONGFIT', split: 'SKIERG 1000M', time: '37:14' },
+              { name: 'SIDDHARTH PATEL & ALOK VERMA', club: 'CROSSFIT 9ONE', split: 'BURPEE BROAD JUMP', time: '37:20' },
+              { name: 'RAHUL SHARMA & POOJA AGGARWAL', club: 'FITNESS FIRST', split: 'ROWING 1000M', time: '37:25' }
             ];
 
             let displayList = [...currentLeaderboard];
@@ -166,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
                   rank: i + 1,
                   name: sample.name,
                   club: sample.club,
-                  split: 'REGISTERED'
+                  split: sample.split,
+                  time: sample.time
                 });
               }
             }
