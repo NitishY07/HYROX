@@ -121,7 +121,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
-          const headerText = state.meetingInfo?.category || state.meetingInfo?.title || 'STARTING LIST';
+          let headerText = 'STARTING LIST';
+          if (state.meetingInfo?.eventTitle && !/^HYROX$/i.test(state.meetingInfo.eventTitle)) {
+            headerText = state.meetingInfo.eventTitle;
+          } else if (state.theme === 'theme-starting-list' && !hasLiveTimes) {
+            headerText = 'STARTING LIST';
+          } else if (state.meetingInfo?.category && !/^HYROX/i.test(state.meetingInfo.category)) {
+            headerText = state.meetingInfo.category;
+          } else if (state.meetingInfo?.title && !/^HYROX/i.test(state.meetingInfo.title)) {
+            headerText = state.meetingInfo.title;
+          }
           eventBar.innerText = headerText.replace(/\s*•\s*Live/i, '').toUpperCase();
         }
 

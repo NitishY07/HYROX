@@ -504,6 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const eventName = eventObj ? eventObj.nameText : cleanEventName;
 
       state.selectedEventKey = selectedKey;
+      state.meetingInfo.eventTitle = eventName;
       state.meetingInfo.meta = `${eventName} • Live`;
       state.meetingInfo.category = eventName;
 
