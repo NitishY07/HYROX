@@ -108,6 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (leaderboardEl) {
       if (state.visibleElements && state.visibleElements.leaderboard && currentLeaderboard && currentLeaderboard.length > 0) {
         leaderboardEl.classList.remove('gfx-hidden');
+        const eventBar = document.getElementById('lbEventBar');
+        if (eventBar && state.meetingInfo) {
+          eventBar.innerText = (state.meetingInfo.category || state.meetingInfo.meta || 'EVENT NAME').replace(/\s*•\s*Live/i, '').toUpperCase();
+        }
         const catBadge = document.getElementById('lbCategory');
         if (catBadge && state.meetingInfo && state.meetingInfo.category) {
           catBadge.innerText = state.meetingInfo.category;
