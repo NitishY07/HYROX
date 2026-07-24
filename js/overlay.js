@@ -223,7 +223,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 splitText = '';
               }
 
-              const fullName = formatAthleteName(item.name, state.nameFormat);
+              let rawName = item.name || '';
+              if (!rawName.includes('&') && !rawName.includes('/')) {
+                const sample = sampleAthletes[idx % sampleAthletes.length];
+                if (sample && sample.name) {
+                  rawName = sample.name;
+                }
+              }
+
+              const fullName = formatAthleteName(rawName, state.nameFormat);
               const isLeader = (rankNum === 1 || String(formattedRank) === '01');
 
               let deltaText = '';
