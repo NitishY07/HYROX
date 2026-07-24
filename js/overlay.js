@@ -108,10 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (leaderboardEl) {
       if (state.visibleElements && state.visibleElements.leaderboard) {
         leaderboardEl.classList.remove('gfx-hidden');
-        const isStartingListTheme = state.theme === 'theme-starting-list';
+        const isStartingListTheme = (state.theme === 'theme-starting-list');
+        const isSignatureBroadcastTheme = (state.theme !== 'theme-starting-list');
         const hasLiveTimes = currentLeaderboard.some(item => item.time || (item.split && item.split !== 'REGISTERED'));
 
-        if (hasLiveTimes) {
+        // If 2nd GFX option (SportVot Broadcast Theme) is selected OR if live times exist:
+        const isLiveTimerMode = isSignatureBroadcastTheme || hasLiveTimes;
+
+        if (isLiveTimerMode) {
           leaderboardEl.classList.remove('mode-team');
           leaderboardEl.classList.add('mode-timer');
         } else {
@@ -119,12 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
           leaderboardEl.classList.add('mode-team');
         }
 
+        const catBadge = document.getElementById('lbCategory');
+        if (catBadge) {
+          catBadge.innerText = isLiveTimerMode ? 'TIME' : 'TEAM';
+        }
+
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
           let headerText = 'STARTING LIST';
           if (state.meetingInfo?.eventTitle && !/^HYROX$/i.test(state.meetingInfo.eventTitle)) {
             headerText = state.meetingInfo.eventTitle;
-          } else if (state.theme === 'theme-starting-list' && !hasLiveTimes) {
+          } else if (!isLiveTimerMode) {
             headerText = 'STARTING LIST';
           } else if (state.meetingInfo?.category && !/^HYROX/i.test(state.meetingInfo.category)) {
             headerText = state.meetingInfo.category;
@@ -132,11 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
             headerText = state.meetingInfo.title;
           }
           eventBar.innerText = headerText.replace(/\s*•\s*Live/i, '').toUpperCase();
-        }
-
-        const catBadge = document.getElementById('lbCategory');
-        if (catBadge) {
-          catBadge.innerText = hasLiveTimes ? 'TIME' : 'TEAM';
         }
 
         const titleEl = document.getElementById('lbTitle') || document.querySelector('.gfx-lb-title');
@@ -203,28 +207,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 'KONGFIT', 'CROSSFIT 9ONE', 'FITNESS FIRST'
               ];
 
-              if (item.time) {
-                rightColText = item.time;
-              } else if (item.split && item.split !== 'REGISTERED') {
-                rightColText = item.split;
+              if (isLiveTimerMode) {
+                // Live Race Timer Mode (2nd GFX option / SportVot Broadcast Theme):
+                rightColText = item.time || sampleAthletes[idx % sampleAthletes.length].time;
+                if (!splitText || splitText === 'REGISTERED') {
+                  splitText = sampleAthletes[idx % sampleAthletes.length].split;
+                }
               } else {
+                // Pre-Race Starting List Mode (1st GFX option / Starting List Theme):
                 let teamName = item.club || item.nat || '';
                 if (!teamName || /^\d{1,2}:\d{2}/.test(teamName) || /HYROX/i.test(teamName)) {
                   teamName = sampleGyms[idx % sampleGyms.length];
                 }
                 rightColText = teamName;
+                splitText = '';
               }
 
               const fullName = formatAthleteName(item.name, state.nameFormat);
               const isLeader = (rankNum === 1 || String(formattedRank) === '01');
 
-              let deltaText = item.delta || '';
-              if (!deltaText) {
-                if (isLeader) {
-                  deltaText = 'LEADER';
-                } else if (item.time) {
-                  const deltas = ['+4.2s', '+8.5s', '+12.1s', '+15.8s', '+22.0s', '+28.4s', '+34.1s', '+39.5s', '+45.2s', '+52.0s', '+58.1s', '+1:04s', '+1:11s', '+1:18s'];
-                  deltaText = deltas[(rankNum - 2) % deltas.length];
+              let deltaText = '';
+              if (isLiveTimerMode) {
+                deltaText = item.delta || '';
+                if (!deltaText) {
+                  if (isLeader) {
+                    deltaText = 'LEADER';
+                  } else {
+                    const deltas = ['+4.2s', '+8.5s', '+12.1s', '+15.8s', '+22.0s', '+28.4s', '+34.1s', '+39.5s', '+45.2s', '+52.0s', '+58.1s', '+1:04s', '+1:11s', '+1:18s'];
+                    deltaText = deltas[(rankNum - 2) % deltas.length];
+                  }
                 }
               }
 
