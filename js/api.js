@@ -106,22 +106,24 @@ class MikaTimingAPI {
    */
   async getRaceResults(idRace, idMeeting, eventKey) {
     const meetingId = idMeeting || 'LR3MS4JI1710';
-    const key = eventKey || 'BOG';
+    const key = eventKey || 'HD';
 
-    // 1. Try Event Key Results Endpoint (e.g. /meetinginfo/meeting/LR3MS4JI1710/event/key/BOG/results)
+    // 1. Try Event Key Results Endpoint (e.g. /meetinginfo/meeting/LR3MS4JI1710/event/key/HD/results)
     try {
       const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/results`);
-      if (data && (data.results || data.participations || data.items)) {
-        return data.results || data.participations || data.items;
+      if (data && data.results && data.results.length > 0) {
+        return data.results;
       }
     } catch (e1) {
       console.info(`[MikaTimingAPI] /event/key/${key}/results info:`, e1.message);
     }
 
-    // 2. Try Event Key Leaders Endpoint (e.g. /meetinginfo/meeting/LR3MS4JI1710/event/key/BOG/leaders)
+    // 2. Try Event Key Leaders Endpoint (e.g. /meetinginfo/meeting/LR3MS4JI1710/event/key/HD/leaders)
     try {
       const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/leaders`);
-      if (data && data.leaders) return data.leaders;
+      if (data && data.leaders && data.leaders.length > 0) {
+        return data.leaders;
+      }
     } catch (e2) {
       console.info(`[MikaTimingAPI] /event/key/${key}/leaders info:`, e2.message);
     }
@@ -130,14 +132,17 @@ class MikaTimingAPI {
     if (idRace) {
       try {
         const data = await this.request(`/meetinginfo/race/${idRace}/results`);
-        if (data && data.results) return data.results;
+        if (data && data.results && data.results.length > 0) return data.results;
       } catch (e3) {}
     }
 
-    // 4. Try Participations Basic Endpoint
+    // 4. Return Registered Participations from Production API
     try {
       const data = await this.request(`/meetinginfo/meeting/${meetingId}/participations/basic`);
-      if (data && data.participations) return data.participations;
+      if (data && data.participations && data.participations.length > 0) {
+        const filtered = data.participations.filter(p => !key || p.eventKey === key || p.idRace === idRace);
+        return filtered.length > 0 ? filtered : data.participations;
+      }
     } catch (e4) {}
 
     throw new Error(`No active live results returned for Meeting ${meetingId} and Key ${key}`);
