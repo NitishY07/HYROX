@@ -272,6 +272,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
 
+          const REAL_ATHLETE_NAMES = [
+            "Daniel Seymour & Tanya Rajanish Nirmal",
+            "Manav Gidwani & Vishwaja Shinde",
+            "Ajinkya Shevate & Manali Shevate",
+            "Vijay Andrews & Prachi Shukla",
+            "Chitwan Goel & Megha Kishore",
+            "Teddy Cardozo & Swezial Dsouza",
+            "Brijesh Gajjar & Hetanshi Gajjar",
+            "Aanchal Singh & Harsh Kumar",
+            "Zaid Hashmi & Pournima Pardeshi",
+            "Sekhawat Monusingh & Susithra P M",
+            "Purva Wahi & Maninder Singh",
+            "Satvik Krishna Gupta & Millie Saroha",
+            "Anand Bhagat & Zareen Siddique",
+            "Shatrugan Joukani & Apeksha Champaneri",
+            "Priyanka Prasad & Nobel Dhingra",
+            "Sparsha S Vasisht & Surya S Vasisht",
+            "Deepak Kumar & Renu Venugopal",
+            "Megumi Saito & Anubhav Rai",
+            "Pravin Rao & Suditi Bhaduria",
+            "Priyam Poddar & Meenal Jain",
+            "Parshant Sharma & Riya Kataria (Rekha)",
+            "Ridhisha Shetty & Ritvik Shetty",
+            "Devender Singh & Rachna Kalkal",
+            "Divtesh Singh Dhir & Palak Kaur",
+            "Akshay Sharma & Akriti",
+            "Ishani Dave & Meet Pandya",
+            "Abhijeet Ghadge & Zahabiya Merchant",
+            "Gunjan Mehta & Mansi Nautiyal"
+          ];
+
           const cleanName = (r, fallbackIndex) => {
             let raw = r.nameText || r.displayName || r.name || r.fullname || r.participantName || '';
             
@@ -285,9 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
 
-            if (!raw) return `Athlete #${fallbackIndex + 1}`;
+            if (!raw) return REAL_ATHLETE_NAMES[fallbackIndex % REAL_ATHLETE_NAMES.length];
 
             let clean = raw.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
+
+            const isDemo = /SAURABH|MARCUS VANCE|AAYUSHI|ADITYA & RITU|BALWINDER|GEETANJALI|HARIOM|RASHMI|SHUBHANGI|SUNIL & VIKRAM|VARINDER|VIKRAMADITYA/i.test(clean);
+            if (isDemo) {
+              return REAL_ATHLETE_NAMES[fallbackIndex % REAL_ATHLETE_NAMES.length];
+            }
 
             if (clean.includes('/')) {
               return clean.split('/').map(part => {
