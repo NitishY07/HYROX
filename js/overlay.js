@@ -341,15 +341,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 5. Top-Right HYROX Broadcast Race Clock (Reference Image 2 Design)
+    // 5. Standalone HYROX Digital Race Clock (Self-Healing Continuous Ticking)
     const raceClockEl = document.getElementById('gfxRaceClock');
     const clockValEl = document.getElementById('gfxClockVal');
     if (raceClockEl) {
-      if (state.visibleElements && state.visibleElements.raceClock !== false) {
+      const isRaceClockVisible = !(state.visibleElements && state.visibleElements.raceClock === false);
+      if (isRaceClockVisible) {
         raceClockEl.classList.remove('gfx-hidden');
         raceClockEl.className = `gfx-race-clock gfx-animated ${state.raceClockPosition || 'pos-clock-top-right'}`;
         if (clockValEl) {
-          clockValEl.innerText = state.raceClockTime || '00:03:31';
+          const hrs = Math.floor(localRaceClockSec / 3600);
+          const mins = String(Math.floor((localRaceClockSec % 3600) / 60)).padStart(2, '0');
+          const secs = String(localRaceClockSec % 60).padStart(2, '0');
+          const displayTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+          clockValEl.innerText = state.raceClockTime || displayTime;
         }
       } else {
         raceClockEl.classList.add('gfx-hidden');
@@ -442,6 +447,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  let localRaceClockSec = 211;
+  let lastClockTimeStr = '';
+
   function applyStateUpdate(incomingPayload) {
     if (!incomingPayload || Object.keys(incomingPayload).length === 0) return;
     const incomingTs = incomingPayload.timestamp || 0;
@@ -464,6 +472,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!state.position) state.position = prevPosition;
     if (!state.theme) state.theme = prevTheme;
     if (!state.displayContent) state.displayContent = prevDisplayContent;
+
+    if (state.raceClockTime && state.raceClockTime !== lastClockTimeStr) {
+      lastClockTimeStr = state.raceClockTime;
+      const parts = state.raceClockTime.split(':').map(Number);
+      if (parts.length === 3) localRaceClockSec = parts[0] * 3600 + parts[1] * 60 + parts[2];
+      else if (parts.length === 2) localRaceClockSec = parts[0] * 60 + parts[1];
+    }
 
     render();
   }
@@ -527,6 +542,13 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (e) {}
 
   render();
-  setInterval(render, 1000);
+  setInterval(() => {
+    localRaceClockSec++;
+    const hrs = Math.floor(localRaceClockSec / 3600);
+    const mins = String(Math.floor((localRaceClockSec % 3600) / 60)).padStart(2, '0');
+    const secs = String(localRaceClockSec % 60).padStart(2, '0');
+    state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+    render();
+  }, 1000);
 });
 
