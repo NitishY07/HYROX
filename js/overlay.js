@@ -537,7 +537,11 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     const saved = localStorage.getItem('mika_gfx_state');
     if (saved) {
-      applyStateUpdate(JSON.parse(saved));
+      if (saved.includes('SAURABH') || saved.includes('MARCUS VANCE')) {
+        localStorage.removeItem('mika_gfx_state');
+      } else {
+        applyStateUpdate(JSON.parse(saved));
+      }
     }
   } catch (e) {}
 

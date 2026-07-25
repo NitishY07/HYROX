@@ -465,6 +465,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadControlPanelSettings() {
     try {
+      const savedGfx = localStorage.getItem('mika_gfx_state');
+      if (savedGfx && (savedGfx.includes('SAURABH') || savedGfx.includes('MARCUS VANCE'))) {
+        localStorage.removeItem('mika_gfx_state');
+        localStorage.removeItem('mika_control_panel_config');
+      }
+
       const savedConfig = localStorage.getItem('mika_control_panel_config');
       if (savedConfig) {
         const config = JSON.parse(savedConfig);
