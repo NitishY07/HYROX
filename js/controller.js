@@ -272,57 +272,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
 
-          const sampleAthletes = [
-            { nameText: 'SAURABH AGGARWAL & KAVITA NAIR', startGroup: 'HYFIT', bib: '101', splitName: 'SLED PUSH 50M', timeText: '36:19', delta: 'LEADER' },
-            { nameText: 'MARCUS VANCE & DAVID MILLER', startGroup: 'VYOM YOGA STUDIO', bib: '102', splitName: 'SKIERG 1000M', timeText: '36:22', delta: '+4.2s' },
-            { nameText: 'AAYUSHI & MANISH SHARMA', startGroup: 'LIFTR', bib: '103', splitName: 'BURPEE BROAD JUMP', timeText: '36:26', delta: '+8.5s' },
-            { nameText: 'ADITYA & RITU VERMA', startGroup: 'FITFORMANCE', bib: '104', splitName: 'ROWING 1000M', timeText: '36:30', delta: '+12.1s' },
-            { nameText: 'BALWINDER SINGH & GURPREET KAUR', startGroup: '6262 FITNESS', bib: '105', splitName: 'FARMERS CARRY', timeText: '36:35', delta: '+15.8s' },
-            { nameText: 'GEETANJALI & ROHIT GUPTA', startGroup: 'FLEXFIT', bib: '106', splitName: 'SLED PULL 50M', timeText: '36:39', delta: '+22.0s' },
-            { nameText: 'HARIOM & DEEPAK YADAV', startGroup: 'HITENSITY', bib: '107', splitName: 'WALL BALLS 100', timeText: '36:44', delta: '+28.4s' },
-            { nameText: 'RASHMI & NEHA MALHOTRA', startGroup: 'ARCH PHYSIOTHERAPY', bib: '108', splitName: 'SANDBAG LUNGES 100M', timeText: '36:47', delta: '+34.1s' },
-            { nameText: 'SHUBHANGI & ANKIT JAIN', startGroup: 'LATERALUS', bib: '109', splitName: 'ROXZONE TRANSITION', timeText: '36:51', delta: '+39.5s' },
-            { nameText: 'SUNIL & VIKRAM CHOUDHARY', startGroup: 'THE FIT GROUND', bib: '110', splitName: 'FINISH LINE', timeText: '36:55', delta: '+45.2s' },
-            { nameText: 'VARINDER SINGH & HARPREET KAUR', startGroup: 'TRF SPACE', bib: '111', splitName: 'RUN 1 1000M', timeText: '37:02', delta: '+52.0s' },
-            { nameText: 'VIKRAMADITYA SINGH & MEENAKSHI', startGroup: 'BLACK BX', bib: '112', splitName: 'SLED PUSH 50M', timeText: '37:08', delta: '+58.1s' },
-            { nameText: 'KABIR DAS & TARUN MEHTA', startGroup: 'KONGFIT', bib: '113', splitName: 'SKIERG 1000M', timeText: '37:14', delta: '+1:04s' },
-            { nameText: 'SIDDHARTH PATEL & ALOK VERMA', startGroup: 'CROSSFIT 9ONE', bib: '114', splitName: 'BURPEE BROAD JUMP', timeText: '37:20', delta: '+1:11s' },
-            { nameText: 'RAHUL SHARMA & POOJA AGGARWAL', startGroup: 'FITNESS FIRST', bib: '115', splitName: 'ROWING 1000M', timeText: '37:25', delta: '+1:18s' }
-          ];
-
-          if (results.length < 15) {
-            for (let i = results.length; i < 15; i++) {
-              const fallback = sampleAthletes[i % sampleAthletes.length];
-              results.push({
-                rank: i + 1,
-                bib: fallback.bib,
-                nameText: fallback.nameText,
-                startGroup: fallback.startGroup,
-                splitName: fallback.splitName,
-                timeText: fallback.timeText,
-                delta: fallback.delta
-              });
-            }
-          }
-
           const cleanName = (r, fallbackIndex) => {
-            const rawNameText = r.nameText || r.name || r.displayName || '';
-            const firstName = (r.firstname || r.first_name || r.fname || '').trim();
-            const rawLastName = (r.lastname || r.last_name || r.lname || '').trim();
-            const lastName = (rawLastName === '.' || rawLastName === ',') ? '' : rawLastName;
-            const constructed = `${firstName} ${lastName}`.trim();
+            let raw = r.nameText || r.displayName || r.name || r.fullname || r.participantName || '';
             
-            let result = rawNameText || constructed || `Athlete #${fallbackIndex+1}`;
-            result = result.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
-
-            if (result.includes(',') && !result.includes('&')) {
-              const parts = result.split(',');
-              if (parts.length === 2) {
-                result = `${parts[1].trim()} ${parts[0].trim()}`;
+            if (!raw) {
+              const fName = (r.firstname || r.first_name || r.fname || '').trim();
+              const lName = (r.lastname || r.last_name || r.lname || '').trim();
+              if (lName === '.' || lName === ',') {
+                raw = fName;
+              } else {
+                raw = `${fName} ${lName}`.trim();
               }
             }
 
-            return result || `Athlete #${fallbackIndex+1}`;
+            if (!raw) return `Athlete #${fallbackIndex + 1}`;
+
+            let clean = raw.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
+
+            if (clean.includes('/')) {
+              return clean.split('/').map(part => {
+                part = part.trim();
+                if (part.includes(',')) {
+                  const sub = part.split(',');
+                  return `${sub[1].trim()} ${sub[0].trim()}`;
+                }
+                return part;
+              }).join(' / ');
+            } else if (clean.includes(',') && !clean.includes('&')) {
+              const parts = clean.split(',');
+              if (parts.length === 2) {
+                return `${parts[1].trim()} ${parts[0].trim()}`;
+              }
+            }
+
+            return clean;
           };
 
           state.leaderboard = results.map((r, i) => {
