@@ -251,6 +251,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (results && results.length > 0) {
           simulator.stop();
 
+          // Sort results strictly by API rank/position
+          results.sort((a, b) => {
+            const rA = parseInt(a.rank || a.position || a.place || 999, 10);
+            const rB = parseInt(b.rank || b.position || b.place || 999, 10);
+            return rA - rB;
+          });
+
           const leader = results[0];
           if (leader) {
             const apiTimeStr = leader.timeText || leader.time || leader.splitTime;
@@ -303,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "Gunjan Mehta & Mansi Nautiyal"
           ];
 
-          const cleanName = (r, fallbackIndex) => {
+          const cleanName = (r, rankIdx) => {
             let raw = r.nameText || r.displayName || r.name || r.fullname || r.participantName || '';
             
             if (!raw) {
@@ -316,13 +323,13 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
 
-            if (!raw) return REAL_ATHLETE_NAMES[fallbackIndex % REAL_ATHLETE_NAMES.length];
+            if (!raw) return REAL_ATHLETE_NAMES[rankIdx % REAL_ATHLETE_NAMES.length];
 
             let clean = raw.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
 
             const isDemo = /SAURABH|MARCUS VANCE|AAYUSHI|ADITYA & RITU|BALWINDER|GEETANJALI|HARIOM|RASHMI|SHUBHANGI|SUNIL & VIKRAM|VARINDER|VIKRAMADITYA/i.test(clean);
             if (isDemo) {
-              return REAL_ATHLETE_NAMES[fallbackIndex % REAL_ATHLETE_NAMES.length];
+              return REAL_ATHLETE_NAMES[rankIdx % REAL_ATHLETE_NAMES.length];
             }
 
             if (clean.includes('/')) {
@@ -351,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
               name: cleanName(r, i),
               club: r.startGroup || r.clubname || r.club || r.raceTitle || r.nation || '',
               nat: r.nationality || r.nation || 'IND',
-              split: r.splitName || r.checkpointName || r.checkpoint || r.split || (r.startGroup ? 'REGISTERED' : ''),
+              split: r.splitName || r.checkpointName || r.checkpoint || r.split || '',
               time: r.timeText || r.time || r.splitTime || '',
               delta: i === 0 ? '' : (r.delta || (r.timeText ? `+${(i * 3.5).toFixed(1)}s` : ''))
             };
