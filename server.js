@@ -5,6 +5,8 @@ const path = require('path');
 const os = require('os');
 const { URL } = require('url');
 
+const PORT = process.env.PORT || 3000;
+
 const REAL_ATHLETE_PAIRS = [
   { rank: 1, bib: '101', name: 'Daniel Seymour & Tanya Rajanish Nirmal', club: 'HYROX INDIA', nat: 'IND', split: '', time: '00:00:00', delta: '' },
   { rank: 2, bib: '102', name: 'Manav Gidwani & Vishwaja Shinde', club: 'FITNESS FIRST', nat: 'IND', split: '', time: '00:00:00', delta: '+3.5s' },
