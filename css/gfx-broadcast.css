@@ -1277,6 +1277,17 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   transform: translateX(-50%) !important;
 }
 
-.gfx-split-badge {
+.gfx-split-badge,
+.gfx-ticker-item .split,
+.gfx-split-label,
+.gfx-split-badge-container,
+[class*="split-badge"],
+[class*="gfx-split"] {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }

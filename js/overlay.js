@@ -313,7 +313,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const itemsHtml = state.tickerItems.map(item => `
             <div class="gfx-ticker-item">
               <span class="name">${escapeHtml(formatAthleteName(item.name, state.nameFormat))}</span>
-              <span class="split">${escapeHtml(item.checkpoint)}</span>
               ${(isTimerEnabled && item.time) ? `<span class="time">${item.time}</span>` : ''}
             </div>
           `).join('');
