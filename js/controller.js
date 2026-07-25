@@ -262,6 +262,10 @@ document.addEventListener('DOMContentLoaded', () => {
               
               if (sec > 0) {
                 liveRaceStartMs = Date.now() - (sec * 1000);
+                const mins = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+                const secs = String(sec % 60).padStart(2, '0');
+                const hrs = Math.floor(sec / 3600);
+                state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
               }
             } else if (leader.gunTimeMs || leader.timeStart || leader.startTimeMs) {
               liveRaceStartMs = leader.gunTimeMs || leader.timeStart || leader.startTimeMs;
