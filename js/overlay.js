@@ -339,6 +339,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function formatAthleteName(nameStr, format) {
     if (!nameStr) return 'Athlete';
+    
+    // Always use full name format for pair names with & symbol
+    if (nameStr.includes('&')) {
+      const parts = nameStr.split('&').map(p => p.trim());
+      if (format === 'initial') {
+        const init1 = parts[0].split(/\s+/).map((w, idx, arr) => idx === arr.length - 1 ? w : w.charAt(0).toUpperCase() + '.').join(' ');
+        const init2 = parts[1].split(/\s+/).map((w, idx, arr) => idx === arr.length - 1 ? w : w.charAt(0).toUpperCase() + '.').join(' ');
+        return `${init1} & ${init2}`;
+      }
+      return `${parts[0]} & ${parts[1]}`;
+    }
+
     if (!format || format === 'full') return nameStr;
 
     const parseSingleName = (singleName) => {
@@ -350,7 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const firstName = parts.slice(0, parts.length - 1).join(' ');
 
       if (format === 'initial') {
-        // Handle names that already have initials like R. Sharma
         if (firstName.length === 1 || (firstName.length === 2 && firstName.endsWith('.'))) {
           return `${firstName.charAt(0).toUpperCase()}. ${lastName}`;
         }
@@ -363,11 +374,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (nameStr.includes('/')) {
-      return nameStr.split('/').map(parseSingleName).join('/');
-    } else if (nameStr.includes('&')) {
-      return nameStr.split('&').map(parseSingleName).join('/');
+      return nameStr.split('/').map(parseSingleName).join(' & ');
     } else if (nameStr.toLowerCase().includes(' and ')) {
-      return nameStr.split(/ and /i).map(parseSingleName).join('/');
+      return nameStr.split(/ and /i).map(parseSingleName).join(' & ');
     }
 
     return parseSingleName(nameStr);
