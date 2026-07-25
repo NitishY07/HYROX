@@ -392,17 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function applyStateUpdate(incomingPayload) {
     if (!incomingPayload || Object.keys(incomingPayload).length === 0) return;
-    const incomingTs = incomingPayload.timestamp || 0;
     
-    // Ignore stale updates if we already received a newer state
-    if (incomingTs > 0 && incomingTs < lastStateTimestamp) {
-      return;
-    }
-    
-    if (incomingTs > 0) {
-      lastStateTimestamp = incomingTs;
-    }
-
     const prevPosition = state.position || 'pos-bottom-grid';
     const prevTheme = state.theme || 'theme-starting-list';
     const prevDisplayContent = state.displayContent || 'both';

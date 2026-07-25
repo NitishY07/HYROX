@@ -323,18 +323,13 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
 
-            // Bind athlete identity to their unique Bib / Start Number
-            let bibNum = parseInt(r.bib || r.startNo || r.idParticipant || (rankIdx + 1), 10);
-            let athleteIdentityIndex = isNaN(bibNum) ? rankIdx : ((bibNum >= 101 ? bibNum - 101 : bibNum - 1) % REAL_ATHLETE_NAMES.length);
-            if (athleteIdentityIndex < 0) athleteIdentityIndex = 0;
-
-            if (!raw) return REAL_ATHLETE_NAMES[athleteIdentityIndex % REAL_ATHLETE_NAMES.length];
+            if (!raw) return REAL_ATHLETE_NAMES[rankIdx % REAL_ATHLETE_NAMES.length];
 
             let clean = raw.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
 
             const isDemo = /SAURABH|MARCUS VANCE|AAYUSHI|ADITYA & RITU|BALWINDER|GEETANJALI|HARIOM|RASHMI|SHUBHANGI|SUNIL & VIKRAM|VARINDER|VIKRAMADITYA/i.test(clean);
             if (isDemo) {
-              return REAL_ATHLETE_NAMES[athleteIdentityIndex % REAL_ATHLETE_NAMES.length];
+              return REAL_ATHLETE_NAMES[rankIdx % REAL_ATHLETE_NAMES.length];
             }
 
             if (clean.includes('/')) {
