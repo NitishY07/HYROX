@@ -173,40 +173,17 @@ document.addEventListener('DOMContentLoaded', () => {
               lastLeaderboardHtml = emptyHtml;
             }
           } else {
-            const sampleAthletes = [
-              { name: 'SAURABH AGGARWAL & KAVITA NAIR', club: 'HYFIT', split: 'SLED PUSH 50M', time: '36:19' },
-              { name: 'MARCUS VANCE & DAVID MILLER', club: 'VYOM YOGA STUDIO', split: 'SKIERG 1000M', time: '36:22' },
-              { name: 'AAYUSHI & MANISH SHARMA', club: 'LIFTR', split: 'BURPEE BROAD JUMP', time: '36:26' },
-              { name: 'ADITYA & RITU VERMA', club: 'FITFORMANCE', split: 'ROWING 1000M', time: '36:30' },
-              { name: 'BALWINDER SINGH & GURPREET KAUR', club: '6262 FITNESS', split: 'FARMERS CARRY', time: '36:35' },
-              { name: 'GEETANJALI & ROHIT GUPTA', club: 'FLEXFIT', split: 'SLED PULL 50M', time: '36:39' },
-              { name: 'HARIOM & DEEPAK YADAV', club: 'HITENSITY', split: 'WALL BALLS 100', time: '36:44' },
-              { name: 'RASHMI & NEHA MALHOTRA', club: 'ARCH PHYSIOTHERAPY', split: 'SANDBAG LUNGES 100M', time: '36:47' },
-              { name: 'SHUBHANGI & ANKIT JAIN', club: 'LATERALUS', split: 'ROXZONE TRANSITION', time: '36:51' },
-              { name: 'SUNIL & VIKRAM CHOUDHARY', club: 'THE FIT GROUND', split: 'FINISH LINE', time: '36:55' },
-              { name: 'VARINDER SINGH & HARPREET KAUR', club: 'TRF SPACE', split: 'RUN 1 1000M', time: '37:02' },
-              { name: 'VIKRAMADITYA SINGH & MEENAKSHI', club: 'BLACK BX', split: 'SLED PUSH 50M', time: '37:08' },
-              { name: 'KABIR DAS & TARUN MEHTA', club: 'KONGFIT', split: 'SKIERG 1000M', time: '37:14' },
-              { name: 'SIDDHARTH PATEL & ALOK VERMA', club: 'CROSSFIT 9ONE', split: 'BURPEE BROAD JUMP', time: '37:20' },
-              { name: 'RAHUL SHARMA & POOJA AGGARWAL', club: 'FITNESS FIRST', split: 'ROWING 1000M', time: '37:25' }
-            ];
-
             let displayList = [...currentLeaderboard];
-            const maxPlayerCount = isBottomGrid ? 12 : 15;
-            if (displayList.length < maxPlayerCount) {
-              for (let i = displayList.length; i < maxPlayerCount; i++) {
-                const sample = sampleAthletes[i % sampleAthletes.length];
-                displayList.push({
-                  rank: i + 1,
-                  name: sample.name,
-                  club: sample.club,
-                  split: sample.split,
-                  time: sample.time
-                });
-              }
-            }
+            
+            // Sort dynamically by rank/position if present
+            displayList.sort((a, b) => {
+              const rA = parseInt(a.rank || 999, 10);
+              const rB = parseInt(b.rank || 999, 10);
+              return rA - rB;
+            });
 
-            const rowLimit = maxPlayerCount;
+            const maxPlayerCount = isBottomGrid ? 12 : 15;
+            const rowLimit = Math.min(displayList.length, maxPlayerCount);
             const displayMode = state.displayContent || 'both';
 
             const lbHtml = displayList.slice(0, rowLimit).map((item, idx) => {
@@ -215,54 +192,24 @@ document.addEventListener('DOMContentLoaded', () => {
               let rightColText = '';
               let splitText = item.split || '';
 
-              const sampleGyms = [
-                'HYFIT', 'VYOM YOGA STUDIO', 'LIFTR', 'FITFORMANCE',
-                '6262 FITNESS', 'FLEXFIT', 'HITENSITY', 'ARCH PHYSIOTHERAPY',
-                'LATERALUS', 'THE FIT GROUND', 'TRF SPACE', 'BLACK BX',
-                'KONGFIT', 'CROSSFIT 9ONE', 'FITNESS FIRST'
-              ];
-
               const isGridLiveSplits = (state.gridMode === 'livesplits');
 
               if (isGridLiveSplits || isLiveTimerMode) {
-                rightColText = item.time || (state.mode === 'sim' ? sampleAthletes[idx % sampleAthletes.length].time : '');
-                if (!splitText || splitText === 'REGISTERED') {
-                  splitText = (state.mode === 'sim') ? sampleAthletes[idx % sampleAthletes.length].split : (item.split || '');
-                }
+                rightColText = item.time || '';
               } else {
-                let teamName = item.club || item.nat || '';
-                if (!teamName || /^\d{1,2}:\d{2}/.test(teamName) || /HYROX/i.test(teamName)) {
-                  teamName = sampleGyms[idx % sampleGyms.length];
-                }
-                rightColText = teamName;
+                rightColText = item.club || item.nat || '';
                 splitText = '';
               }
 
-              let rawName = item.name || '';
-              if (!rawName.includes('&') && !rawName.includes('/')) {
-                const sample = sampleAthletes[idx % sampleAthletes.length];
-                if (sample && sample.name) {
-                  rawName = sample.name;
-                }
-              }
-
-              const fullName = formatAthleteName(rawName, state.nameFormat);
+              const fullName = formatAthleteName(item.name || `Athlete #${idx + 1}`, state.nameFormat);
               const isLeader = (rankNum === 1 || String(formattedRank) === '01');
 
-              let deltaText = '';
-              if (isLiveTimerMode && !isBottomGrid) {
-                deltaText = item.delta || '';
-                if (!deltaText) {
-                  if (isLeader) {
-                    deltaText = 'LEADER';
-                  } else {
-                    const deltas = ['+4.2s', '+8.5s', '+12.1s', '+15.8s', '+22.0s', '+28.4s', '+34.1s', '+39.5s', '+45.2s', '+52.0s', '+58.1s', '+1:04s', '+1:11s', '+1:18s'];
-                    deltaText = deltas[(rankNum - 2) % deltas.length];
-                  }
+              let deltaText = item.delta || '';
+              if (!deltaText && isLiveTimerMode && !isBottomGrid) {
+                if (isLeader) {
+                  deltaText = 'LEADER';
                 }
               }
-
-              const flagSvg = '';
 
               const showPlayers = (displayMode === 'both' || displayMode === 'players');
               const showTeams = (displayMode === 'both' || displayMode === 'teams');
@@ -282,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
               if (displayMode === 'teams') {
                 mainContentHtml = `
                   <div class="gfx-athlete-details">
-                    <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml(rightColText.toUpperCase())}</div>
+                    <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml((rightColText || 'HYROX').toUpperCase())}</div>
                   </div>
                 `;
               } else {
@@ -296,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               const rightColHtml = (showTeams && displayMode === 'both') ? `
                 <div class="gfx-time-col">
-                  <div class="gfx-time-val">${escapeHtml(rightColText.toUpperCase())}</div>
+                  <div class="gfx-time-val">${escapeHtml((rightColText || '').toUpperCase())}</div>
                   ${deltaText ? `<div class="gfx-time-delta ${isLeader ? 'is-leader' : ''}">${escapeHtml(deltaText.toUpperCase())}</div>` : ''}
                 </div>
               ` : '';
