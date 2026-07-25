@@ -84,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let livePollInterval = null;
   let simSyncInterval = null;
+  let liveClockInterval = null;
+  let liveRaceStartMs = null;
 
   /**
    * Sync State across BroadcastChannel, LocalStorage, AND Server Network API
@@ -228,6 +230,19 @@ document.addEventListener('DOMContentLoaded', () => {
       simSyncInterval = null;
     }
     if (livePollInterval) clearInterval(livePollInterval);
+    if (liveClockInterval) clearInterval(liveClockInterval);
+    
+    // Live 1-second continuous clock ticker linked to API start timestamp
+    liveClockInterval = setInterval(() => {
+      if (state.mode === 'live' && liveRaceStartMs) {
+        const elapsedSec = Math.max(0, Math.floor((Date.now() - liveRaceStartMs) / 1000));
+        const mins = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
+        const secs = String(elapsedSec % 60).padStart(2, '0');
+        const hrs = Math.floor(elapsedSec / 3600);
+        state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+        syncState();
+      }
+    }, 1000);
     
     const pollFn = async () => {
       if (state.mode !== 'live') return;
@@ -235,6 +250,23 @@ document.addEventListener('DOMContentLoaded', () => {
         let results = await api.getRaceResults(state.selectedRaceId, state.selectedMeetingId, state.selectedEventKey);
         if (results && results.length > 0) {
           simulator.stop();
+
+          const leader = results[0];
+          if (leader) {
+            const apiTimeStr = leader.timeText || leader.time || leader.splitTime;
+            if (apiTimeStr && /^\d{1,2}:\d{2}/.test(apiTimeStr)) {
+              const parts = apiTimeStr.split(':').map(Number);
+              let sec = 0;
+              if (parts.length === 3) sec = parts[0] * 3600 + parts[1] * 60 + parts[2];
+              else if (parts.length === 2) sec = parts[0] * 60 + parts[1];
+              
+              if (sec > 0) {
+                liveRaceStartMs = Date.now() - (sec * 1000);
+              }
+            } else if (leader.gunTimeMs || leader.timeStart || leader.startTimeMs) {
+              liveRaceStartMs = leader.gunTimeMs || leader.timeStart || leader.startTimeMs;
+            }
+          }
 
           const sampleAthletes = [
             { nameText: 'SAURABH AGGARWAL & KAVITA NAIR', startGroup: 'HYFIT', bib: '101', splitName: 'SLED PUSH 50M', timeText: '36:19', delta: 'LEADER' },
@@ -311,7 +343,9 @@ document.addEventListener('DOMContentLoaded', () => {
             };
           });
 
-          state.raceClockTime = (results[0]?.timeText || results[0]?.time || '00:03:31');
+          if (!liveRaceStartMs) {
+            state.raceClockTime = (results[0]?.timeText || results[0]?.time || '00:03:31');
+          }
           updateSpotlightSelectOptions();
           syncState();
         } else {
@@ -350,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.mode = modeToggle.checked ? 'live' : 'sim';
     if (state.mode === 'sim') {
       if (livePollInterval) clearInterval(livePollInterval);
+      if (liveClockInterval) clearInterval(liveClockInterval);
       simulator.start();
       updateStatus('Running in High-Fidelity Simulator Mode', 'info');
       startSimulatorSync();
