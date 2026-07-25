@@ -216,13 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               let itemStyle = '';
               if (isBottomGrid) {
-                if (displayMode === 'players') {
-                  itemStyle = 'grid-template-columns: 42px 1fr !important;';
-                } else if (displayMode === 'teams') {
-                  itemStyle = 'grid-template-columns: 42px 1fr !important;';
-                } else {
-                  itemStyle = 'grid-template-columns: 42px 1.6fr 1fr !important;';
-                }
+                itemStyle = 'grid-template-columns: 42px 1fr !important;';
               }
 
               let mainContentHtml = '';
@@ -240,7 +234,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
               }
 
-              const rightColHtml = (showTeams && displayMode === 'both') ? `
+              const isSplitName = /SLED|SKIERG|BURPEE|ROWING|FARMERS|WALL|SANDBAG|ROXZONE|FINISH|RUN|REGISTERED/i.test(rightColText || '');
+              const showRightCol = (showTeams && displayMode === 'both' && !isBottomGrid && !isSplitName && rightColText && /^\d{1,2}:\d{2}/.test(rightColText));
+
+              const rightColHtml = showRightCol ? `
                 <div class="gfx-time-col">
                   <div class="gfx-time-val">${escapeHtml((rightColText || '').toUpperCase())}</div>
                   ${deltaText ? `<div class="gfx-time-delta ${isLeader ? 'is-leader' : ''}">${escapeHtml(deltaText.toUpperCase())}</div>` : ''}
