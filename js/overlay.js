@@ -234,21 +234,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
               }
 
-              const isSplitName = /SLED|SKIERG|BURPEE|ROWING|FARMERS|WALL|SANDBAG|ROXZONE|FINISH|RUN|REGISTERED/i.test(rightColText || '');
-              const showRightCol = (showTeams && displayMode === 'both' && !isBottomGrid && !isSplitName && rightColText && /^\d{1,2}:\d{2}/.test(rightColText));
-
-              const rightColHtml = showRightCol ? `
-                <div class="gfx-time-col">
-                  <div class="gfx-time-val">${escapeHtml((rightColText || '').toUpperCase())}</div>
-                  ${deltaText ? `<div class="gfx-time-delta ${isLeader ? 'is-leader' : ''}">${escapeHtml(deltaText.toUpperCase())}</div>` : ''}
-                </div>
-              ` : '';
-
               return `
                 <div class="gfx-lb-item pos-${rankNum}" style="${itemStyle}">
                   <div class="gfx-rank-num">${formattedRank}</div>
                   ${mainContentHtml}
-                  ${rightColHtml}
                 </div>
               `;
             }).join('');
