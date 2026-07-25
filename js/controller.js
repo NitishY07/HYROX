@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
     meetings: [],
     races: [],
     events: [],
-    leaderboard: [],
+    leaderboard: REAL_ATHLETE_PAIRS_DEFAULT,
     spotlightAthlete: null,
-    tickerItems: [],
+    tickerItems: REAL_ATHLETE_PAIRS_DEFAULT.map(p => ({ bib: p.bib, name: p.name, checkpoint: p.split, time: p.time })),
     meetingInfo: {
       title: 'DELHI - 25.07.2026 - DAY 2',
       meta: 'BATTLE OF GYMS • Live',
