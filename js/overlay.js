@@ -236,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainContentHtml = `
                   <div class="gfx-athlete-details">
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
-                    ${(splitText && splitText !== 'REGISTERED') ? `<div class="gfx-split-badge" style="font-size: 10px; font-weight: 800; color: #EAB308;">${escapeHtml(splitText)}</div>` : ''}
                   </div>
                 `;
               }

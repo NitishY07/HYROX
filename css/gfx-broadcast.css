@@ -1276,3 +1276,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   bottom: auto !important;
   transform: translateX(-50%) !important;
 }
+
+.gfx-split-badge {
+  display: none !important;
+}
