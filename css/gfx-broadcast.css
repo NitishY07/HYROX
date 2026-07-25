@@ -1110,7 +1110,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 .pos-bottom-grid .gfx-lb-item,
 .theme-starting-list.pos-bottom-grid .gfx-lb-item {
   display: grid !important;
-  grid-template-columns: 42px 1.6fr 1fr !important;
+  grid-template-columns: 46px 1fr !important;
   height: 48px !important;
   background: #FFFFFF !important;
   border-radius: 4px !important;
@@ -1171,16 +1171,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 
 .pos-bottom-grid .gfx-time-col,
 .theme-starting-list.pos-bottom-grid .gfx-time-col {
-  background: #EAEAEA !important;
-  border: none !important;
-  height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-left: 1px solid #D5D5D5 !important;
-  padding: 0 8px !important;
-  border-radius: 0 !important;
-  width: 100% !important;
+  display: none !important;
 }
 
 .pos-bottom-grid .gfx-time-val,
