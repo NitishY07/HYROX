@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               let itemStyle = '';
               if (isBottomGrid) {
-                itemStyle = 'grid-template-columns: 42px 1fr !important;';
+                const isLiveTimerMode = state.visibleElements && state.visibleElements.showTimer; itemStyle = isBottomGrid ? (isLiveTimerMode && rightColText ? 'grid-template-columns: 42px 1fr auto !important;' : 'grid-template-columns: 42px 1fr !important;') : (isLiveTimerMode && rightColText ? 'grid-template-columns: 46px 1fr 115px !important;' : 'grid-template-columns: 46px 1fr !important;');
               }
 
               let mainContentHtml = '';
