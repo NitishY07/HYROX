@@ -1,3 +1,4 @@
+const REAL_ATHLETE_PAIRS_DEFAULT = [];
 /**
  * Operator Control Panel Logic (controller.js)
  * Manages API requests, Simulator, State, UI Events, Hotkeys, and Server Network Sync.
