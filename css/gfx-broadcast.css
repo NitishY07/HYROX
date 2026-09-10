@@ -288,7 +288,7 @@
 .theme-starting-list.mode-timer .gfx-time-val {
   font-size: 15px !important;
   font-weight: 900 !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
   line-height: 1.1 !important;
 }
 
@@ -409,7 +409,7 @@
   text-transform: uppercase !important;
   text-align: center !important;
   line-height: 1.1 !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
 }
 
 .theme-starting-list .gfx-time-delta {
@@ -422,7 +422,7 @@
   text-align: center !important;
   line-height: 1 !important;
   margin-top: 2px !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
 }
 
 .theme-starting-list .gfx-time-delta.is-leader {
@@ -784,7 +784,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   text-transform: uppercase !important;
   text-align: center !important;
   line-height: 1.1 !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
 }
 
 .gfx-time-delta {
@@ -797,7 +797,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   text-align: center !important;
   line-height: 1 !important;
   margin-top: 2px !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
 }
 
 .gfx-time-delta.is-leader {
@@ -1159,10 +1159,10 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   color: #000000 !important;
   font-family: 'Brutel', sans-serif !important;
   font-weight: 900 !important;
-  font-size: 14.5px !important;
+  font-size: 11.5px !important;
   letter-spacing: 0px !important;
   text-transform: uppercase !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   margin: 0 !important;
@@ -1181,7 +1181,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   font-weight: 900 !important;
   font-size: 13px !important;
   letter-spacing: 0.3px !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
   text-transform: uppercase !important;
   text-align: center !important;
   display: -webkit-box !important;

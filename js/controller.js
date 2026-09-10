@@ -668,14 +668,25 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         state.visibleElements.leaderboard = false;
       }
-      saveControlPanelSettings();
-      syncState();
+      saveControlPanelSettings(); 
+      syncState(); 
     });
-  }
 
-  if (toggleRaceClock) toggleRaceClock.addEventListener('change', () => { state.visibleElements.raceClock = toggleRaceClock.checked; saveControlPanelSettings(); syncState(); });
-  if (toggleBanner) toggleBanner.addEventListener('change', () => { state.visibleElements.banner = toggleBanner.checked; saveControlPanelSettings(); syncState(); });
-  if (toggleLeaderboard) toggleLeaderboard.addEventListener('change', () => { state.visibleElements.leaderboard = toggleLeaderboard.checked; saveControlPanelSettings(); syncState(); });
+    if (toggleLeaderboard) toggleLeaderboard.addEventListener('change', () => { 
+      if (toggleLeaderboard.checked) {
+        state.theme = 'theme-signature-broadcast';
+        state.position = 'pos-top-right';
+        state.visibleElements.leaderboard = true;
+        if (toggleGridGfx) toggleGridGfx.checked = false;
+      } else {
+        state.visibleElements.leaderboard = false;
+      }
+      saveControlPanelSettings(); 
+      syncState(); 
+    });
+
+    if (toggleRaceClock) toggleRaceClock.addEventListener('change', () => { state.visibleElements.raceClock = toggleRaceClock.checked; saveControlPanelSettings(); syncState(); });
+    if (toggleBanner) toggleBanner.addEventListener('change', () => { state.visibleElements.banner = toggleBanner.checked; saveControlPanelSettings(); syncState(); });
   if (toggleLowerThird) toggleLowerThird.addEventListener('change', () => { state.visibleElements.lowerThird = toggleLowerThird.checked; saveControlPanelSettings(); syncState(); });
   if (toggleTicker) toggleTicker.addEventListener('change', () => { state.visibleElements.ticker = toggleTicker.checked; saveControlPanelSettings(); syncState(); });
   if (toggleTimer) toggleTimer.addEventListener('change', () => { state.visibleElements.showTimer = toggleTimer.checked; saveControlPanelSettings(); syncState(); });
