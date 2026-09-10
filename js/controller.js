@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function syncState() {
     const payload = {
       mode: state.mode,
-      startTimeMs: simulator.startTimeMs,
+      startTimeMs: state.mode === 'api' ? (typeof liveRaceStartMs !== 'undefined' ? liveRaceStartMs : null) : simulator.startTimeMs,
       theme: state.theme,
       position: state.position,
       nameFormat: state.nameFormat,
@@ -819,4 +819,5 @@ document.addEventListener('DOMContentLoaded', () => {
   updateMode();
   connectAPI();
 });
+
 

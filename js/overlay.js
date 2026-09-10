@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dynamic clock calculation ONLY in SIM mode
     let currentLeaderboard = state.leaderboard || [];
-    if (state.mode === 'sim' && isTimerEnabled && state.startTimeMs) {
+    if (isTimerEnabled && state.startTimeMs) {
       const elapsedSec = Math.floor((Date.now() - state.startTimeMs) / 1000);
       currentLeaderboard = currentLeaderboard.map((item, index) => {
         const baseOffset = index === 0 ? 0 : index * 4.2;
@@ -494,3 +494,4 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }, 1000);
 });
+
