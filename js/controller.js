@@ -809,4 +809,3 @@ document.addEventListener('DOMContentLoaded', () => {
   connectAPI();
 });
 
-const REAL_ATHLETE_PAIRS_DEFAULT = [];
