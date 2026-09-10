@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    const isTimerEnabled = state.visibleElements && state.visibleElements.showTimer === true;
+    const isTimerEnabled = !!(state.visibleElements && state.visibleElements.showTimer);
     const isClubsEnabled = !state.visibleElements || state.visibleElements.showClubs !== false;
 
     // Dynamic clock calculation ONLY in SIM mode
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hasLiveTimes = currentLeaderboard.some(item => item.time || (item.split && item.split !== 'REGISTERED'));
 
         // Determine mode
-        const isLiveTimerMode = isSignatureBroadcastTheme || hasLiveTimes;
+        const isLiveTimerMode = isTimerEnabled || hasLiveTimes;
 
         if (isLiveTimerMode) {
           leaderboardEl.classList.remove('mode-team');
@@ -216,7 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
               let itemStyle = '';
               if (isBottomGrid) {
-                const isLiveTimerMode = state.visibleElements && state.visibleElements.showTimer; itemStyle = isBottomGrid ? (isLiveTimerMode && rightColText ? 'grid-template-columns: 42px 1fr auto !important;' : 'grid-template-columns: 42px 1fr !important;') : (isLiveTimerMode && rightColText ? 'grid-template-columns: 46px 1fr 115px !important;' : 'grid-template-columns: 46px 1fr !important;');
+                itemStyle = (isLiveTimerMode && rightColText) ? 'grid-template-columns: 42px 1fr 100px !important;' : 'grid-template-columns: 42px 1fr !important;';
+              } else {
+                itemStyle = (isLiveTimerMode && rightColText) ? 'grid-template-columns: 46px 1fr 115px !important;' : 'grid-template-columns: 46px 1fr !important;';
               }
 
               let mainContentHtml = '';
@@ -234,10 +236,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
               }
 
+              const timeColHtml = (isLiveTimerMode && rightColText) ? `
+                <div class="gfx-time-col" style="display:flex !important; align-items:center; justify-content:center; background:#e8e8e8; border-left:2px solid #ccc; padding:0 8px;">
+                  <span class="gfx-time-val" style="font-weight:900; font-size:13px; color:#111; letter-spacing:0.5px;">${escapeHtml(rightColText)}</span>
+                </div>
+              ` : '';
+
               return `
                 <div class="gfx-lb-item pos-${rankNum}" style="${itemStyle}">
                   <div class="gfx-rank-num">${formattedRank}</div>
                   ${mainContentHtml}
+                  ${timeColHtml}
                 </div>
               `;
             }).join('');
@@ -485,4 +494,3 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }, 1000);
 });
-
