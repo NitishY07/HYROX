@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hasLiveTimes = currentLeaderboard.some(item => item.time || (item.split && item.split !== 'REGISTERED'));
 
         // Determine mode
-        const isLiveTimerMode = isTimerEnabled || hasLiveTimes;
+        const isLiveTimerMode = isTimerEnabled;
 
         if (isLiveTimerMode) {
           leaderboardEl.classList.remove('mode-team');
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
           if (isBottomGrid) {
-            eventBar.innerHTML = `<span class="gfx-grid-station-pill">STARTING LIST</span>`;
+            eventBar.innerHTML = isLiveTimerMode ? '' : `<span class="gfx-grid-station-pill">STARTING LIST</span>`;
           } else {
             eventBar.innerText = headerText.toUpperCase();
           }
@@ -496,6 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }, 1000);
 });
+
 
 
 
