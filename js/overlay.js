@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               const timeColHtml = (isLiveTimerMode && rightColText) ? `
                 <div class="gfx-time-col" style="display:flex !important; align-items:center; justify-content:center; background:#e8e8e8; border-left:2px solid #ccc; padding:0 8px;">
-                  <span class="gfx-time-val" style="font-weight:900; font-size:13px; color:#111; letter-spacing:0.5px;">${escapeHtml(rightColText)}</span>
+                  <span class="gfx-time-val" style="font-family: 'BrutalType', 'Brutel', sans-serif; font-weight:900; font-size:16px; color:#111; letter-spacing:0.5px;">${escapeHtml(rightColText)}</span>
                 </div>
               ` : '';
 
@@ -496,6 +496,8 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }, 1000);
 });
+
+
 
 
 
