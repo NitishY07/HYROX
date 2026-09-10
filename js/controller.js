@@ -675,7 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (toggleLeaderboard) toggleLeaderboard.addEventListener('change', () => { 
       if (toggleLeaderboard.checked) {
         state.theme = 'theme-signature-broadcast';
-        state.position = 'pos-top-right';
+        state.position = 'pos-top-left';
         state.visibleElements.leaderboard = true;
         if (toggleGridGfx) toggleGridGfx.checked = false;
       } else {
@@ -819,5 +819,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateMode();
   connectAPI();
 });
+
 
 
