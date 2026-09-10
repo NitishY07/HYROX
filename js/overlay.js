@@ -97,15 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dynamic clock calculation ONLY in SIM mode
     let currentLeaderboard = state.leaderboard || [];
-    if (isTimerEnabled && state.startTimeMs) {
-      const elapsedSec = Math.floor((Date.now() - state.startTimeMs) / 1000);
-      currentLeaderboard = currentLeaderboard.map((item, index) => {
-        const baseOffset = index === 0 ? 0 : index * 4.2;
-        const itemSec = Math.max(0, elapsedSec + baseOffset);
-        return {
-          ...item,
-          time: formatTime(itemSec)
-        };
+    if (isTimerEnabled && state.gridMode !== 'livesplits') {
+        let baseElapsed = 0;
+        if (state.mode === 'sim' && state.startTimeMs) {
+          baseElapsed = Math.floor((Date.now() - state.startTimeMs) / 1000);
+        } else {
+          const p = (state.raceClockTime || '00:00').split(':').map(Number);
+          baseElapsed = p.length === 3 ? p[0]*3600 + p[1]*60 + p[2] : p[0]*60 + p[1];
+        }
+        currentLeaderboard = currentLeaderboard.map((item, index) => {
+          const itemSec = Math.max(0, baseElapsed + (index * 4.2));
+          return { ...item, time: formatTime(itemSec) };
       });
     }
 
@@ -494,4 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }, 1000);
 });
+
+
+
 
