@@ -258,17 +258,17 @@
             <label for="envPresetSelect">Environment Preset</label>
             <select id="envPresetSelect">
               <option value="staging">Staging (apihub-staging.mikatiming.net)</option>
-              <option value="prod">Production (apihub.mikatiming.net)</option>
+              <option value="prod" selected>Production (apihub.mikatiming.net)</option>
               <option value="custom">Custom Endpoint URL</option>
             </select>
           </div>
           <div class="form-group">
             <label for="apiHostInput">API Host Base URL</label>
-            <input type="text" id="apiHostInput" value="https://apihub-staging.mikatiming.net/ah/rest/appapi">
+            <input type="text" id="apiHostInput" value="https://apihub.mikatiming.net/ah/rest/appapi">
           </div>
           <div class="form-group">
             <label for="apiKeyInput">API Key</label>
-            <input type="text" id="apiKeyInput" value="sportvot" placeholder="Enter Mika Timing API Key">
+            <input type="text" id="apiKeyInput" value="sportvot-vhzj2id" placeholder="Enter Mika Timing API Key">
           </div>
           <button id="connectBtn" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Connect API</button>
           <button id="saveConfigBtn" class="btn" style="width: 100%; margin-top: 8px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #FFF; font-weight: 700;">💾 Save Settings</button>
@@ -344,4 +344,6 @@
   <script src="js/controller.js"></script>
 </body>
 </html>
+
+
 
