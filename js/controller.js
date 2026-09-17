@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (simulator.startTimeMs) {
         const elapsedSec = Math.floor((Date.now() - simulator.startTimeMs) / 1000);
-        const mins = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+        const mins = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
         const secs = String(elapsedSec % 60).padStart(2, '0');
         const hrs = Math.floor(elapsedSec / 3600);
         state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
@@ -819,6 +819,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateMode();
   connectAPI();
 });
+
 
 
 
