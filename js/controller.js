@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const leader = results[0];
           if (leader) {
-            const apiTimeStr = leader.timeText || leader.time || leader.splitTime;
+            const apiTimeStr = leader.timeText || leader.time || leader.splitTimeStr || leader.splitTime || leader.finishTimeNet;
             if (apiTimeStr && /^\d{1,2}:\d{2}/.test(apiTimeStr)) {
               const parts = apiTimeStr.split(':').map(Number);
               let sec = 0;
@@ -360,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
               club: r.startGroup || r.clubname || r.club || r.raceTitle || r.nation || '',
               nat: r.nationality || r.nation || 'IND',
               split: r.splitName || r.checkpointName || r.checkpoint || r.split || '',
-              time: r.timeText || r.time || r.splitTime || '',
+              time: r.timeText || r.time || r.splitTimeStr || r.splitTime || r.finishTimeNet || '',
               delta: i === 0 ? '' : (r.delta || (r.timeText ? `+${(i * 3.5).toFixed(1)}s` : ''))
             };
           });
@@ -370,12 +370,12 @@ document.addEventListener('DOMContentLoaded', () => {
               bib: r.bib || r.startNo || r.idParticipant || '00',
               name: cleanName(r, i),
               checkpoint: r.splitName || r.checkpointName || r.checkpoint || r.split || r.startGroup || 'Registered Participant',
-              time: r.splitTime || r.timeText || ''
+              time: r.timeText || r.splitTimeStr || r.splitTime || r.finishTimeNet || ''
             };
           });
 
           if (!liveRaceStartMs) {
-            state.raceClockTime = (results[0]?.timeText || results[0]?.time || '00:03:31');
+            state.raceClockTime = (results[0]?.timeText || results[0]?.splitTimeStr || results[0]?.time || results[0]?.finishTimeNet || '00:03:31');
           }
           updateSpotlightSelectOptions();
           syncState();
@@ -819,6 +819,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateMode();
   connectAPI();
 });
+
+
 
 
 
