@@ -267,7 +267,7 @@
   font-size: 11px !important;
   font-weight: 900 !important;
   white-space: normal !important;
-  word-break: break-word !important;
+  word-break: normal !important; overflow-wrap: break-word !important;
   text-align: center !important;
   line-height: 1.15 !important;
   display: -webkit-box !important;
@@ -343,7 +343,7 @@
   line-height: 1.15 !important;
   margin-bottom: 2px !important;
   white-space: normal !important;
-  word-break: break-word !important;
+  word-break: normal !important; overflow-wrap: break-word !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
@@ -733,7 +733,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   line-height: 1.15 !important;
   margin-bottom: 2px !important;
   white-space: normal !important;
-  word-break: break-word !important;
+  word-break: normal !important; overflow-wrap: break-word !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
@@ -1166,7 +1166,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   margin: 0 !important;
-  display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important;
+  display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important; flex: 1 !important; word-break: normal !important;
 }
 
 .pos-bottom-grid .gfx-time-col,
@@ -1188,7 +1188,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
-  word-break: break-word !important;
+  word-break: normal !important; overflow-wrap: break-word !important;
   line-height: 1.15 !important;
 }
 
@@ -1282,6 +1282,8 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+
 
 
 
