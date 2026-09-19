@@ -328,6 +328,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let clean = raw.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
 
+            if (state.selectedEventKey === 'BOG') {
+              const bogTeams = {
+                'khushboo': 'Pankaj Pasi & Khusboo Adalja',
+                'vidushi': 'Tom Saxena & Vidushi Kumar',
+                'punith': 'Punith Basavaraju & Tanvi Gandhi',
+                'rohit': 'Paromita Mandal & Rohit Parab',
+                'sahirah': 'Jehangir Havaldar & Sahirah Oshidar',
+                'janhavi': 'Parth Pandya & Janhavi Patil',
+                'sameer': 'Vineetha Deshmukh & Sameer Deshmukh',
+                'glen': 'Glen Richard & Anchal Singh',
+                'teddy': 'Teddy Cardozo & Swisel Dsouza',
+                'vikram': 'Vikram Naik & Pooja Naik',
+                'ashwani': 'Ashwani Kumar Gupta & Nancy Gupta',
+                'priti': 'Sikandar Tadakhe & Priti Lamba',
+                'zahabiya': 'Abhijeet Ghadge & Zahabiya Merchant',
+                'lalwani': 'Hetal Sumra & Pratik Lalwani',
+                'mohena': 'Dhruv Adwani & Mohena Ahluwalia',
+                'jayashree': 'Kunal Nath & Jayashree Parihar',
+                'iris': 'Iris Lewis & Praveen Pai',
+                'abhishek menon': 'Mini Menon & Abhishek Menon',
+                'malvika': 'Malvika Iyer & Pratik Mhatre',
+                'shardul': 'Hiloni Ajmera & Shardul Zankar',
+                'ritesh': 'Indira Baikerikar & Ritesh Shetty',
+                'parshant': 'Prashant Sharma & Ria Kataria',
+                'naman': 'Naman Mawandia & Geetika Hans'
+              };
+              const cleanLower = clean.toLowerCase();
+              for (const [key, pairName] of Object.entries(bogTeams)) {
+                if (cleanLower.includes(key)) {
+                  clean = pairName;
+                  break;
+                }
+              }
+            }
+
             const isDemo = /SAURABH|MARCUS VANCE|AAYUSHI|ADITYA & RITU|BALWINDER|GEETANJALI|HARIOM|RASHMI|SHUBHANGI|SUNIL & VIKRAM|VARINDER|VIKRAMADITYA/i.test(clean);
             if (isDemo) {
               return REAL_ATHLETE_NAMES[rankIdx % REAL_ATHLETE_NAMES.length];
