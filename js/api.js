@@ -98,7 +98,16 @@ class MikaTimingAPI {
    */
   async getEvents() {
     const data = await this.request('/meetinginfo/events');
-    return data.events || [];
+    const allEvents = data.events || [];
+    const uniqueEvents = [];
+    const seenKeys = new Set();
+    for (const e of allEvents) {
+      if (!seenKeys.has(e.key)) {
+        seenKeys.add(e.key);
+        uniqueEvents.push(e);
+      }
+    }
+    return uniqueEvents;
   }
 
   /**
