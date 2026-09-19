@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const mins = String(Math.floor((localRaceClockSec % 3600) / 60)).padStart(2, '0');
           const secs = String(localRaceClockSec % 60).padStart(2, '0');
           const displayTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
-          clockValEl.innerText = state.raceClockTime || displayTime;
+          clockValEl.innerText = displayTime;
         }
       } else {
         raceClockEl.classList.add('gfx-hidden');
