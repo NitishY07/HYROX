@@ -1024,7 +1024,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   left: 30px !important;
     transform: none !important;
   width: calc(100% - 60px) !important;
-  max-width: none !important;
+  max-width: 1440px !important;
   gap: 0 !important;
 }
 
