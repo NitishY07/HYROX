@@ -678,6 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.position = 'pos-top-left';
         state.visibleElements.leaderboard = true;
         if (toggleGridGfx) toggleGridGfx.checked = false;
+        if (toggleRaceClock) { toggleRaceClock.checked = false; state.visibleElements.raceClock = false; }
       } else {
         state.visibleElements.leaderboard = false;
       }
@@ -819,6 +820,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateMode();
   connectAPI();
 });
+
 
 
 

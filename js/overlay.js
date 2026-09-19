@@ -288,7 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const raceClockEl = document.getElementById('gfxRaceClock');
     const clockValEl = document.getElementById('gfxClockVal');
     if (raceClockEl) {
-      const isRaceClockVisible = !(state.visibleElements && state.visibleElements.raceClock === false);
+      const isVerticalVisible = state.visibleElements && state.visibleElements.leaderboard && state.position === 'pos-top-left';
+      const isRaceClockVisible = !(state.visibleElements && state.visibleElements.raceClock === false) && !isVerticalVisible;
       if (isRaceClockVisible) {
         raceClockEl.classList.remove('gfx-hidden');
         raceClockEl.className = `gfx-race-clock gfx-animated ${state.raceClockPosition || 'pos-clock-top-right'}`;
@@ -496,6 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }, 1000);
 });
+
 
 
 
