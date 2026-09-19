@@ -151,7 +151,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const eventBar = document.getElementById('lbEventBar');
         if (eventBar) {
           if (isBottomGrid) {
-            eventBar.innerHTML = isLiveTimerMode ? '' : `<span class="gfx-grid-station-pill">STARTING LIST</span>`;
+            let zoneHtml = `<span class="gfx-grid-station-pill">STARTING LIST</span>`;
+            if (currentLeaderboard && currentLeaderboard.length > 0) {
+              const leaderSplit = currentLeaderboard[0].split || currentLeaderboard[0].checkpoint;
+              if (leaderSplit) {
+                const s = leaderSplit.toLowerCase();
+                let num = ''; let name = '';
+                if (s.includes('ski')) { num = '01'; name = 'SKIERG'; }
+                else if (s.includes('push')) { num = '02'; name = 'SLED PUSH'; }
+                else if (s.includes('pull')) { num = '03'; name = 'SLED PULL'; }
+                else if (s.includes('burpee') || s.includes('broad')) { num = '04'; name = 'BURPEES'; }
+                else if (s.includes('row')) { num = '05'; name = 'ROWERG'; }
+                else if (s.includes('farm') || s.includes('carry')) { num = '06'; name = 'FARMERS CARRY'; }
+                else if (s.includes('sandbag') || s.includes('lunge')) { num = '07'; name = 'SANDBAG LUNGES'; }
+                else if (s.includes('wall') || s.includes('ball')) { num = '08'; name = 'WALL BALLS'; }
+                else if (s.includes('finish')) { num = 'FI'; name = 'FINISH'; }
+                
+                if (num && name) {
+                  zoneHtml = `<div class="gfx-grid-station-num">${num}</div><div class="gfx-grid-station-pill">${name}</div>`;
+                } else {
+                  zoneHtml = `<span class="gfx-grid-station-pill">${leaderSplit.toUpperCase()}</span>`;
+                }
+              }
+            }
+            eventBar.innerHTML = zoneHtml;
           } else {
             eventBar.innerText = headerText.toUpperCase();
           }
