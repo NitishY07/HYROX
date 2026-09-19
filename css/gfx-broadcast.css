@@ -1046,7 +1046,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 .theme-starting-list.pos-bottom-grid .gfx-lb-event-bar {
   background: transparent !important;
   border: none !important;
-  padding: 0 0 10px 15px !important;
+  padding: 0 0 10px 3px !important;
   margin: 0 !important;
   display: flex !important;
   align-items: center !important;
@@ -1102,8 +1102,8 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   grid-template-columns: repeat(4, 1fr) !important;
   gap: 8px 14px !important;
   width: 100% !important;
-  border-left: 3px solid rgba(255, 255, 255, 0.8) !important;
-  padding-left: 12px !important;
+  border-left: none !important;
+  padding-left: 3px !important;
   box-sizing: border-box !important;
 }
 
