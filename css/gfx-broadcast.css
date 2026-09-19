@@ -1150,7 +1150,9 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   align-items: center !important;
   gap: 6px !important;
   height: 100% !important;
-  overflow: hidden !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
   border-radius: 0 !important;
 }
 
@@ -1166,7 +1168,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   margin: 0 !important;
-  display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important; flex: 1 !important; word-break: normal !important;
+  display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important; flex: 1 !important; word-break: normal !important; overflow-wrap: break-word !important; min-width: 0 !important; width: 100% !important;
 }
 
 .pos-bottom-grid .gfx-time-col,
@@ -1282,6 +1284,10 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+
+
+
 
 
 
