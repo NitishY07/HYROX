@@ -132,7 +132,10 @@ class MikaTimingAPI {
     if (idRace) {
       try {
         const data = await this.request(`/meetinginfo/race/${idRace}/results`);
-        if (data && data.results && data.results.length > 0) return data.results;
+        if (data && data.results && data.results.length > 0) {
+            const filtered = data.results.filter(r => !key || r.eventKey === key);
+            if (filtered.length > 0) return filtered;
+          }
       } catch (e3) {}
     }
 
@@ -153,5 +156,6 @@ if (typeof window !== 'undefined') {
 }
 
 const api = new MikaTimingAPI();
+
 
 
