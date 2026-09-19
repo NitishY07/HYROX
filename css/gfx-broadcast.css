@@ -1293,3 +1293,15 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 
 
 
+
+/* Global Vertical Alignment Line for Bottom Grid Mode */
+.pos-bottom-grid .gfx-leaderboard-box::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    bottom: -80px !important;
+    height: 100vh !important;
+    width: 3px !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    z-index: 10 !important;
+}
