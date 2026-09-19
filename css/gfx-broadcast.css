@@ -1110,7 +1110,7 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 .pos-bottom-grid .gfx-lb-item,
 .theme-starting-list.pos-bottom-grid .gfx-lb-item {
   display: grid !important;
-  grid-template-columns: 46px 1fr !important;
+  grid-template-columns: 46px 1fr auto !important;
   height: 48px !important;
   background: #FFFFFF !important;
   border-radius: 4px !important;
