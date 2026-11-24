@@ -4,8 +4,8 @@
  */
 class MikaTimingAPI {
   constructor(config = {}) {
-    this.baseUrl = config.baseUrl || 'https://apihub-staging.mikatiming.net/ah/rest/appapi';
-    this.apiKey = config.apiKey || 'sportvot';
+    this.baseUrl = config.baseUrl || 'https://apihub.mikatiming.net/ah/rest/appapi';
+    this.apiKey = config.apiKey || 'sportvot-vhzj2id';
     this.apiVersion = config.apiVersion || '1';
   }
 
@@ -85,19 +85,21 @@ class MikaTimingAPI {
 
   /**
    * 2. Get Races List
-   * Endpoint: GET /meetinginfo/races
+   * Endpoint: GET /meetinginfo/meeting/{idMeeting}/races or /meetinginfo/races
    */
-  async getRaces() {
-    const data = await this.request('/meetinginfo/races');
+  async getRaces(idMeeting) {
+    const endpoint = idMeeting ? `/meetinginfo/meeting/${idMeeting}/races` : '/meetinginfo/races';
+    const data = await this.request(endpoint);
     return data.races || [];
   }
 
   /**
    * 3. Get Events List
-   * Endpoint: GET /meetinginfo/events
+   * Endpoint: GET /meetinginfo/meeting/{idMeeting}/events or /meetinginfo/events
    */
-  async getEvents() {
-    const data = await this.request('/meetinginfo/events');
+  async getEvents(idMeeting) {
+    const endpoint = idMeeting ? `/meetinginfo/meeting/${idMeeting}/events` : '/meetinginfo/events';
+    const data = await this.request(endpoint);
     const allEvents = data.events || [];
     const uniqueEvents = [];
     const seenKeys = new Set();
@@ -114,12 +116,13 @@ class MikaTimingAPI {
    * 4. Get Race Results / Participations for specific Event Key & Meeting ID
    */
   async getRaceResults(idRace, idMeeting, eventKey) {
-    const meetingId = idMeeting || 'LR3MS4JI1710';
+    const meetingId = idMeeting || 'LR3MS4JI1A59';
     const key = eventKey || 'HD';
+    const paginationParams = { pageStart: 0, pageMaxCount: 500 };
 
-    // 1. Try Event Key Results Endpoint (e.g. /meetinginfo/meeting/LR3MS4JI1710/event/key/HD/results)
+    // 1. Try Event Key Results Endpoint (e.g. /meetinginfo/meeting/{meetingId}/event/key/{key}/results)
     try {
-      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/results`);
+      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/results`, paginationParams);
       if (data && data.results && data.results.length > 0) {
         return data.results;
       }
@@ -127,9 +130,9 @@ class MikaTimingAPI {
       console.info(`[MikaTimingAPI] /event/key/${key}/results info:`, e1.message);
     }
 
-    // 2. Try Event Key Leaders Endpoint (e.g. /meetinginfo/meeting/LR3MS4JI1710/event/key/HD/leaders)
+    // 2. Try Event Key Leaders Endpoint (e.g. /meetinginfo/meeting/{meetingId}/event/key/{key}/leaders)
     try {
-      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/leaders`);
+      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/leaders`, paginationParams);
       if (data && data.leaders && data.leaders.length > 0) {
         return data.leaders;
       }
@@ -140,17 +143,16 @@ class MikaTimingAPI {
     // 3. Try Race Results Endpoint
     if (idRace) {
       try {
-        const data = await this.request(`/meetinginfo/race/${idRace}/results`);
+        const data = await this.request(`/meetinginfo/race/${idRace}/results`, paginationParams);
         if (data && data.results && data.results.length > 0) {
-            const filtered = data.results.filter(r => !key || r.eventKey === key);
-            if (filtered.length > 0) return filtered;
-          }
+          return data.results;
+        }
       } catch (e3) {}
     }
 
-    // 4. Return Registered Participations from Production API (guarantee all participants)
+    // 4. Return Registered Participations from Production API (guarantee all participants up to 500)
     try {
-      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/participations`);
+      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/participations`, paginationParams);
       if (data && data.participations && data.participations.length > 0) {
         return data.participations;
       }

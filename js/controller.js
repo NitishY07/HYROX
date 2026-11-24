@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Application State
   const state = {
-    mode: 'sim',
-    apiBaseUrl: 'https://apihub-staging.mikatiming.net/ah/rest/appapi',
-    apiKey: 'sportvot',
+    mode: 'live',
+    apiBaseUrl: 'https://apihub.mikatiming.net/ah/rest/appapi',
+    apiKey: 'sportvot-vhzj2id',
     selectedMeetingId: null,
     selectedRaceId: null,
     selectedEventKey: null,
@@ -42,9 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
     spotlightAthlete: null,
     tickerItems: REAL_ATHLETE_PAIRS_DEFAULT.map(p => ({ bib: p.bib, name: p.name, checkpoint: p.split, time: p.time })),
     meetingInfo: {
-      title: 'DELHI - 25.07.2026 - DAY 2',
-      meta: 'BATTLE OF GYMS • Live',
-      category: 'BATTLE OF GYMS',
+      title: 'GUJARAT - 27.11.2026 - DAY 2',
+      meta: 'HYROX • Live',
+      category: 'HYROX',
       sponsorLogo: ''
     }
   };
@@ -152,8 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
    * Connect API & Fetch Data
    */
   async function connectAPI() {
-    state.apiBaseUrl = apiHostInput.value.trim();
-    state.apiKey = apiKeyInput.value.trim();
+    state.apiBaseUrl = apiHostInput ? apiHostInput.value.trim() : 'https://apihub.mikatiming.net/ah/rest/appapi';
+    state.apiKey = apiKeyInput ? apiKeyInput.value.trim() : 'sportvot-vhzj2id';
     api.setConfig(state.apiBaseUrl, state.apiKey);
 
     updateStatus('Connecting to Mika Timing AppAPI via Proxy...', 'warning');
@@ -168,11 +168,17 @@ document.addEventListener('DOMContentLoaded', () => {
       })));
 
       if (meetings.length > 0) {
-        state.selectedMeetingId = meetings[0].idMeeting;
-        state.meetingInfo.title = meetings[0].titleText;
+        const validMeeting = meetings.find(m => m.idMeeting === state.selectedMeetingId);
+        if (!validMeeting) {
+          state.selectedMeetingId = meetings[0].idMeeting;
+          state.meetingInfo.title = meetings[0].titleText;
+        } else {
+          state.meetingInfo.title = validMeeting.titleText;
+        }
+        if (meetingSelect) meetingSelect.value = state.selectedMeetingId;
       }
 
-      await fetchRacesAndEvents();
+      await fetchRacesAndEvents(state.selectedMeetingId);
 
       updateStatus(`Connected Successfully! Found ${meetings.length} meeting(s) & ${state.races.length} race(s).`, 'success');
       
@@ -194,29 +200,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  async function fetchRacesAndEvents() {
+  async function fetchRacesAndEvents(meetingId) {
+    const targetMeetingId = meetingId || state.selectedMeetingId;
     try {
-      const races = await api.getRaces();
+      const races = await api.getRaces(targetMeetingId);
       state.races = races;
       populateSelect(raceSelect, races.map(r => ({
         value: r.idRace,
         text: `${r.descriptionText || r.idRace} (${r.distanceText || ''})`
       })));
 
-      if (races.length > 0 && !state.selectedRaceId) {
-        state.selectedRaceId = races[0].idRace;
-        state.meetingInfo.meta = `${races[0].descriptionText} • Live`;
+      if (races.length > 0) {
+        const validRace = races.find(r => r.idRace === state.selectedRaceId);
+        if (!validRace) {
+          state.selectedRaceId = races[0].idRace;
+          state.meetingInfo.meta = `${races[0].descriptionText} • Live`;
+          state.meetingInfo.category = races[0].descriptionText;
+        }
+        if (raceSelect) raceSelect.value = state.selectedRaceId;
       }
 
-      const events = await api.getEvents();
+      const events = await api.getEvents(targetMeetingId);
       state.events = events;
       populateSelect(eventSelect, events.map(e => ({
         value: e.key,
         text: `${e.nameText} [Key: ${e.key}]`
       })));
 
-      if (events.length > 0 && !state.selectedEventKey) {
-        state.selectedEventKey = events[0].key;
+      if (events.length > 0) {
+        const validEvent = events.find(e => e.key === state.selectedEventKey);
+        if (!validEvent) {
+          state.selectedEventKey = events[0].key;
+          state.meetingInfo.eventTitle = events[0].nameText;
+        }
+        if (eventSelect) eventSelect.value = state.selectedEventKey;
       }
 
       syncState();
@@ -326,9 +343,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!raw) return REAL_ATHLETE_NAMES[rankIdx % REAL_ATHLETE_NAMES.length];
 
-            let clean = raw.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
+            // Remove email addresses (e.g. from registration typos)
+            raw = raw.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '');
 
-            if (state.selectedEventKey === 'BOG') {
+            let clean = raw.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
+            clean = clean.replace(/[\s.,]+$/, '').trim();
+
+            // Only apply legacy Mumbai BOG manual pairs if viewing Mumbai meeting
+            if (state.selectedMeetingId === 'LR3MS4JI1804' && state.selectedEventKey === 'BOG') {
               const bogTeams = {
                 'khushboo': 'Pankaj Pasi & Khusboo Adalja',
                 'vidushi': 'Tom Saxena & Vidushi Kumar',
@@ -380,8 +402,13 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (clean.includes(',') && !clean.includes('&')) {
               const parts = clean.split(',');
               if (parts.length === 2) {
-                return `${parts[1].trim()} ${parts[0].trim()}`;
+                clean = `${parts[1].trim()} ${parts[0].trim()}`;
               }
+            }
+
+            // Capitalize properly if all lowercase or all uppercase
+            if (clean === clean.toLowerCase() || clean === clean.toUpperCase()) {
+              clean = clean.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
             }
 
             return clean;
@@ -390,9 +417,9 @@ document.addEventListener('DOMContentLoaded', () => {
           state.leaderboard = results.map((r, i) => {
             return {
               rank: r.rank || r.position || i + 1,
-              bib: r.bib || r.startNo || r.idParticipant || `B${i+1}`,
+              bib: r.startNo || r.bib || r.idParticipant || `B${i+1}`,
               name: cleanName(r, i),
-              club: r.startGroup || r.clubname || r.club || r.raceTitle || r.nation || '',
+              club: r.company || r.clubname || r.club || r.startGroup || r.raceTitle || r.nation || '',
               nat: r.nationality || r.nation || 'IND',
               split: r.splitName || r.checkpointName || r.checkpoint || r.split || '',
               time: r.timeText || r.time || r.splitTimeStr || r.splitTime || r.finishTimeNet || '',
@@ -402,9 +429,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
           state.tickerItems = results.map((r, i) => {
             return {
-              bib: r.bib || r.startNo || r.idParticipant || '00',
+              bib: r.startNo || r.bib || r.idParticipant || '00',
               name: cleanName(r, i),
-              checkpoint: r.splitName || r.checkpointName || r.checkpoint || r.split || r.startGroup || 'Registered Participant',
+              checkpoint: r.splitName || r.checkpointName || r.checkpoint || r.split || r.company || r.startGroup || 'Registered Participant',
               time: r.timeText || r.splitTimeStr || r.splitTime || r.finishTimeNet || ''
             };
           });
@@ -553,10 +580,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const savedConfig = localStorage.getItem('mika_control_panel_config');
       if (savedConfig) {
         const config = JSON.parse(savedConfig);
+        if (config.apiKey === 'sportvot' || (config.apiHost && config.apiHost.includes('staging'))) {
+          config.apiKey = 'sportvot-vhzj2id';
+          config.apiHost = 'https://apihub.mikatiming.net/ah/rest/appapi';
+          config.envPreset = 'prod';
+        }
         if (config.envPreset && envPresetSelect) envPresetSelect.value = config.envPreset;
         if (config.apiHost && apiHostInput) apiHostInput.value = config.apiHost;
         if (config.apiKey && apiKeyInput) apiKeyInput.value = config.apiKey;
-        if (typeof config.mode === 'boolean' && modeToggle) modeToggle.checked = config.mode;
+        if (typeof config.mode === 'boolean' && modeToggle) {
+          modeToggle.checked = config.mode;
+        } else if (modeToggle) {
+          modeToggle.checked = true;
+        }
         if (typeof config.simFallback === 'boolean' && simFallbackToggle) {
           simFallbackToggle.checked = config.simFallback;
           state.allowSimFallback = config.simFallback;
@@ -600,12 +636,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (meetingSelect) {
-    meetingSelect.addEventListener('change', () => {
+    meetingSelect.addEventListener('change', async () => {
       const selectedId = meetingSelect.value;
       const meetingObj = state.meetings.find(m => m.idMeeting === selectedId);
       if (meetingObj) {
         state.selectedMeetingId = selectedId;
         state.meetingInfo.title = meetingObj.titleText;
+        state.selectedRaceId = null;
+        state.selectedEventKey = null;
+        await fetchRacesAndEvents(selectedId);
         syncState();
         if (state.mode === 'live') startLivePolling();
       }
