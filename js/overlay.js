@@ -315,7 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const isRaceClockVisible = !(state.visibleElements && state.visibleElements.raceClock === false) && !isVerticalVisible;
       if (isRaceClockVisible) {
         raceClockEl.classList.remove('gfx-hidden');
-        raceClockEl.className = `gfx-race-clock gfx-animated ${state.raceClockPosition || 'pos-clock-top-right'}`;
+        const clockPos = state.raceClockPosition || (state.position === 'pos-bottom-grid' ? 'pos-clock-top-left' : 'pos-clock-top-right');
+        raceClockEl.className = `gfx-race-clock gfx-animated ${clockPos}`;
         if (clockValEl) {
           const hrs = Math.floor(localRaceClockSec / 3600);
           const mins = String(Math.floor((localRaceClockSec % 3600) / 60)).padStart(2, '0');

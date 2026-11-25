@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayContent: 'both',
     gridMode: 'startlist',
     raceClockTime: '00:03:31',
-    raceClockPosition: 'pos-clock-top-right',
+    raceClockPosition: 'pos-clock-top-left',
     allowSimFallback: false,
     visibleElements: {
       banner: false,
@@ -732,11 +732,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isGridOn) {
         state.theme = 'theme-starting-list';
         state.position = 'pos-bottom-grid';
+        state.raceClockPosition = 'pos-clock-top-left';
         state.visibleElements.leaderboard = true;
         state.visibleElements.banner = false;
         state.visibleElements.lowerThird = false;
         if (themeSelect) themeSelect.value = 'theme-starting-list';
         if (posSelect) posSelect.value = 'pos-bottom-grid';
+        if (raceClockPosSelect) raceClockPosSelect.value = 'pos-clock-top-left';
         if (toggleBanner) toggleBanner.checked = false;
         if (toggleLeaderboard) toggleLeaderboard.checked = false;
       } else {
