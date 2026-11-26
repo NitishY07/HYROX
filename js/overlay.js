@@ -78,11 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return { num: '', name: splitStr.toUpperCase() };
   }
 
-  // JetBrains Mono with font-feature-settings "zero" handles slashed zero natively
-  // No SVG injection needed — just return the plain number string
+  // Replace leading zero with Ø (U+00D8) — same font renders both glyphs at identical weight
+  // Result: Ø1, Ø2 … Ø9  |  10, 11, 12  (no leading-zero treatment for two-digit numbers)
   function formatSlashedNum(numStr) {
     if (!numStr && numStr !== 0) return '';
-    return String(numStr).trim();
+    const str = String(numStr).trim();
+    if (str.length === 2 && str.charAt(0) === '0') {
+      return '\u00D8' + str.charAt(1);  // Ø + digit
+    }
+    return str;
   }
 
   function render() {

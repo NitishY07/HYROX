@@ -1128,10 +1128,9 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   color: #111111 !important;
   border: none !important;
   font-family: 'JetBrains Mono', monospace !important;
-  font-weight: 700 !important;
-  font-size: 15px !important;
-  font-feature-settings: "zero" 1 !important;
-  letter-spacing: -0.03em !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  letter-spacing: -0.04em !important;
   height: 100% !important;
   border-right: 1px solid #E0E0E0 !important;
   display: flex !important;
