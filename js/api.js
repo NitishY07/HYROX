@@ -117,40 +117,40 @@ class MikaTimingAPI {
    */
   async getRaceResults(idRace, idMeeting, eventKey) {
     const meetingId = idMeeting || 'LR3MS4JI1A59';
-    const key = eventKey || 'HD';
+    const key = eventKey || 'BOG';
     const paginationParams = { pageStart: 0, pageMaxCount: 500 };
 
-    // 1. Try Event Key Results Endpoint (e.g. /meetinginfo/meeting/{meetingId}/event/key/{key}/results)
-    try {
-      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/results`, paginationParams);
-      if (data && data.results && data.results.length > 0) {
-        return data.results;
-      }
-    } catch (e1) {
-      console.info(`[MikaTimingAPI] /event/key/${key}/results info:`, e1.message);
-    }
-
-    // 2. Try Event Key Leaders Endpoint (e.g. /meetinginfo/meeting/{meetingId}/event/key/{key}/leaders)
+    // 1. Try Event Key Leaders Endpoint (provides live intermediate station splits and positions during active race)
     try {
       const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/leaders`, paginationParams);
       if (data && data.leaders && data.leaders.length > 0) {
         return data.leaders;
       }
+    } catch (e1) {
+      console.info(`[MikaTimingAPI] /event/key/${key}/leaders info:`, e1.message);
+    }
+
+    // 2. Try Event Key Leaders Split Endpoint
+    try {
+      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/leaders/split`, paginationParams);
+      if (data && data.leaders && data.leaders.length > 0) {
+        return data.leaders;
+      }
     } catch (e2) {
-      console.info(`[MikaTimingAPI] /event/key/${key}/leaders info:`, e2.message);
+      console.info(`[MikaTimingAPI] /event/key/${key}/leaders/split info:`, e2.message);
     }
 
-    // 3. Try Race Results Endpoint
-    if (idRace) {
-      try {
-        const data = await this.request(`/meetinginfo/race/${idRace}/results`, paginationParams);
-        if (data && data.results && data.results.length > 0) {
-          return data.results;
-        }
-      } catch (e3) {}
+    // 3. Try Event Key Results Endpoint (provides official finish times)
+    try {
+      const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/results`, paginationParams);
+      if (data && data.results && data.results.length > 0) {
+        return data.results;
+      }
+    } catch (e3) {
+      console.info(`[MikaTimingAPI] /event/key/${key}/results info:`, e3.message);
     }
 
-    // 4. Return Registered Participations from Production API (guarantee all participants up to 500)
+    // 4. Return Registered Participations from Production API (before race starts, loads all participants)
     try {
       const data = await this.request(`/meetinginfo/meeting/${meetingId}/event/key/${key}/participations`, paginationParams);
       if (data && data.participations && data.participations.length > 0) {

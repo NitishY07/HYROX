@@ -7,35 +7,22 @@ const { URL } = require('url');
 
 const PORT = process.env.PORT || 3000;
 
-const REAL_ATHLETE_PAIRS = [
-  { rank: 1, bib: '101', name: 'Daniel Seymour & Tanya Rajanish Nirmal', club: 'HYROX INDIA', nat: 'IND', split: '', time: '00:00:00', delta: '' },
-  { rank: 2, bib: '102', name: 'Manav Gidwani & Vishwaja Shinde', club: 'FITNESS FIRST', nat: 'IND', split: '', time: '00:00:00', delta: '+3.5s' },
-  { rank: 3, bib: '103', name: 'Ajinkya Shevate & Manali Shevate', club: 'CROSSFIT 9ONE', nat: 'IND', split: '', time: '00:00:00', delta: '+7.2s' },
-  { rank: 4, bib: '104', name: 'Vijay Andrews & Prachi Shukla', club: 'HYFIT ACADEMY', nat: 'IND', split: '', time: '00:00:00', delta: '+11.0s' },
-  { rank: 5, bib: '105', name: 'Chitwan Goel & Megha Kishore', club: 'VYOM YOGA STUDIO', nat: 'IND', split: '', time: '00:00:00', delta: '+15.1s' },
-  { rank: 6, bib: '106', name: 'Teddy Cardozo & Swezial Dsouza', club: 'LIFTR GYM', nat: 'IND', split: '', time: '00:00:00', delta: '+18.8s' },
-  { rank: 7, bib: '107', name: 'Brijesh Gajjar & Hetanshi Gajjar', club: 'FITFORMANCE', nat: 'IND', split: '', time: '00:00:00', delta: '+22.4s' },
-  { rank: 8, bib: '108', name: 'Aanchal Singh & Harsh Kumar', club: '6262 FITNESS', nat: 'IND', split: '', time: '00:00:00', delta: '+26.0s' },
-  { rank: 9, bib: '109', name: 'Zaid Hashmi & Pournima Pardeshi', club: 'FLEXFIT', nat: 'IND', split: '', time: '00:00:00', delta: '+30.2s' },
-  { rank: 10, bib: '110', name: 'Sekhawat Monusingh & Susithra P M', club: 'HITENSITY', nat: 'IND', split: '', time: '00:00:00', delta: '+34.5s' },
-  { rank: 11, bib: '111', name: 'Purva Wahi & Maninder Singh', club: 'ARCH PHYSIO', nat: 'IND', split: '', time: '00:00:00', delta: '+38.1s' },
-  { rank: 12, bib: '112', name: 'Satvik Krishna Gupta & Millie Saroha', club: 'LATERALUS', nat: 'IND', split: '', time: '00:00:00', delta: '+42.0s' },
-  { rank: 13, bib: '113', name: 'Anand Bhagat & Zareen Siddique', club: 'THE FIT GROUND', nat: 'IND', split: '', time: '00:00:00', delta: '+46.2s' },
-  { rank: 14, bib: '114', name: 'Shatrugan Joukani & Apeksha Champaneri', club: 'TRF SPACE', nat: 'IND', split: '', time: '00:00:00', delta: '+50.0s' },
-  { rank: 15, bib: '115', name: 'Priyanka Prasad & Nobel Dhingra', club: 'BLACK BX', nat: 'IND', split: '', time: '00:00:00', delta: '+54.1s' },
-  { rank: 16, bib: '116', name: 'Sparsha S Vasisht & Surya S Vasisht', club: 'KONGFIT', nat: 'IND', split: '', time: '00:00:00', delta: '+58.5s' },
-  { rank: 17, bib: '117', name: 'Deepak Kumar & Renu Venugopal', club: 'CROSSFIT HUB', nat: 'IND', split: '', time: '00:00:00', delta: '+1:03s' },
-  { rank: 18, bib: '118', name: 'Megumi Saito & Anubhav Rai', club: 'HYROX TOKYO', nat: 'JPN', split: '', time: '00:00:00', delta: '+1:07s' },
-  { rank: 19, bib: '119', name: 'Pravin Rao & Suditi Bhaduria', club: 'PEAK FITNESS', nat: 'IND', split: '', time: '00:00:00', delta: '+1:11s' },
-  { rank: 20, bib: '120', name: 'Priyam Poddar & Meenal Jain', club: 'RED BULL GYM', nat: 'IND', split: '', time: '00:00:00', delta: '+1:15s' },
-  { rank: 21, bib: '121', name: 'Parshant Sharma & Riya Kataria (Rekha)', club: 'FITZONE DELHI', nat: 'IND', split: '', time: '00:00:00', delta: '+1:20s' },
-  { rank: 22, bib: '122', name: 'Ridhisha Shetty & Ritvik Shetty', club: 'MUMBAI STRIDERS', nat: 'IND', split: '', time: '00:00:00', delta: '+1:24s' },
-  { rank: 23, bib: '123', name: 'Devender Singh & Rachna Kalkal', club: 'DELHI STEEL', nat: 'IND', split: '', time: '00:00:00', delta: '+1:29s' },
-  { rank: 24, bib: '124', name: 'Divtesh Singh Dhir & Palak Kaur', club: 'PUNJAB FITNESS', nat: 'IND', split: '', time: '00:00:00', delta: '+1:33s' },
-  { rank: 25, bib: '125', name: 'Akshay Sharma & Akriti', club: 'STEEL GYM', nat: 'IND', split: '', time: '00:00:00', delta: '+1:37s' },
-  { rank: 26, bib: '126', name: 'Ishani Dave & Meet Pandya', club: 'GUJARAT HARRIERS', nat: 'IND', split: '', time: '00:00:00', delta: '+1:42s' },
-  { rank: 27, bib: '127', name: 'Abhijeet Ghadge & Zahabiya Merchant', club: 'IRON GYM', nat: 'IND', split: '', time: '00:00:00', delta: '+1:46s' },
-  { rank: 28, bib: '128', name: 'Gunjan Mehta & Mansi Nautiyal', club: 'POWER FITNESS', nat: 'IND', split: '', time: '00:00:00', delta: '+1:51s' }
+const BOG_ATHLETES_GUJARAT = [
+  { rank: 1, bib: '172007', name: 'Team Sudhanshu Pant', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 2, bib: '172004', name: 'Team Nancy Gupta', club: 'Xtrofit Lab', nat: 'IND', split: '', time: '' },
+  { rank: 3, bib: '172005', name: 'Team Aashka Thakkar', club: 'Liftmix Rehab Solutions', nat: 'IND', split: '', time: '' },
+  { rank: 4, bib: '172009', name: 'Team Sahil Sharma', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 5, bib: '172002', name: 'Team Paromita Mandal', club: 'House of Champions', nat: 'IND', split: '', time: '' },
+  { rank: 6, bib: '172010', name: 'Team Nini Bhatia', club: 'Amit Bhagat', nat: 'IND', split: '', time: '' },
+  { rank: 7, bib: '172015', name: 'Team Stuti Mandaliya', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 8, bib: '172001', name: 'Team Sanjay Negi', club: 'EST', nat: 'IND', split: '', time: '' },
+  { rank: 9, bib: '172008', name: 'Team Saloni Sathe', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 10, bib: '172006', name: 'Team Ranu Chatwani', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 11, bib: '172003', name: 'Team Bhoomik Goswami', club: 'Strength Bar Athlete', nat: 'IND', split: '', time: '' },
+  { rank: 12, bib: '172013', name: 'Team Jaydip Solanki', club: 'MY GYM 2.0', nat: 'IND', split: '', time: '' },
+  { rank: 13, bib: '172011', name: 'Team Ridham Patel Thakkar', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 14, bib: '172012', name: 'Team Malarkodi Mahendran', club: 'Metcon Apex', nat: 'IND', split: '', time: '' },
+  { rank: 15, bib: '172014', name: 'Team Akshay Mhetre', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' }
 ];
 
 let currentGfxState = {
@@ -43,10 +30,12 @@ let currentGfxState = {
   position: 'pos-bottom-grid',
   displayContent: 'both',
   gridMode: 'startlist',
-  raceClockTime: '00:03:31',
+  raceClockTime: '00:00:00',
+  raceClockPosition: 'pos-clock-top-left',
   nameFormat: 'full',
-  leaderboard: REAL_ATHLETE_PAIRS,
-  tickerItems: REAL_ATHLETE_PAIRS.map(p => ({ bib: p.bib, name: p.name, checkpoint: p.split, time: p.time })),
+  isRaceStarted: false,
+  leaderboard: BOG_ATHLETES_GUJARAT,
+  tickerItems: BOG_ATHLETES_GUJARAT.map(p => ({ bib: p.bib, name: p.name, checkpoint: p.split || p.club, time: p.time })),
   visibleElements: {
     banner: false,
     leaderboard: true,
@@ -55,6 +44,13 @@ let currentGfxState = {
     showTimer: false,
     showClubs: true,
     raceClock: true
+  },
+  meetingInfo: {
+    title: 'GUJARAT - 27.11.2026 - DAY 2',
+    meta: 'Battle of Gyms • Live',
+    category: 'Battle of Gyms',
+    eventTitle: 'Battle of Gyms',
+    sponsorLogo: ''
   },
   timestamp: Date.now()
 };

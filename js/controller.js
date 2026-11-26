@@ -1,4 +1,20 @@
-const REAL_ATHLETE_PAIRS_DEFAULT = [];
+const REAL_ATHLETE_PAIRS_DEFAULT = [
+  { rank: 1, bib: '172007', name: 'Team Sudhanshu Pant', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 2, bib: '172004', name: 'Team Nancy Gupta', club: 'Xtrofit Lab', nat: 'IND', split: '', time: '' },
+  { rank: 3, bib: '172005', name: 'Team Aashka Thakkar', club: 'Liftmix Rehab Solutions', nat: 'IND', split: '', time: '' },
+  { rank: 4, bib: '172009', name: 'Team Sahil Sharma', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 5, bib: '172002', name: 'Team Paromita Mandal', club: 'House of Champions', nat: 'IND', split: '', time: '' },
+  { rank: 6, bib: '172010', name: 'Team Nini Bhatia', club: 'Amit Bhagat', nat: 'IND', split: '', time: '' },
+  { rank: 7, bib: '172015', name: 'Team Stuti Mandaliya', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 8, bib: '172001', name: 'Team Sanjay Negi', club: 'EST', nat: 'IND', split: '', time: '' },
+  { rank: 9, bib: '172008', name: 'Team Saloni Sathe', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 10, bib: '172006', name: 'Team Ranu Chatwani', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 11, bib: '172003', name: 'Team Bhoomik Goswami', club: 'Strength Bar Athlete', nat: 'IND', split: '', time: '' },
+  { rank: 12, bib: '172013', name: 'Team Jaydip Solanki', club: 'MY GYM 2.0', nat: 'IND', split: '', time: '' },
+  { rank: 13, bib: '172011', name: 'Team Ridham Patel Thakkar', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
+  { rank: 14, bib: '172012', name: 'Team Malarkodi Mahendran', club: 'Metcon Apex', nat: 'IND', split: '', time: '' },
+  { rank: 15, bib: '172014', name: 'Team Akshay Mhetre', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' }
+];
 /**
  * Operator Control Panel Logic (controller.js)
  * Manages API requests, Simulator, State, UI Events, Hotkeys, and Server Network Sync.
@@ -15,15 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
     mode: 'live',
     apiBaseUrl: 'https://apihub.mikatiming.net/ah/rest/appapi',
     apiKey: 'sportvot-vhzj2id',
-    selectedMeetingId: null,
-    selectedRaceId: null,
-    selectedEventKey: null,
+    selectedMeetingId: 'LR3MS4JI1A59',
+    selectedRaceId: 'LR3MS4JI295A',
+    selectedEventKey: 'BOG',
+    isRaceStarted: false,
     theme: 'theme-starting-list',
     position: 'pos-bottom-grid',
     nameFormat: 'full',
     displayContent: 'both',
     gridMode: 'startlist',
-    raceClockTime: '00:03:31',
+    raceClockTime: '00:00:00',
     raceClockPosition: 'pos-clock-top-left',
     allowSimFallback: false,
     visibleElements: {
@@ -40,11 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
     events: [],
     leaderboard: REAL_ATHLETE_PAIRS_DEFAULT,
     spotlightAthlete: null,
-    tickerItems: REAL_ATHLETE_PAIRS_DEFAULT.map(p => ({ bib: p.bib, name: p.name, checkpoint: p.split, time: p.time })),
+    tickerItems: REAL_ATHLETE_PAIRS_DEFAULT.map(p => ({ bib: p.bib, name: p.name, checkpoint: p.split || p.club, time: p.time })),
     meetingInfo: {
       title: 'GUJARAT - 27.11.2026 - DAY 2',
-      meta: 'HYROX • Live',
-      category: 'HYROX',
+      meta: 'Battle of Gyms • Live',
+      category: 'Battle of Gyms',
+      eventTitle: 'Battle of Gyms',
       sponsorLogo: ''
     }
   };
@@ -94,7 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
   async function syncState() {
     const payload = {
       mode: state.mode,
-      startTimeMs: state.mode === 'api' ? (typeof liveRaceStartMs !== 'undefined' ? liveRaceStartMs : null) : simulator.startTimeMs,
+      isRaceStarted: !!state.isRaceStarted,
+      startTimeMs: (state.mode === 'live' || state.mode === 'api') ? (typeof liveRaceStartMs !== 'undefined' ? liveRaceStartMs : null) : simulator.startTimeMs,
       theme: state.theme,
       position: state.position,
       nameFormat: state.nameFormat,
@@ -210,16 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
         text: `${r.descriptionText || r.idRace} (${r.distanceText || ''})`
       })));
 
-      if (races.length > 0) {
-        const validRace = races.find(r => r.idRace === state.selectedRaceId);
-        if (!validRace) {
-          state.selectedRaceId = races[0].idRace;
-          state.meetingInfo.meta = `${races[0].descriptionText} • Live`;
-          state.meetingInfo.category = races[0].descriptionText;
-        }
-        if (raceSelect) raceSelect.value = state.selectedRaceId;
-      }
-
       const events = await api.getEvents(targetMeetingId);
       state.events = events;
       populateSelect(eventSelect, events.map(e => ({
@@ -228,12 +237,34 @@ document.addEventListener('DOMContentLoaded', () => {
       })));
 
       if (events.length > 0) {
-        const validEvent = events.find(e => e.key === state.selectedEventKey);
-        if (!validEvent) {
-          state.selectedEventKey = events[0].key;
-          state.meetingInfo.eventTitle = events[0].nameText;
+        // ALWAYS select BOG by default if available
+        const bogEvent = events.find(e => e.key === 'BOG');
+        if (bogEvent && (!state.selectedEventKey || state.selectedEventKey === 'BOG' || state.selectedEventKey === 'HD')) {
+          state.selectedEventKey = 'BOG';
+          state.meetingInfo.eventTitle = bogEvent.nameText;
+          state.meetingInfo.category = bogEvent.nameText;
+          state.meetingInfo.meta = `${bogEvent.nameText} • Live`;
+        } else {
+          const validEvent = events.find(e => e.key === state.selectedEventKey) || events[0];
+          state.selectedEventKey = validEvent.key;
+          state.meetingInfo.eventTitle = validEvent.nameText;
+          state.meetingInfo.category = validEvent.nameText;
+          state.meetingInfo.meta = `${validEvent.nameText} • Live`;
         }
         if (eventSelect) eventSelect.value = state.selectedEventKey;
+      }
+
+      if (races.length > 0) {
+        if (state.selectedEventKey === 'BOG') {
+          const doublesRace = races.find(r => (r.descriptionText || '').toLowerCase().includes('doubles')) || races[0];
+          state.selectedRaceId = doublesRace.idRace;
+          state.meetingInfo.meta = `Battle of Gyms • Live`;
+          state.meetingInfo.category = 'Battle of Gyms';
+        } else {
+          const validRace = races.find(r => r.idRace === state.selectedRaceId) || races[0];
+          state.selectedRaceId = validRace.idRace;
+        }
+        if (raceSelect) raceSelect.value = state.selectedRaceId;
       }
 
       syncState();
@@ -250,9 +281,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (livePollInterval) clearInterval(livePollInterval);
     if (liveClockInterval) clearInterval(liveClockInterval);
     
-    // Live 1-second continuous clock ticker linked to API start timestamp
+    // Live 1-second continuous clock ticker linked strictly to API start timestamp
     liveClockInterval = setInterval(() => {
-      if (state.mode === 'live' && liveRaceStartMs) {
+      if (state.mode === 'live' && state.isRaceStarted && liveRaceStartMs) {
         const elapsedSec = Math.max(0, Math.floor((Date.now() - liveRaceStartMs) / 1000));
         const mins = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
         const secs = String(elapsedSec % 60).padStart(2, '0');
@@ -276,57 +307,42 @@ document.addEventListener('DOMContentLoaded', () => {
             return rA - rB;
           });
 
+          // Check if race has started and extract live timing strictly from API
           const leader = results[0];
+          let raceStarted = false;
+          let calculatedElapsedSec = 0;
+
           if (leader) {
-            const apiTimeStr = leader.timeText || leader.time || leader.splitTimeStr || leader.splitTime || leader.finishTimeNet;
-            if (apiTimeStr && /^\d{1,2}:\d{2}/.test(apiTimeStr)) {
+            const apiTimeStr = leader.splitTimeStr || leader.splitTime || leader.timeText || leader.time || leader.finishNetStr || leader.finishTimeNet;
+            const apiSeconds = leader.splitTimeSeconds || leader.finishTimeNetSeconds;
+            const apiStartMs = leader.startNetTodMs || leader.startTodMs;
+
+            if (apiSeconds && apiSeconds > 0) {
+              calculatedElapsedSec = Math.floor(apiSeconds);
+              raceStarted = true;
+            } else if (apiTimeStr && /^\d{1,2}:\d{2}/.test(apiTimeStr)) {
               const parts = apiTimeStr.split(':').map(Number);
-              let sec = 0;
-              if (parts.length === 3) sec = parts[0] * 3600 + parts[1] * 60 + parts[2];
-              else if (parts.length === 2) sec = parts[0] * 60 + parts[1];
-              
-              if (sec > 0) {
-                liveRaceStartMs = Date.now() - (sec * 1000);
-                const mins = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
-                const secs = String(sec % 60).padStart(2, '0');
-                const hrs = Math.floor(sec / 3600);
-                state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
-              }
-            } else if (leader.gunTimeMs || leader.timeStart || leader.startTimeMs) {
-              liveRaceStartMs = leader.gunTimeMs || leader.timeStart || leader.startTimeMs;
+              if (parts.length === 3) calculatedElapsedSec = parts[0] * 3600 + parts[1] * 60 + parts[2];
+              else if (parts.length === 2) calculatedElapsedSec = parts[0] * 60 + parts[1];
+              if (calculatedElapsedSec > 0) raceStarted = true;
+            } else if (apiStartMs && apiStartMs > 0 && apiStartMs <= Date.now()) {
+              calculatedElapsedSec = Math.floor((Date.now() - apiStartMs) / 1000);
+              raceStarted = true;
             }
           }
 
-          const REAL_ATHLETE_NAMES = [
-            "Daniel Seymour & Tanya Rajanish Nirmal",
-            "Manav Gidwani & Vishwaja Shinde",
-            "Ajinkya Shevate & Manali Shevate",
-            "Vijay Andrews & Prachi Shukla",
-            "Chitwan Goel & Megha Kishore",
-            "Teddy Cardozo & Swezial Dsouza",
-            "Brijesh Gajjar & Hetanshi Gajjar",
-            "Aanchal Singh & Harsh Kumar",
-            "Zaid Hashmi & Pournima Pardeshi",
-            "Sekhawat Monusingh & Susithra P M",
-            "Purva Wahi & Maninder Singh",
-            "Satvik Krishna Gupta & Millie Saroha",
-            "Anand Bhagat & Zareen Siddique",
-            "Shatrugan Joukani & Apeksha Champaneri",
-            "Priyanka Prasad & Nobel Dhingra",
-            "Sparsha S Vasisht & Surya S Vasisht",
-            "Deepak Kumar & Renu Venugopal",
-            "Megumi Saito & Anubhav Rai",
-            "Pravin Rao & Suditi Bhaduria",
-            "Priyam Poddar & Meenal Jain",
-            "Parshant Sharma & Riya Kataria (Rekha)",
-            "Ridhisha Shetty & Ritvik Shetty",
-            "Devender Singh & Rachna Kalkal",
-            "Divtesh Singh Dhir & Palak Kaur",
-            "Akshay Sharma & Akriti",
-            "Ishani Dave & Meet Pandya",
-            "Abhijeet Ghadge & Zahabiya Merchant",
-            "Gunjan Mehta & Mansi Nautiyal"
-          ];
+          if (raceStarted && calculatedElapsedSec > 0) {
+            liveRaceStartMs = Date.now() - (calculatedElapsedSec * 1000);
+            const hrs = Math.floor(calculatedElapsedSec / 3600);
+            const mins = String(Math.floor((calculatedElapsedSec % 3600) / 60)).padStart(2, '0');
+            const secs = String(calculatedElapsedSec % 60).padStart(2, '0');
+            state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+            state.isRaceStarted = true;
+          } else {
+            liveRaceStartMs = null;
+            state.raceClockTime = '00:00:00';
+            state.isRaceStarted = false;
+          }
 
           const cleanName = (r, rankIdx) => {
             let raw = r.nameText || r.displayName || r.name || r.fullname || r.participantName || '';
@@ -341,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
 
-            if (!raw) return REAL_ATHLETE_NAMES[rankIdx % REAL_ATHLETE_NAMES.length];
+            if (!raw) return `Team ${rankIdx + 1}`;
 
             // Remove email addresses (e.g. from registration typos)
             raw = raw.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '');
@@ -385,11 +401,6 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             }
 
-            const isDemo = /SAURABH|MARCUS VANCE|AAYUSHI|ADITYA & RITU|BALWINDER|GEETANJALI|HARIOM|RASHMI|SHUBHANGI|SUNIL & VIKRAM|VARINDER|VIKRAMADITYA/i.test(clean);
-            if (isDemo) {
-              return REAL_ATHLETE_NAMES[rankIdx % REAL_ATHLETE_NAMES.length];
-            }
-
             if (clean.includes('/')) {
               return clean.split('/').map(part => {
                 part = part.trim();
@@ -407,23 +418,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Capitalize properly if all lowercase or all uppercase
-            if (clean === clean.toLowerCase() || clean === clean.toUpperCase()) {
-              clean = clean.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-            }
+            clean = clean.split(/\s+/).map(w => {
+              if (w.toLowerCase() === 'team') return 'Team';
+              return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+            }).join(' ');
 
             return clean;
           };
 
+          const cleanClub = (r) => {
+            if (r.company && r.company.trim()) return r.company.trim();
+            if (r.clubname && r.clubname.trim()) return r.clubname.trim();
+            if (r.club && r.club.trim()) return r.club.trim();
+            if (r.startGroup) {
+              const grp = r.startGroup.split('|')[0].replace(/^\d{1,2}:\d{2}\s*/, '').trim();
+              if (grp) return grp;
+            }
+            return 'GYM V/S GYM';
+          };
+
           state.leaderboard = results.map((r, i) => {
             return {
-              rank: r.rank || r.position || i + 1,
+              rank: r.rank || r.position || r.place || i + 1,
               bib: r.startNo || r.bib || r.idParticipant || `B${i+1}`,
               name: cleanName(r, i),
-              club: r.company || r.clubname || r.club || r.startGroup || r.raceTitle || r.nation || '',
+              club: cleanClub(r),
               nat: r.nationality || r.nation || 'IND',
               split: r.splitName || r.checkpointName || r.checkpoint || r.split || '',
-              time: r.timeText || r.time || r.splitTimeStr || r.splitTime || r.finishTimeNet || '',
-              delta: i === 0 ? '' : (r.delta || (r.timeText ? `+${(i * 3.5).toFixed(1)}s` : ''))
+              time: r.splitTimeStr || r.splitTime || r.timeText || r.time || r.finishNetStr || r.finishTimeNet || '',
+              delta: i === 0 ? '' : (r.splitDiffStr || r.delta || '')
             };
           });
 
@@ -431,14 +454,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return {
               bib: r.startNo || r.bib || r.idParticipant || '00',
               name: cleanName(r, i),
-              checkpoint: r.splitName || r.checkpointName || r.checkpoint || r.split || r.company || r.startGroup || 'Registered Participant',
-              time: r.timeText || r.splitTimeStr || r.splitTime || r.finishTimeNet || ''
+              checkpoint: r.splitName || r.checkpointName || r.checkpoint || r.split || cleanClub(r),
+              time: r.splitTimeStr || r.splitTime || r.timeText || r.finishNetStr || r.finishTimeNet || ''
             };
           });
 
-          if (!liveRaceStartMs) {
-            state.raceClockTime = (results[0]?.timeText || results[0]?.splitTimeStr || results[0]?.time || results[0]?.finishTimeNet || '00:03:31');
-          }
           updateSpotlightSelectOptions();
           syncState();
         } else {
@@ -617,6 +637,8 @@ document.addEventListener('DOMContentLoaded', () => {
           posSelect.value = config.position;
           state.position = config.position;
         }
+        state.selectedEventKey = config.eventKey || 'BOG';
+        state.selectedMeetingId = config.meetingId || 'LR3MS4JI1A59';
       }
     } catch (e) {}
   }

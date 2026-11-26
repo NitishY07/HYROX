@@ -19,21 +19,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // State
   let state = {
-    mode: 'sim',
+    mode: 'live',
     startTimeMs: null,
+    isRaceStarted: false,
     theme: 'theme-starting-list',
     position: 'pos-bottom-grid',
+    raceClockPosition: 'pos-clock-top-left',
+    raceClockTime: '00:00:00',
     displayContent: 'both',
     nameFormat: 'full',
     visibleElements: {
-      banner: true,
+      banner: false,
       leaderboard: true,
       lowerThird: false,
-      ticker: true
+      ticker: true,
+      raceClock: true
     },
     meetingInfo: {
-      title: 'DELHI CHAMPIONSHIP 2026',
-      meta: 'HYROX • Day 2 • Live',
+      title: 'GUJARAT - 27.11.2026 - DAY 2',
+      meta: 'Battle of Gyms • Live',
+      category: 'Battle of Gyms',
+      eventTitle: 'Battle of Gyms',
       sponsorLogo: ''
     },
     leaderboard: [],
@@ -54,6 +60,22 @@ document.addEventListener('DOMContentLoaded', () => {
       return `${String(hrs).padStart(2, '0')}:${pMins}:${pSecs}`;
     }
     return `${pMins}:${pSecs}`;
+  }
+
+  function parseHyroxZone(splitStr) {
+    if (!splitStr) return null;
+    const s = String(splitStr).toLowerCase().trim();
+    if (s.includes('ski')) return { num: '01', name: 'SKIERG' };
+    if (s.includes('push')) return { num: '02', name: 'SLED PUSH' };
+    if (s.includes('pull')) return { num: '03', name: 'SLED PULL' };
+    if (s.includes('burpee') || s.includes('broad')) return { num: '04', name: 'BURPEES' };
+    if (s.includes('row')) return { num: '05', name: 'ROWERG' };
+    if (s.includes('farm') || s.includes('carry')) return { num: '06', name: 'FARMERS CARRY' };
+    if (s.includes('sandbag') || s.includes('lunge')) return { num: '07', name: 'SANDBAG LUNGES' };
+    if (s.includes('wall') || s.includes('ball')) return { num: '08', name: 'WALL BALLS' };
+    if (s.includes('finish') || s.includes('total') || s.includes('ziel')) return { num: 'FI', name: 'FINISH' };
+    if (s.includes('run') || s.includes('rox')) return { num: 'RN', name: 'RUNNING' };
+    return { num: '', name: splitStr.toUpperCase() };
   }
 
   function render() {
@@ -97,17 +119,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dynamic clock calculation ONLY in SIM mode
     let currentLeaderboard = state.leaderboard || [];
-    if (isTimerEnabled && state.gridMode !== 'livesplits') {
-        let baseElapsed = 0;
-        if (state.mode === 'sim' && state.startTimeMs) {
-          baseElapsed = Math.floor((Date.now() - state.startTimeMs) / 1000);
-        } else {
-          const p = (state.raceClockTime || '00:00').split(':').map(Number);
-          baseElapsed = p.length === 3 ? p[0]*3600 + p[1]*60 + p[2] : p[0]*60 + p[1];
-        }
-        currentLeaderboard = currentLeaderboard.map((item, index) => {
-          const itemSec = Math.max(0, baseElapsed + (index * 4.2));
-          return { ...item, time: formatTime(itemSec) };
+    if (state.mode === 'sim' && isTimerEnabled && state.gridMode !== 'livesplits') {
+      let baseElapsed = 0;
+      if (state.startTimeMs) {
+        baseElapsed = Math.floor((Date.now() - state.startTimeMs) / 1000);
+      } else {
+        const p = (state.raceClockTime || '00:00').split(':').map(Number);
+        baseElapsed = p.length === 3 ? p[0]*3600 + p[1]*60 + p[2] : p[0]*60 + p[1];
+      }
+      currentLeaderboard = currentLeaderboard.map((item, index) => {
+        const itemSec = Math.max(0, baseElapsed + (index * 4.2));
+        return { ...item, time: formatTime(itemSec) };
       });
     }
 
@@ -118,10 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const isStartingListTheme = (state.theme === 'theme-starting-list');
         const isSignatureBroadcastTheme = (state.theme !== 'theme-starting-list');
         const isBottomGrid = (state.position === 'pos-bottom-grid');
-        const hasLiveTimes = currentLeaderboard.some(item => item.time || (item.split && item.split !== 'REGISTERED'));
+        const hasLiveTimes = currentLeaderboard.some(item => item.time && item.time !== '00:00' && item.time !== '00:00:00');
+        const isRaceLive = !!(state.isRaceStarted || hasLiveTimes);
 
-        // Determine mode
-        const isLiveTimerMode = isTimerEnabled;
+        // Determine mode: live timer only if race has started or has live times
+        const isLiveTimerMode = isRaceLive && isTimerEnabled;
 
         if (isLiveTimerMode) {
           leaderboardEl.classList.remove('mode-team');
@@ -152,31 +175,34 @@ document.addEventListener('DOMContentLoaded', () => {
         if (eventBar) {
           if (isBottomGrid) {
             let zoneHtml = `<span class="gfx-grid-station-pill">STARTING LIST</span>`;
-            if (currentLeaderboard && currentLeaderboard.length > 0) {
-              const leaderSplit = currentLeaderboard[0].split || currentLeaderboard[0].checkpoint;
-              if (leaderSplit) {
-                const s = leaderSplit.toLowerCase();
-                let num = ''; let name = '';
-                if (s.includes('ski')) { num = '01'; name = 'SKIERG'; }
-                else if (s.includes('push')) { num = '02'; name = 'SLED PUSH'; }
-                else if (s.includes('pull')) { num = '03'; name = 'SLED PULL'; }
-                else if (s.includes('burpee') || s.includes('broad')) { num = '04'; name = 'BURPEES'; }
-                else if (s.includes('row')) { num = '05'; name = 'ROWERG'; }
-                else if (s.includes('farm') || s.includes('carry')) { num = '06'; name = 'FARMERS CARRY'; }
-                else if (s.includes('sandbag') || s.includes('lunge')) { num = '07'; name = 'SANDBAG LUNGES'; }
-                else if (s.includes('wall') || s.includes('ball')) { num = '08'; name = 'WALL BALLS'; }
-                else if (s.includes('finish')) { num = 'FI'; name = 'FINISH'; }
-                
-                if (num && name) {
-                  zoneHtml = `<div class="gfx-grid-station-num">${num}</div><div class="gfx-grid-station-pill">${name}</div>`;
+            if (isRaceLive && currentLeaderboard && currentLeaderboard.length > 0) {
+              const activeItem = currentLeaderboard.find(item => item.split && item.split !== 'REGISTERED' && item.split !== '-') || currentLeaderboard[0];
+              const activeSplit = activeItem?.split || activeItem?.checkpoint || state.currentStation;
+              const zone = parseHyroxZone(activeSplit);
+              if (zone) {
+                if (zone.num && zone.name) {
+                  zoneHtml = `<div class="gfx-grid-station-num">${zone.num}</div><div class="gfx-grid-station-pill">${zone.name}</div>`;
                 } else {
-                  zoneHtml = `<span class="gfx-grid-station-pill">${leaderSplit.toUpperCase()}</span>`;
+                  zoneHtml = `<span class="gfx-grid-station-pill">${zone.name}</span>`;
                 }
+              } else {
+                zoneHtml = `<div class="gfx-grid-station-num">01</div><div class="gfx-grid-station-pill">SKIERG</div>`;
               }
             }
             eventBar.innerHTML = zoneHtml;
           } else {
-            eventBar.innerText = headerText.toUpperCase();
+            if (isRaceLive && currentLeaderboard && currentLeaderboard.length > 0) {
+              const activeItem = currentLeaderboard.find(item => item.split && item.split !== 'REGISTERED' && item.split !== '-') || currentLeaderboard[0];
+              const activeSplit = activeItem?.split || activeItem?.checkpoint || state.currentStation;
+              const zone = parseHyroxZone(activeSplit);
+              if (zone) {
+                eventBar.innerText = zone.num ? `${zone.num} ${zone.name}` : zone.name;
+              } else {
+                eventBar.innerText = '01 SKIERG';
+              }
+            } else {
+              eventBar.innerText = headerText.toUpperCase();
+            }
           }
         }
 
@@ -220,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const isGridLiveSplits = (state.gridMode === 'livesplits');
 
               if (isGridLiveSplits || isLiveTimerMode) {
-                rightColText = item.time || '';
+                rightColText = item.time || (item.split && item.split !== 'REGISTERED' ? item.split : '');
               } else {
                 rightColText = item.club || item.nat || '';
                 splitText = '';
@@ -250,7 +276,14 @@ document.addEventListener('DOMContentLoaded', () => {
               if (displayMode === 'teams') {
                 mainContentHtml = `
                   <div class="gfx-athlete-details">
-                    <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml((rightColText || 'HYROX').toUpperCase())}</div>
+                    <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml((rightColText || item.club || 'HYROX').toUpperCase())}</div>
+                  </div>
+                `;
+              } else if (displayMode === 'both' && !isLiveTimerMode && item.club) {
+                mainContentHtml = `
+                  <div class="gfx-athlete-details" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
+                    <span class="gfx-athlete-team" style="color:#666; font-size:11px; font-weight:700; text-transform:uppercase; margin-left:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(item.club)}</span>
                   </div>
                 `;
               } else {
@@ -423,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  let localRaceClockSec = 211;
+  let localRaceClockSec = 0;
   let lastClockTimeStr = '';
 
   function applyStateUpdate(incomingPayload) {
@@ -439,11 +472,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!state.theme) state.theme = prevTheme;
     if (!state.displayContent) state.displayContent = prevDisplayContent;
 
-    if (state.raceClockTime && state.raceClockTime !== lastClockTimeStr) {
+    if (state.startTimeMs && state.isRaceStarted) {
+      localRaceClockSec = Math.max(0, Math.floor((Date.now() - state.startTimeMs) / 1000));
+    } else if (state.raceClockTime && state.raceClockTime !== lastClockTimeStr) {
       lastClockTimeStr = state.raceClockTime;
       const parts = state.raceClockTime.split(':').map(Number);
       if (parts.length === 3) localRaceClockSec = parts[0] * 3600 + parts[1] * 60 + parts[2];
       else if (parts.length === 2) localRaceClockSec = parts[0] * 60 + parts[1];
+    }
+
+    if (!state.isRaceStarted && state.mode !== 'manual') {
+      localRaceClockSec = 0;
+      state.raceClockTime = '00:00:00';
     }
 
     render();
@@ -513,11 +553,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   render();
   setInterval(() => {
-    localRaceClockSec++;
-    const hrs = Math.floor(localRaceClockSec / 3600);
-    const mins = String(Math.floor((localRaceClockSec % 3600) / 60)).padStart(2, '0');
-    const secs = String(localRaceClockSec % 60).padStart(2, '0');
-    state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+    if (state.isRaceStarted || state.mode === 'manual') {
+      if (state.startTimeMs && state.isRaceStarted) {
+        localRaceClockSec = Math.max(0, Math.floor((Date.now() - state.startTimeMs) / 1000));
+      } else {
+        localRaceClockSec++;
+      }
+      const hrs = Math.floor(localRaceClockSec / 3600);
+      const mins = String(Math.floor((localRaceClockSec % 3600) / 60)).padStart(2, '0');
+      const secs = String(localRaceClockSec % 60).padStart(2, '0');
+      state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+    } else {
+      localRaceClockSec = 0;
+      state.raceClockTime = '00:00:00';
+    }
     render();
   }, 1000);
 });
