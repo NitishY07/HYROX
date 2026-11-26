@@ -78,9 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return { num: '', name: splitStr.toUpperCase() };
   }
 
+  const ZERO_SVG = '<svg class="gfx-zero-svg" viewBox="0 0 10 16" aria-hidden="true" focusable="false"><rect x="1" y="1" width="8" height="14" rx="4" ry="4" fill="none" stroke="currentColor" stroke-width="1.8" /><line x1="2.2" y1="12" x2="7.8" y2="4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg>';
+
   function formatSlashedNum(numStr) {
     if (!numStr && numStr !== 0) return '';
-    return String(numStr).replace(/0/g, '<span class="gfx-slashed-zero">0</span>');
+    const str = String(numStr).trim();
+    if (str.startsWith('0')) {
+      return ZERO_SVG + str.slice(1);
+    }
+    return str;
   }
 
   function render() {
