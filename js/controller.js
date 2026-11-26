@@ -582,7 +582,13 @@ document.addEventListener('DOMContentLoaded', () => {
       displayContent: displayContentSelect ? displayContentSelect.value : 'both',
       gridMode: gridModeSelect ? gridModeSelect.value : 'startlist',
       theme: themeSelect ? themeSelect.value : 'theme-starting-list',
-      position: posSelect ? posSelect.value : 'pos-bottom-grid'
+      position: posSelect ? posSelect.value : 'pos-bottom-grid',
+      showClubs: toggleClubs ? toggleClubs.checked : true,
+      showTimer: toggleTimer ? toggleTimer.checked : false,
+      raceClock: toggleRaceClock ? toggleRaceClock.checked : true,
+      ticker: toggleTicker ? toggleTicker.checked : true,
+      banner: toggleBanner ? toggleBanner.checked : false,
+      leaderboard: toggleLeaderboard ? toggleLeaderboard.checked : true
     };
     try {
       localStorage.setItem('mika_control_panel_config', JSON.stringify(configData));
@@ -636,6 +642,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (config.position && posSelect) {
           posSelect.value = config.position;
           state.position = config.position;
+        }
+        if (typeof config.showClubs === 'boolean') {
+          if (toggleClubs) toggleClubs.checked = config.showClubs;
+          state.visibleElements.showClubs = config.showClubs;
+        }
+        if (typeof config.showTimer === 'boolean') {
+          if (toggleTimer) toggleTimer.checked = config.showTimer;
+          state.visibleElements.showTimer = config.showTimer;
+        }
+        if (typeof config.raceClock === 'boolean') {
+          if (toggleRaceClock) toggleRaceClock.checked = config.raceClock;
+          state.visibleElements.raceClock = config.raceClock;
+        }
+        if (typeof config.ticker === 'boolean') {
+          if (toggleTicker) toggleTicker.checked = config.ticker;
+          state.visibleElements.ticker = config.ticker;
+        }
+        if (typeof config.banner === 'boolean') {
+          if (toggleBanner) toggleBanner.checked = config.banner;
+          state.visibleElements.banner = config.banner;
+        }
+        if (typeof config.leaderboard === 'boolean') {
+          if (toggleLeaderboard) toggleLeaderboard.checked = config.leaderboard;
+          if (toggleGridGfx) toggleGridGfx.checked = config.leaderboard;
+          state.visibleElements.leaderboard = config.leaderboard;
         }
         state.selectedEventKey = config.eventKey || 'BOG';
         state.selectedMeetingId = config.meetingId || 'LR3MS4JI1A59';
@@ -904,6 +935,12 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
       case '4':
         if (toggleTicker) { toggleTicker.checked = !toggleTicker.checked; state.visibleElements.ticker = toggleTicker.checked; syncState(); }
+        break;
+      case '5':
+        if (toggleTimer) { toggleTimer.checked = !toggleTimer.checked; state.visibleElements.showTimer = toggleTimer.checked; saveControlPanelSettings(); syncState(); }
+        break;
+      case '6':
+        if (toggleClubs) { toggleClubs.checked = !toggleClubs.checked; state.visibleElements.showClubs = toggleClubs.checked; saveControlPanelSettings(); syncState(); }
         break;
       case ' ':
         e.preventDefault();

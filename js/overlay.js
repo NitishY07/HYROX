@@ -156,7 +156,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const catBadge = document.getElementById('lbCategory');
         if (catBadge) {
-          catBadge.innerText = isLiveTimerMode ? 'TIME' : 'TEAM';
+          if (isLiveTimerMode) {
+            catBadge.innerText = 'TIME';
+            catBadge.style.display = '';
+          } else if (isClubsEnabled) {
+            catBadge.innerText = 'TEAM';
+            catBadge.style.display = '';
+          } else {
+            catBadge.style.display = 'none';
+          }
         }
 
         let headerText = 'STARTING LIST';
@@ -248,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
               if (isGridLiveSplits || isLiveTimerMode) {
                 rightColText = item.time || (item.split && item.split !== 'REGISTERED' ? item.split : '');
               } else {
-                rightColText = item.club || item.nat || '';
+                rightColText = isClubsEnabled ? (item.club || item.nat || '') : '';
                 splitText = '';
               }
 
@@ -269,17 +277,18 @@ document.addEventListener('DOMContentLoaded', () => {
               if (isBottomGrid) {
                 itemStyle = (isLiveTimerMode && rightColText) ? 'grid-template-columns: 42px 1fr 100px !important;' : 'grid-template-columns: 42px 1fr !important;';
               } else {
-                itemStyle = (isLiveTimerMode && rightColText) ? 'grid-template-columns: 46px 1fr 115px !important;' : 'grid-template-columns: 46px 1fr !important;';
+                itemStyle = ((isLiveTimerMode || isClubsEnabled) && rightColText) ? 'grid-template-columns: 46px 1fr 115px !important;' : 'grid-template-columns: 46px 1fr !important;';
               }
 
               let mainContentHtml = '';
               if (displayMode === 'teams') {
+                const teamLabel = isClubsEnabled ? (rightColText || item.club || 'HYROX') : 'HYROX';
                 mainContentHtml = `
                   <div class="gfx-athlete-details">
-                    <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml((rightColText || item.club || 'HYROX').toUpperCase())}</div>
+                    <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml(teamLabel.toUpperCase())}</div>
                   </div>
                 `;
-              } else if (displayMode === 'both' && !isLiveTimerMode && item.club) {
+              } else if (displayMode === 'both' && !isLiveTimerMode && isClubsEnabled && item.club) {
                 mainContentHtml = `
                   <div class="gfx-athlete-details" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
@@ -466,7 +475,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevTheme = state.theme || 'theme-starting-list';
     const prevDisplayContent = state.displayContent || 'both';
 
-    state = { ...state, ...incomingPayload };
+    state = { 
+      ...state, 
+      ...incomingPayload,
+      visibleElements: {
+        ...(state.visibleElements || {}),
+        ...(incomingPayload.visibleElements || {})
+      }
+    };
     
     if (!state.position) state.position = prevPosition;
     if (!state.theme) state.theme = prevTheme;
