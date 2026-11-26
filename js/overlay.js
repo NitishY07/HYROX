@@ -78,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return { num: '', name: splitStr.toUpperCase() };
   }
 
+  function formatSlashedNum(numStr) {
+    if (!numStr && numStr !== 0) return '';
+    return String(numStr).replace(/0/g, '<span class="gfx-slashed-zero">0</span>');
+  }
+
   function render() {
     // 1. Theme & Position
     if (!state.theme || state.theme === 'theme-starting-list') {
@@ -189,12 +194,12 @@ document.addEventListener('DOMContentLoaded', () => {
               const zone = parseHyroxZone(activeSplit);
               if (zone) {
                 if (zone.num && zone.name) {
-                  zoneHtml = `<div class="gfx-grid-station-num">${zone.num}</div><div class="gfx-grid-station-pill">${zone.name}</div>`;
+                  zoneHtml = `<div class="gfx-grid-station-num">${formatSlashedNum(zone.num)}</div><div class="gfx-grid-station-pill">${zone.name}</div>`;
                 } else {
                   zoneHtml = `<span class="gfx-grid-station-pill">${zone.name}</span>`;
                 }
               } else {
-                zoneHtml = `<div class="gfx-grid-station-num">01</div><div class="gfx-grid-station-pill">SKIERG</div>`;
+                zoneHtml = `<div class="gfx-grid-station-num">${formatSlashedNum('01')}</div><div class="gfx-grid-station-pill">SKIERG</div>`;
               }
             }
             eventBar.innerHTML = zoneHtml;
@@ -311,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               return `
                 <div class="gfx-lb-item pos-${rankNum}" style="${itemStyle}">
-                  <div class="gfx-rank-num">${formattedRank}</div>
+                  <div class="gfx-rank-num">${formatSlashedNum(formattedRank)}</div>
                   ${mainContentHtml}
                   ${timeColHtml}
                 </div>
