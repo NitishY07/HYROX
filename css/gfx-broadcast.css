@@ -1127,9 +1127,11 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   background: #F4F4F4 !important;
   color: #111111 !important;
   border: none !important;
-  font-family: 'Brutel', sans-serif !important;
+  font-family: 'JetBrains Mono', monospace !important;
   font-weight: 700 !important;
-  font-size: 16px !important;
+  font-size: 15px !important;
+  font-feature-settings: "zero" 1 !important;
+  letter-spacing: -0.03em !important;
   height: 100% !important;
   border-right: 1px solid #E0E0E0 !important;
   display: flex !important;
@@ -1138,15 +1140,9 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   border-radius: 0 !important;
 }
 
-/* Precision Vector Slashed Zero for Official HYROX Timing Numbers */
+/* JetBrains Mono handles slashed zero natively via font-feature-settings "zero" — SVG no longer needed */
 .gfx-zero-svg {
-  display: inline-block;
-  width: 0.58em;
-  height: 0.95em;
-  vertical-align: -0.06em;
-  margin-right: 0.05em;
-  color: inherit;
-  flex-shrink: 0;
+  display: none;
 }
 
 .pos-bottom-grid .gfx-athlete-details,
