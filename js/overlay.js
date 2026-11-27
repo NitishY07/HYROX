@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml(teamLabel.toUpperCase())}</div>
                   </div>
                 `;
-              } else if (displayMode === 'both' && !showTimeCol && isClubsEnabled && item.club) {
+              } else if (displayMode === 'both' && !showTimeCol && isClubsEnabled && item.club && !isBottomGrid) {
                 mainContentHtml = `
                   <div class="gfx-athlete-details" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
