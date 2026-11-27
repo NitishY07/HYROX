@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    const isTimerEnabled = !!(state.visibleElements && state.visibleElements.showTimer);
+    const isTimerEnabled = !(state.visibleElements && state.visibleElements.showTimer === false);
     const isClubsEnabled = !state.visibleElements || state.visibleElements.showClubs !== false;
 
     // Dynamic clock calculation ONLY in SIM mode
@@ -263,8 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
               let splitText = item.split || '';
 
               const isGridLiveSplits = (state.gridMode === 'livesplits');
+              const showTimeCol = (isGridLiveSplits || isLiveTimerMode || !!(item.time && item.time !== '00:00' && item.time !== '00:00:00')) && isTimerEnabled;
 
-              if (isGridLiveSplits || isLiveTimerMode) {
+              if (showTimeCol) {
                 rightColText = item.time || (item.split && item.split !== 'REGISTERED' ? item.split : '');
               } else {
                 rightColText = isClubsEnabled ? (item.club || item.nat || '') : '';
@@ -286,9 +287,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
               let itemStyle = '';
               if (isBottomGrid) {
-                itemStyle = (isLiveTimerMode && rightColText) ? 'grid-template-columns: 42px 1fr 100px !important;' : 'grid-template-columns: 42px 1fr !important;';
+                itemStyle = (showTimeCol && rightColText) ? 'grid-template-columns: 42px 1fr 100px !important;' : 'grid-template-columns: 42px 1fr !important;';
               } else {
-                itemStyle = ((isLiveTimerMode || isClubsEnabled) && rightColText) ? 'grid-template-columns: 46px 1fr 115px !important;' : 'grid-template-columns: 46px 1fr !important;';
+                itemStyle = ((showTimeCol || isClubsEnabled) && rightColText) ? 'grid-template-columns: 46px 1fr 115px !important;' : 'grid-template-columns: 46px 1fr !important;';
               }
 
               let mainContentHtml = '';
@@ -299,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="gfx-athlete-name" style="font-size: 14px; font-weight: 900; color: #111111;">${escapeHtml(teamLabel.toUpperCase())}</div>
                   </div>
                 `;
-              } else if (displayMode === 'both' && !isLiveTimerMode && isClubsEnabled && item.club) {
+              } else if (displayMode === 'both' && !showTimeCol && isClubsEnabled && item.club) {
                 mainContentHtml = `
                   <div class="gfx-athlete-details" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
                     <div class="gfx-athlete-name">${escapeHtml(fullName)}</div>
@@ -314,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
               }
 
-              const timeColHtml = (isLiveTimerMode && rightColText) ? `
+              const timeColHtml = (showTimeCol && rightColText) ? `
                 <div class="gfx-time-col" style="display:flex !important; align-items:center; justify-content:center; background:#e8e8e8; border-left:2px solid #ccc; padding:0 8px;">
                   <span class="gfx-time-val" style="font-family: 'BrutalType', 'Brutel', sans-serif; font-weight:900; font-size:16px; color:#111; letter-spacing:0.5px;">${escapeHtml(rightColText)}</span>
                 </div>
@@ -429,46 +430,51 @@ document.addEventListener('DOMContentLoaded', () => {
   function formatAthleteName(nameStr, format) {
     if (!nameStr) return 'Athlete';
     
-    // Always use full name format for pair names with & symbol
-    if (nameStr.includes('&')) {
-      const parts = nameStr.split('&').map(p => p.trim());
-      if (format === 'initial') {
-        const init1 = parts[0].split(/\s+/).map((w, idx, arr) => idx === arr.length - 1 ? w : w.charAt(0).toUpperCase() + '.').join(' ');
-        const init2 = parts[1].split(/\s+/).map((w, idx, arr) => idx === arr.length - 1 ? w : w.charAt(0).toUpperCase() + '.').join(' ');
-        return `${init1} & ${init2}`;
+    if (!format || format === 'full') {
+      if (nameStr.includes('/')) {
+        return nameStr.split('/').map(p => p.trim()).join(' / ');
       }
-      return `${parts[0]} & ${parts[1]}`;
+      return nameStr;
     }
-
-    if (!format || format === 'full') return nameStr;
 
     const parseSingleName = (singleName) => {
       const trimmed = singleName.trim();
       const parts = trimmed.split(/\s+/);
-      if (parts.length <= 1) return trimmed;
+      if (parts.length <= 1) return { first: '', last: trimmed, full: trimmed };
 
       const lastName = parts[parts.length - 1];
       const firstName = parts.slice(0, parts.length - 1).join(' ');
-
-      if (format === 'initial') {
-        if (firstName.length === 1 || (firstName.length === 2 && firstName.endsWith('.'))) {
-          return `${firstName.charAt(0).toUpperCase()}. ${lastName}`;
-        }
-        const initial = firstName.charAt(0).toUpperCase();
-        return `${initial}. ${lastName}`;
-      } else if (format === 'last') {
-        return lastName;
-      }
-      return trimmed;
+      return { first: firstName, last: lastName, full: trimmed };
     };
 
-    if (nameStr.includes('/')) {
-      return nameStr.split('/').map(parseSingleName).join(' & ');
-    } else if (nameStr.toLowerCase().includes(' and ')) {
-      return nameStr.split(/ and /i).map(parseSingleName).join(' & ');
+    if (nameStr.includes('/') || nameStr.includes('&') || nameStr.toLowerCase().includes(' and ')) {
+      const delimiter = nameStr.includes('/') ? '/' : (nameStr.includes('&') ? '&' : / and /i);
+      const rawParts = nameStr.split(delimiter).map(p => p.trim());
+      if (rawParts.length === 2) {
+        const p1 = parseSingleName(rawParts[0]);
+        const p2 = parseSingleName(rawParts[1]);
+
+        if (format === 'last') {
+          // If both athletes share the exact same last name, avoid redundant "THAKKAR & THAKKAR"
+          if (p1.last.toLowerCase() === p2.last.toLowerCase() && p1.first && p2.first) {
+            return `${p1.first} & ${p2.first} ${p1.last}`;
+          }
+          return `${p1.last} & ${p2.last}`;
+        } else if (format === 'initial') {
+          const init1 = p1.first ? `${p1.first.charAt(0).toUpperCase()}. ` : '';
+          const init2 = p2.first ? `${p2.first.charAt(0).toUpperCase()}. ` : '';
+          if (p1.last.toLowerCase() === p2.last.toLowerCase() && init1 && init2) {
+            return `${init1}& ${init2}${p1.last}`;
+          }
+          return `${init1}${p1.last} & ${init2}${p2.last}`;
+        }
+      }
     }
 
-    return parseSingleName(nameStr);
+    const single = parseSingleName(nameStr);
+    if (format === 'last') return single.last;
+    if (format === 'initial' && single.first) return `${single.first.charAt(0).toUpperCase()}. ${single.last}`;
+    return single.full;
   }
 
   function escapeHtml(str) {
