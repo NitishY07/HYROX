@@ -79,13 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return { num: '', name: splitStr.toUpperCase() };
   }
 
-  // Replace leading zero with Ø (U+00D8) — same font renders both glyphs at identical weight
-  // Result: Ø1, Ø2 … Ø9  |  10, 11, 12  (no leading-zero treatment for two-digit numbers)
+  // Format numbers with clean internal slashed-zero (regular digit 0 rendered with internal slash font features)
+  // Result: 01, 02 … 09 | 10, 11, 12 with the slash strictly inside the zero
   function formatSlashedNum(numStr) {
     if (!numStr && numStr !== 0) return '';
     const str = String(numStr).trim();
-    if (str.length === 2 && str.charAt(0) === '0') {
-      return '\u00D8' + str.charAt(1);  // Ø + digit
+    if (str.length === 1) {
+      return '0' + str;
     }
     return str;
   }

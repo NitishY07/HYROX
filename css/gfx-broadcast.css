@@ -296,8 +296,10 @@
   background: #000000 !important;
   color: #FFFFFF !important;
   border: 1.5px solid #FFFFFF !important;
-  font-family: 'BrutalType', 'Brutel', sans-serif !important;
-  font-weight: 700 !important;
+  font-family: 'JetBrains Mono', Consolas, monospace !important;
+  font-weight: 800 !important;
+  font-variant-numeric: slashed-zero !important;
+  font-feature-settings: "zero" 1 !important;
   font-size: 16px !important;
   box-shadow: none !important;
   display: flex !important;
@@ -687,8 +689,10 @@ body:not(.pos-bottom-grid) .gfx-lb-item,
   background: #000000 !important;
   color: #FFFFFF !important;
   border: 1.5px solid #FFFFFF !important;
-  font-family: 'BrutalType', 'Brutel', sans-serif !important;
-  font-weight: 700 !important;
+  font-family: 'JetBrains Mono', Consolas, monospace !important;
+  font-weight: 800 !important;
+  font-variant-numeric: slashed-zero !important;
+  font-feature-settings: "zero" 1 !important;
   font-size: 16px !important;
   box-shadow: none !important;
   display: flex !important;
@@ -1058,8 +1062,10 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 .theme-starting-list.pos-bottom-grid .gfx-grid-station-num {
   background: #25262A !important;
   color: #FFFFFF !important;
-  font-family: 'Brutel', sans-serif !important;
-  font-weight: 700 !important;
+  font-family: 'JetBrains Mono', Consolas, monospace !important;
+  font-weight: 800 !important;
+  font-variant-numeric: slashed-zero !important;
+  font-feature-settings: "zero" 1 !important;
   font-size: 16px !important;
   padding: 4px 12px !important;
   border-radius: 6px !important;
@@ -1128,8 +1134,10 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
   background: #F4F4F4 !important;
   color: #111111 !important;
   border: none !important;
-  font-family: 'JetBrains Mono', monospace !important;
+  font-family: 'JetBrains Mono', Consolas, monospace !important;
   font-weight: 800 !important;
+  font-variant-numeric: slashed-zero !important;
+  font-feature-settings: "zero" 1 !important;
   font-size: 16px !important;
   letter-spacing: -0.04em !important;
   height: 100% !important;
@@ -1200,10 +1208,12 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 .pos-bottom-grid .gfx-time-val,
 .theme-starting-list.pos-bottom-grid .gfx-time-val {
   color: #111111 !important;
-  font-family: 'BrutalType', 'Brutel', sans-serif !important;
-  font-weight: 900 !important;
+  font-family: 'JetBrains Mono', Consolas, 'BrutalType', 'Brutel', monospace, sans-serif !important;
+  font-weight: 800 !important;
   font-size: 16px !important;
   letter-spacing: 0.3px !important;
+  font-variant-numeric: tabular-nums slashed-zero !important;
+  font-feature-settings: "zero" 1, "tnum" 1 !important;
   white-space: normal !important;
   text-transform: uppercase !important;
   text-align: center !important;
@@ -1239,10 +1249,12 @@ body:not(.pos-bottom-grid) .gfx-lb-item.pos-1 .gfx-athlete-details {
 .gfx-clock-val {
   background: #000000 !important;
   color: #FFFFFF !important;
-  font-family: 'BrutalType', 'Brutel', monospace, sans-serif !important;
+  font-family: 'JetBrains Mono', Consolas, 'BrutalType', 'Brutel', monospace, sans-serif !important;
   font-size: 50px !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
   letter-spacing: 3px !important;
+  font-variant-numeric: tabular-nums slashed-zero !important;
+  font-feature-settings: "zero" 1, "tnum" 1 !important;
   padding: 12px 28px !important;
   text-align: center !important;
   box-sizing: border-box !important;
