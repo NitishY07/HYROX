@@ -508,17 +508,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!state.displayContent) state.displayContent = prevDisplayContent;
 
     if (state.startTimeMs && state.isRaceStarted) {
+      // Live race: derive clock from wall-clock start timestamp
       localRaceClockSec = Math.max(0, Math.floor((Date.now() - state.startTimeMs) / 1000));
-    } else if (state.raceClockTime && state.raceClockTime !== lastClockTimeStr) {
-      lastClockTimeStr = state.raceClockTime;
+    } else if (state.raceClockTime && state.raceClockTime !== '00:00:00') {
+      // Finished race or API-set time: always accept the latest value
       const parts = state.raceClockTime.split(':').map(Number);
       if (parts.length === 3) localRaceClockSec = parts[0] * 3600 + parts[1] * 60 + parts[2];
       else if (parts.length === 2) localRaceClockSec = parts[0] * 60 + parts[1];
+      lastClockTimeStr = state.raceClockTime;
     }
 
     if (!state.isRaceStarted && state.mode !== 'manual') {
       localRaceClockSec = 0;
       state.raceClockTime = '00:00:00';
+      lastClockTimeStr = '';
     }
 
     render();
@@ -590,14 +593,14 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(() => {
     if (state.isRaceStarted || state.mode === 'manual') {
       if (state.startTimeMs && state.isRaceStarted) {
+        // Live running race: derive from wall-clock
         localRaceClockSec = Math.max(0, Math.floor((Date.now() - state.startTimeMs) / 1000));
-      } else {
-        localRaceClockSec++;
+        const hrs = Math.floor(localRaceClockSec / 3600);
+        const mins = String(Math.floor((localRaceClockSec % 3600) / 60)).padStart(2, '0');
+        const secs = String(localRaceClockSec % 60).padStart(2, '0');
+        state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
       }
-      const hrs = Math.floor(localRaceClockSec / 3600);
-      const mins = String(Math.floor((localRaceClockSec % 3600) / 60)).padStart(2, '0');
-      const secs = String(localRaceClockSec % 60).padStart(2, '0');
-      state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+      // If no startTimeMs (finished race), keep showing the last known raceClockTime without incrementing
     } else {
       localRaceClockSec = 0;
       state.raceClockTime = '00:00:00';

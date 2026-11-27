@@ -298,6 +298,10 @@ document.addEventListener('DOMContentLoaded', () => {
         state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
         if (panelClockTime) panelClockTime.innerText = state.raceClockTime;
         syncState();
+      } else if (state.mode === 'live' && state.isRaceStarted && !liveRaceStartMs) {
+        // Finished race: keep syncing the frozen winning time to the overlay
+        if (panelClockTime) panelClockTime.innerText = state.raceClockTime;
+        syncState();
       } else if (!state.isRaceStarted) {
         if (panelClockTime && panelClockTime.innerText !== '00:00:00' && state.raceClockTime === '00:00:00') {
           panelClockTime.innerText = '00:00:00';
