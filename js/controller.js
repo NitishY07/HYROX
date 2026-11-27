@@ -781,8 +781,9 @@ document.addEventListener('DOMContentLoaded', () => {
           state.displayContent = config.displayContent;
         }
         if (config.gridMode && gridModeSelect) {
-          gridModeSelect.value = config.gridMode;
-          state.gridMode = config.gridMode;
+          const resolvedGridMode = config.gridMode === 'startlist' ? 'auto' : config.gridMode;
+          gridModeSelect.value = resolvedGridMode;
+          state.gridMode = resolvedGridMode;
         }
         if (config.theme && themeSelect) {
           themeSelect.value = config.theme;
