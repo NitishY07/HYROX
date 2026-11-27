@@ -668,16 +668,17 @@ body:not(.pos-bottom-grid) .gfx-lb-category {
 body:not(.pos-bottom-grid) .gfx-lb-list {
   display: flex !important;
   flex-direction: column !important;
-  gap: 6px !important;
+  gap: 4px !important;
   background: transparent !important;
   padding: 0 !important;
 }
 
-body:not(.pos-bottom-grid) .gfx-lb-item {
+body:not(.pos-bottom-grid) .gfx-lb-item,
+.theme-starting-list:not(.pos-bottom-grid) .gfx-lb-item {
   display: grid !important;
   grid-template-columns: 46px 1fr 115px !important;
   gap: 10px !important;
-  height: 52px !important;
+  height: 44px !important;
   background: transparent !important;
   border: none !important;
 }

@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
               return rA - rB;
             });
 
-            const maxPlayerCount = isBottomGrid ? 12 : 15;
+            const maxPlayerCount = isBottomGrid ? 12 : 20;
             const rowLimit = Math.min(displayList.length, maxPlayerCount);
             const displayMode = state.displayContent || 'both';
 
