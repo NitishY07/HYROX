@@ -247,8 +247,18 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             let displayList = [...currentLeaderboard];
             
-            // Sort dynamically by rank/position if present
+            // Sort dynamically by fastest timer first (when times are present), then by rank
+            const parseTimeSec = (tStr) => {
+              if (!tStr || !/^\d{1,2}:\d{2}/.test(String(tStr).trim())) return Number.MAX_SAFE_INTEGER;
+              const parts = String(tStr).trim().split(':').map(Number);
+              if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+              if (parts.length === 2) return parts[0] * 60 + parts[1];
+              return Number.MAX_SAFE_INTEGER;
+            };
             displayList.sort((a, b) => {
+              const tA = parseTimeSec(a.time);
+              const tB = parseTimeSec(b.time);
+              if (tA !== tB) return tA - tB;
               const rA = parseInt(a.rank || 999, 10);
               const rB = parseInt(b.rank || 999, 10);
               return rA - rB;
@@ -259,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const displayMode = state.displayContent || 'both';
 
             const lbHtml = displayList.slice(0, rowLimit).map((item, idx) => {
-              const rankNum = item.rank || (idx + 1);
+              const rankNum = hasLiveTimes ? (idx + 1) : (item.rank || (idx + 1));
               const formattedRank = String(rankNum).padStart(2, '0');
               let rightColText = '';
               let splitText = item.split || '';

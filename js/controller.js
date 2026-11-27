@@ -317,21 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (results && results.length > 0) {
           simulator.stop();
 
-          // Sort results strictly by API rank/position, or by furthest station & fastest timer
-          results.sort((a, b) => {
-            const rA = parseInt(a.rank || a.position || a.place || 0, 10);
-            const rB = parseInt(b.rank || b.position || b.place || 0, 10);
-            if (rA > 0 && rB > 0 && rA !== rB) return rA - rB;
-            if (rA > 0 && rB === 0) return -1;
-            if (rB > 0 && rA === 0) return 1;
-            const posA = parseInt(a.splitPos || 0, 10);
-            const posB = parseInt(b.splitPos || 0, 10);
-            if (posA !== posB) return posB - posA;
-            const tA = a.splitTimeMs || (a.splitTimeSeconds ? a.splitTimeSeconds * 1000 : Number.MAX_SAFE_INTEGER);
-            const tB = b.splitTimeMs || (b.splitTimeSeconds ? b.splitTimeSeconds * 1000 : Number.MAX_SAFE_INTEGER);
-            return tA - tB;
-          });
-
           const parseTimeToSec = (tStr) => {
             if (!tStr || !/^\d{1,2}:\d{2}/.test(String(tStr).trim())) return 0;
             const parts = String(tStr).trim().split(':').map(Number);
@@ -339,6 +324,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (parts.length === 2) return parts[0] * 60 + parts[1];
             return 0;
           };
+
+          // Sort results strictly by fastest timer (athletes with valid time first, ascending)
+          results.sort((a, b) => {
+            const getMs = (item) => {
+              if (item.splitTimeMs && item.splitTimeMs > 0) return item.splitTimeMs;
+              if (item.splitTimeSeconds && item.splitTimeSeconds > 0) return item.splitTimeSeconds * 1000;
+              const sec = parseTimeToSec(item.splitTimeStr || item.splitTime || item.timeText || item.time || item.finishNetStr || item.finishTimeNet);
+              return sec > 0 ? sec * 1000 : Number.MAX_SAFE_INTEGER;
+            };
+            const tA = getMs(a);
+            const tB = getMs(b);
+            if (tA !== tB) return tA - tB;
+            const rA = parseInt(a.rank || a.position || a.place || 999, 10);
+            const rB = parseInt(b.rank || b.position || b.place || 999, 10);
+            return rA - rB;
+          });
 
           // Check if race has started and extract live timing strictly from API
           const allFinished = results.length > 0 && results.every(r => r.status === 'F' || r.status === 'finished');
@@ -565,7 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mappedResults = results.map((r, i) => {
               const pName = cleanName(r, i);
               return {
-                rank: r.rank || r.position || r.place || i + 1,
+                rank: i + 1,
                 bib: r.startNo || r.bib || r.idParticipant || `B${i+1}`,
                 name: pName,
                 club: cleanClub(r),
