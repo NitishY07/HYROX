@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return { num: '', name: splitStr.toUpperCase() };
   }
 
-  // Format numbers with clean internal slashed-zero (regular digit 0 rendered with internal slash font features)
-  // Result: 01, 02 … 09 | 10, 11, 12 with the slash strictly inside the zero
+  // Format numbers with zero-padded plain digits (no slashed-zero)
+  // Result: 01, 02 … 09 | 10, 11, 12
   function formatSlashedNum(numStr) {
     if (!numStr && numStr !== 0) return '';
     const str = String(numStr).trim();
