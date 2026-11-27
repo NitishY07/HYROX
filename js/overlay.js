@@ -151,10 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const isStartingListTheme = (state.theme === 'theme-starting-list');
         const isSignatureBroadcastTheme = (state.theme !== 'theme-starting-list');
         const isBottomGrid = (state.position === 'pos-bottom-grid');
+        const isStartlistGrid = (state.gridMode === 'startlist');
         const hasLiveTimes = currentLeaderboard.some(item => item.time && item.time !== '00:00' && item.time !== '00:00:00');
-        const isRaceLive = !!(state.isRaceStarted || hasLiveTimes);
+        const isRaceLive = !isStartlistGrid && !!(state.isRaceStarted || hasLiveTimes);
 
-        // Determine mode: live timer only if race has started or has live times
+        // Determine mode: live timer only if race is live and timer is enabled
         const isLiveTimerMode = isRaceLive && isTimerEnabled;
 
         if (isLiveTimerMode) {
@@ -194,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (eventBar) {
           if (isBottomGrid) {
             let zoneHtml = `<span class="gfx-grid-station-pill">STARTING LIST</span>`;
-            if (isRaceLive && currentLeaderboard && currentLeaderboard.length > 0) {
+            if (!isStartlistGrid && isRaceLive && currentLeaderboard && currentLeaderboard.length > 0) {
               const activeItem = currentLeaderboard.find(item => item.split && item.split !== 'REGISTERED' && item.split !== '-') || currentLeaderboard[0];
               const activeSplit = activeItem?.split || activeItem?.checkpoint || state.currentStation;
               const zone = parseHyroxZone(activeSplit);
@@ -263,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
               let splitText = item.split || '';
 
               const isGridLiveSplits = (state.gridMode === 'livesplits');
-              const showTimeCol = (isGridLiveSplits || isLiveTimerMode || !!(item.time && item.time !== '00:00' && item.time !== '00:00:00')) && isTimerEnabled;
+              const showTimeCol = !isStartlistGrid && (isGridLiveSplits || isLiveTimerMode || !!(item.time && item.time !== '00:00' && item.time !== '00:00:00')) && isTimerEnabled;
 
               if (showTimeCol) {
                 rightColText = item.time || (item.split && item.split !== 'REGISTERED' ? item.split : '');

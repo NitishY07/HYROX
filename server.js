@@ -8,21 +8,23 @@ const { URL } = require('url');
 const PORT = process.env.PORT || 3000;
 
 const BOG_ATHLETES_GUJARAT = [
-  { rank: 1, bib: '172007', name: 'Team Sudhanshu Pant', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 2, bib: '172004', name: 'Team Nancy Gupta', club: 'Xtrofit Lab', nat: 'IND', split: '', time: '' },
-  { rank: 3, bib: '172005', name: 'Team Aashka Thakkar', club: 'Liftmix Rehab Solutions', nat: 'IND', split: '', time: '' },
-  { rank: 4, bib: '172009', name: 'Team Sahil Sharma', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 5, bib: '172002', name: 'Team Paromita Mandal', club: 'House of Champions', nat: 'IND', split: '', time: '' },
-  { rank: 6, bib: '172010', name: 'Team Nini Bhatia', club: 'Amit Bhagat', nat: 'IND', split: '', time: '' },
-  { rank: 7, bib: '172015', name: 'Team Stuti Mandaliya', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 8, bib: '172001', name: 'Team Sanjay Negi', club: 'EST', nat: 'IND', split: '', time: '' },
-  { rank: 9, bib: '172008', name: 'Team Saloni Sathe', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 10, bib: '172006', name: 'Team Ranu Chatwani', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 11, bib: '172003', name: 'Team Bhoomik Goswami', club: 'Strength Bar Athlete', nat: 'IND', split: '', time: '' },
-  { rank: 12, bib: '172013', name: 'Team Jaydip Solanki', club: 'MY GYM 2.0', nat: 'IND', split: '', time: '' },
-  { rank: 13, bib: '172011', name: 'Team Ridham Patel Thakkar', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 14, bib: '172012', name: 'Team Malarkodi Mahendran', club: 'Metcon Apex', nat: 'IND', split: '', time: '' },
-  { rank: 15, bib: '172014', name: 'Team Akshay Mhetre', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' }
+  { rank: 1, bib: '172011', name: 'Dhaval Thakkar / Ridham Thakkar', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 2, bib: '172003', name: 'Palak Goswami / Bhoomik Goswami', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 3, bib: '172007', name: 'Beneeta Kiran / Sudhanshu Pant', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 4, bib: '172015', name: 'Vedant Mandaliya / Stuti Mandaliya', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 5, bib: '172006', name: 'Ketan Wadkar / Ranu Chatwani', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 6, bib: '172008', name: 'Vishesh Kumar Singh / Saloni Sathe', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 7, bib: '172012', name: 'Bhavin Doshi / Malarkodi Mahendran', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 8, bib: '172005', name: 'Aakshka Thakkar / Yagya Raj', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 9, bib: '172013', name: 'Shilpa Patel / Jaydip Solanki', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 10, bib: '172009', name: 'Megumi Saito / Sahil Sharma', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 11, bib: '172004', name: 'Ashwani Kumar Gupta / Nancy Gupta', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 12, bib: '172010', name: 'Amit Bhagat / Nini Bhatia', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 13, bib: '172001', name: 'Sanjay Negi / Bhavneet Kaur', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 14, bib: '172014', name: 'Helina Swamy / Akshay Mhetre', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 15, bib: '172002', name: 'Paromita Mandal / Rohit Parab', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 16, bib: '172016', name: 'Devender Singh / Princi Kumari', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 17, bib: '172017', name: 'Saumya Verma / Sonu Kumar', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' }
 ];
 
 let currentGfxState = {

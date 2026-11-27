@@ -1,22 +1,22 @@
 
 const REAL_ATHLETE_PAIRS_DEFAULT = [
-  { rank: 1, bib: '001', name: 'Dhaval Thakkar / Ridham Thakkar', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 2, bib: '002', name: 'Palak Goswami / Bhoomik Goswami', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 3, bib: '003', name: 'Beneeta Kiran / Sudhanshu Pant', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 4, bib: '004', name: 'Vedant Mandaliya / Stuti Mandaliya', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 5, bib: '005', name: 'Ketan Wadkar / Ranu Chatwani', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 6, bib: '006', name: 'Vishesh Kumar Singh / Saloni Sathe', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 7, bib: '007', name: 'Bhavin Doshi / Malarkodi Mahendran', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 8, bib: '008', name: 'Aakshka Thakkar / Yagya Raj', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 9, bib: '009', name: 'Shilpa Patel / Jaydip Solanki', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 10, bib: '010', name: 'Megumi Saito / Sahil Sharma', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 11, bib: '011', name: 'Ashwani Kumar Gupta / Nancy Gupta', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 12, bib: '012', name: 'Amit Bhagat / Nini Bhatia', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 13, bib: '013', name: 'Sanjay Negi / Bhavneet Kaur', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 14, bib: '014', name: 'Helina Swamy / Akshay Mhetre', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 15, bib: '015', name: 'Paromita Mandal / Rohit Parab', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 16, bib: '016', name: 'Devender Singh / Princi Kumari', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
-  { rank: 17, bib: '017', name: 'Saumya Verma / Sonu Kumar', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' }
+  { rank: 1, bib: '172011', name: 'Dhaval Thakkar / Ridham Thakkar', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 2, bib: '172003', name: 'Palak Goswami / Bhoomik Goswami', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 3, bib: '172007', name: 'Beneeta Kiran / Sudhanshu Pant', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 4, bib: '172015', name: 'Vedant Mandaliya / Stuti Mandaliya', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 5, bib: '172006', name: 'Ketan Wadkar / Ranu Chatwani', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 6, bib: '172008', name: 'Vishesh Kumar Singh / Saloni Sathe', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 7, bib: '172012', name: 'Bhavin Doshi / Malarkodi Mahendran', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 8, bib: '172005', name: 'Aakshka Thakkar / Yagya Raj', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 9, bib: '172013', name: 'Shilpa Patel / Jaydip Solanki', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 10, bib: '172009', name: 'Megumi Saito / Sahil Sharma', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 11, bib: '172004', name: 'Ashwani Kumar Gupta / Nancy Gupta', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 12, bib: '172010', name: 'Amit Bhagat / Nini Bhatia', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 13, bib: '172001', name: 'Sanjay Negi / Bhavneet Kaur', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 14, bib: '172014', name: 'Helina Swamy / Akshay Mhetre', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 15, bib: '172002', name: 'Paromita Mandal / Rohit Parab', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 16, bib: '172016', name: 'Devender Singh / Princi Kumari', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 17, bib: '172017', name: 'Saumya Verma / Sonu Kumar', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' }
 ];
 /**
  * Operator Control Panel Logic (controller.js)
@@ -103,6 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const sponsorLogoInput = document.getElementById('sponsorLogoInput');
   const openOverlayBtn = document.getElementById('openOverlayBtn');
   const networkUrlsContainer = document.getElementById('networkUrlsContainer');
+  const startRaceGunBtn = document.getElementById('startRaceGunBtn');
+  const resetRaceClockBtn = document.getElementById('resetRaceClockBtn');
+  const panelClockTime = document.getElementById('panelClockTime');
+  const raceStatusBadge = document.getElementById('raceStatusBadge');
 
   let livePollInterval = null;
   let simSyncInterval = null;
@@ -292,7 +296,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const secs = String(elapsedSec % 60).padStart(2, '0');
         const hrs = Math.floor(elapsedSec / 3600);
         state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
+        if (panelClockTime) panelClockTime.innerText = state.raceClockTime;
         syncState();
+      } else if (!state.isRaceStarted) {
+        if (panelClockTime && panelClockTime.innerText !== '00:00:00' && state.raceClockTime === '00:00:00') {
+          panelClockTime.innerText = '00:00:00';
+        }
       }
     }, 1000);
     
@@ -311,48 +320,92 @@ document.addEventListener('DOMContentLoaded', () => {
           });
 
           // Check if race has started and extract live timing strictly from API
-          let raceStarted = false;
-          let calculatedElapsedSec = 0;
+          const allFinished = results.length > 0 && results.every(r => r.status === 'F' || r.status === 'finished');
+          const isUserInStartlistMode = (state.gridMode === 'startlist');
 
-          // Check all results for valid split time, finish time or start timestamp
-          for (const item of results) {
-            const apiTimeStr = item.splitTimeStr || item.splitTime || item.timeText || item.time || item.finishNetStr || item.finishTimeNet;
-            const apiSeconds = item.splitTimeSeconds || item.finishTimeNetSeconds;
-            const apiStartMs = item.startNetTodMs || item.startTodMs;
-
-            if (apiSeconds && apiSeconds > 0) {
-              calculatedElapsedSec = Math.max(calculatedElapsedSec, Math.floor(apiSeconds));
-              raceStarted = true;
-            } else if (apiTimeStr && /^\d{1,2}:\d{2}/.test(apiTimeStr)) {
-              const parts = apiTimeStr.split(':').map(Number);
-              let sec = 0;
-              if (parts.length === 3) sec = parts[0] * 3600 + parts[1] * 60 + parts[2];
-              else if (parts.length === 2) sec = parts[0] * 60 + parts[1];
-              if (sec > 0) {
-                calculatedElapsedSec = Math.max(calculatedElapsedSec, sec);
-                raceStarted = true;
+          if (isUserInStartlistMode) {
+            // Operator is displaying Pre-Race Starting List before the gun
+            state.isRaceStarted = false;
+            liveRaceStartMs = null;
+            state.startTimeMs = null;
+            state.raceClockTime = '00:00:00';
+            if (panelClockTime) panelClockTime.innerText = '00:00:00';
+            if (raceStatusBadge) {
+              raceStatusBadge.className = 'status-badge status-info';
+              raceStatusBadge.innerText = 'PRE-RACE (STANDBY)';
+            }
+          } else if (liveRaceStartMs) {
+            // Live Race is actively running (Gun fired or active race started) - Keep timer running!
+            state.isRaceStarted = true;
+            state.startTimeMs = liveRaceStartMs;
+            if (raceStatusBadge) {
+              raceStatusBadge.className = 'status-badge status-success';
+              raceStatusBadge.innerText = 'RACE LIVE (ACTIVE)';
+            }
+          } else {
+            // Check if API has active live race in progress
+            const activeRunning = results.find(r => r.status !== 'F' && r.status !== 'R' && (r.splitTimeSeconds || r.splitTimeStr));
+            if (activeRunning) {
+              state.isRaceStarted = true;
+              const sec = activeRunning.splitTimeSeconds || 0;
+              liveRaceStartMs = Date.now() - (sec * 1000);
+              state.startTimeMs = liveRaceStartMs;
+              state.gridMode = 'livesplits';
+              if (gridModeSelect) gridModeSelect.value = 'livesplits';
+              if (raceStatusBadge) {
+                raceStatusBadge.className = 'status-badge status-success';
+                raceStatusBadge.innerText = 'RACE LIVE (ACTIVE)';
               }
-            } else if (apiStartMs && apiStartMs > 0 && apiStartMs <= Date.now()) {
-              const sec = Math.floor((Date.now() - apiStartMs) / 1000);
-              calculatedElapsedSec = Math.max(calculatedElapsedSec, sec);
-              raceStarted = true;
+            } else if (allFinished) {
+              // Historical or complete event: display official finish time when operator is not running a live race
+              state.isRaceStarted = true;
+              state.startTimeMs = null;
+              const winningTime = results[0]?.splitTimeStr || results[0]?.finishNetStr || results[0]?.timeText || '01:05:07';
+              state.raceClockTime = winningTime;
+              if (panelClockTime) panelClockTime.innerText = winningTime;
+              if (raceStatusBadge) {
+                raceStatusBadge.className = 'status-badge status-success';
+                raceStatusBadge.innerText = 'OFFICIAL FINISH';
+              }
+            } else {
+              // Pre-race standby
+              state.isRaceStarted = false;
+              liveRaceStartMs = null;
+              state.startTimeMs = null;
+              state.raceClockTime = '00:00:00';
+              if (panelClockTime) panelClockTime.innerText = '00:00:00';
+              if (raceStatusBadge) {
+                raceStatusBadge.className = 'status-badge status-info';
+                raceStatusBadge.innerText = 'PRE-RACE (STANDBY)';
+              }
             }
           }
 
-          if (raceStarted && calculatedElapsedSec > 0) {
-            liveRaceStartMs = Date.now() - (calculatedElapsedSec * 1000);
-            const hrs = Math.floor(calculatedElapsedSec / 3600);
-            const mins = String(Math.floor((calculatedElapsedSec % 3600) / 60)).padStart(2, '0');
-            const secs = String(calculatedElapsedSec % 60).padStart(2, '0');
-            state.raceClockTime = hrs > 0 ? `${String(hrs).padStart(2, '0')}:${mins}:${secs}` : `00:${mins}:${secs}`;
-            state.isRaceStarted = true;
-          } else {
-            liveRaceStartMs = null;
-            state.raceClockTime = '00:00:00';
-            state.isRaceStarted = false;
-          }
-
           const cleanName = (r, rankIdx) => {
+            const bib = String(r.startNo || r.bib || '').trim();
+            const bibMap = {
+              '172001': 'Sanjay Negi / Bhavneet Kaur',
+              '172002': 'Paromita Mandal / Rohit Parab',
+              '172003': 'Palak Goswami / Bhoomik Goswami',
+              '172004': 'Ashwani Kumar Gupta / Nancy Gupta',
+              '172005': 'Aakshka Thakkar / Yagya Raj',
+              '172006': 'Ketan Wadkar / Ranu Chatwani',
+              '172007': 'Beneeta Kiran / Sudhanshu Pant',
+              '172008': 'Vishesh Kumar Singh / Saloni Sathe',
+              '172009': 'Megumi Saito / Sahil Sharma',
+              '172010': 'Amit Bhagat / Nini Bhatia',
+              '172011': 'Dhaval Thakkar / Ridham Thakkar',
+              '172012': 'Bhavin Doshi / Malarkodi Mahendran',
+              '172013': 'Shilpa Patel / Jaydip Solanki',
+              '172014': 'Helina Swamy / Akshay Mhetre',
+              '172015': 'Vedant Mandaliya / Stuti Mandaliya',
+              '172016': 'Devender Singh / Princi Kumari',
+              '172017': 'Saumya Verma / Sonu Kumar'
+            };
+            if (state.selectedEventKey === 'BOG' && bibMap[bib]) {
+              return bibMap[bib];
+            }
+
             let raw = r.nameText || r.displayName || r.name || r.fullname || r.participantName || '';
             
             if (!raw) {
@@ -408,69 +461,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
               }
             } else if (state.selectedEventKey === 'BOG') {
-              const bogGujaratTeams = {
-                'thakkar': 'Dhaval Thakkar / Ridham Thakkar',
-                'ridham': 'Dhaval Thakkar / Ridham Thakkar',
-                'dhaval': 'Dhaval Thakkar / Ridham Thakkar',
-                'goswami': 'Palak Goswami / Bhoomik Goswami',
-                'bhoomik': 'Palak Goswami / Bhoomik Goswami',
-                'palak': 'Palak Goswami / Bhoomik Goswami',
-                'pant': 'Beneeta Kiran / Sudhanshu Pant',
-                'sudhanshu': 'Beneeta Kiran / Sudhanshu Pant',
-                'beneeta': 'Beneeta Kiran / Sudhanshu Pant',
-                'mandaliya': 'Vedant Mandaliya / Stuti Mandaliya',
-                'vedant': 'Vedant Mandaliya / Stuti Mandaliya',
-                'stuti': 'Vedant Mandaliya / Stuti Mandaliya',
-                'chatwani': 'Ketan Wadkar / Ranu Chatwani',
-                'ranu': 'Ketan Wadkar / Ranu Chatwani',
-                'ketan': 'Ketan Wadkar / Ranu Chatwani',
-                'wadkar': 'Ketan Wadkar / Ranu Chatwani',
-                'sathe': 'Vishesh Kumar Singh / Saloni Sathe',
-                'saloni': 'Vishesh Kumar Singh / Saloni Sathe',
-                'vishesh': 'Vishesh Kumar Singh / Saloni Sathe',
-                'doshi': 'Bhavin Doshi / Malarkodi Mahendran',
-                'bhavin': 'Bhavin Doshi / Malarkodi Mahendran',
-                'malarkodi': 'Bhavin Doshi / Malarkodi Mahendran',
-                'mahendran': 'Bhavin Doshi / Malarkodi Mahendran',
-                'aakshka': 'Aakshka Thakkar / Yagya Raj',
-                'aashka': 'Aakshka Thakkar / Yagya Raj',
-                'yagya': 'Aakshka Thakkar / Yagya Raj',
-                'solanki': 'Shilpa Patel / Jaydip Solanki',
-                'jaydip': 'Shilpa Patel / Jaydip Solanki',
-                'shilpa': 'Shilpa Patel / Jaydip Solanki',
-                'saito': 'Megumi Saito / Sahil Sharma',
-                'megumi': 'Megumi Saito / Sahil Sharma',
-                'sahil': 'Megumi Saito / Sahil Sharma',
-                'gupta': 'Ashwani Kumar Gupta / Nancy Gupta',
-                'ashwani': 'Ashwani Kumar Gupta / Nancy Gupta',
-                'nancy': 'Ashwani Kumar Gupta / Nancy Gupta',
-                'bhagat': 'Amit Bhagat / Nini Bhatia',
-                'bhatia': 'Amit Bhagat / Nini Bhatia',
-                'nini': 'Amit Bhagat / Nini Bhatia',
-                'amit': 'Amit Bhagat / Nini Bhatia',
-                'negi': 'Sanjay Negi / Bhavneet Kaur',
-                'sanjay': 'Sanjay Negi / Bhavneet Kaur',
-                'bhavneet': 'Sanjay Negi / Bhavneet Kaur',
-                'swamy': 'Helina Swamy / Akshay Mhetre',
-                'helina': 'Helina Swamy / Akshay Mhetre',
-                'mhetre': 'Helina Swamy / Akshay Mhetre',
-                'akshay': 'Helina Swamy / Akshay Mhetre',
-                'mandal': 'Paromita Mandal / Rohit Parab',
-                'paromita': 'Paromita Mandal / Rohit Parab',
-                'parab': 'Paromita Mandal / Rohit Parab',
-                'rohit': 'Paromita Mandal / Rohit Parab',
-                'devender': 'Devender Singh / Princi Kumari',
-                'princi': 'Devender Singh / Princi Kumari',
-                'saumya': 'Saumya Verma / Sonu Kumar',
-                'sonu': 'Saumya Verma / Sonu Kumar'
-              };
-              const cleanLower = clean.toLowerCase();
-              for (const [key, pairName] of Object.entries(bogGujaratTeams)) {
-                if (cleanLower.includes(key)) {
-                  clean = pairName;
-                  break;
-                }
-              }
+              const lower = clean.toLowerCase();
+              if (lower.includes('aashka') || lower.includes('aakshka') || lower.includes('yagya')) clean = 'Aakshka Thakkar / Yagya Raj';
+              else if (lower.includes('ridham') || lower.includes('dhaval')) clean = 'Dhaval Thakkar / Ridham Thakkar';
+              else if (lower.includes('goswami') || lower.includes('palak') || lower.includes('bhoomik')) clean = 'Palak Goswami / Bhoomik Goswami';
+              else if (lower.includes('pant') || lower.includes('beneeta') || lower.includes('sudhanshu')) clean = 'Beneeta Kiran / Sudhanshu Pant';
+              else if (lower.includes('mandaliya') || lower.includes('vedant') || lower.includes('stuti')) clean = 'Vedant Mandaliya / Stuti Mandaliya';
+              else if (lower.includes('chatwani') || lower.includes('ranu') || lower.includes('wadkar') || lower.includes('ketan')) clean = 'Ketan Wadkar / Ranu Chatwani';
+              else if (lower.includes('sathe') || lower.includes('saloni') || lower.includes('vishesh')) clean = 'Vishesh Kumar Singh / Saloni Sathe';
+              else if (lower.includes('doshi') || lower.includes('malarkodi') || lower.includes('mahendran') || lower.includes('bhavin')) clean = 'Bhavin Doshi / Malarkodi Mahendran';
+              else if (lower.includes('solanki') || lower.includes('jaydip') || lower.includes('shilpa')) clean = 'Shilpa Patel / Jaydip Solanki';
+              else if (lower.includes('saito') || lower.includes('megumi') || lower.includes('sahil')) clean = 'Megumi Saito / Sahil Sharma';
+              else if (lower.includes('gupta') || lower.includes('ashwani') || lower.includes('nancy')) clean = 'Ashwani Kumar Gupta / Nancy Gupta';
+              else if (lower.includes('bhagat') || lower.includes('bhatia') || lower.includes('nini') || lower.includes('amit')) clean = 'Amit Bhagat / Nini Bhatia';
+              else if (lower.includes('negi') || lower.includes('sanjay') || lower.includes('bhavneet')) clean = 'Sanjay Negi / Bhavneet Kaur';
+              else if (lower.includes('swamy') || lower.includes('mhetre') || lower.includes('helina') || lower.includes('akshay')) clean = 'Helina Swamy / Akshay Mhetre';
+              else if (lower.includes('mandal') || lower.includes('paromita') || lower.includes('parab') || lower.includes('rohit')) clean = 'Paromita Mandal / Rohit Parab';
+              else if (lower.includes('devender') || lower.includes('princi')) clean = 'Devender Singh / Princi Kumari';
+              else if (lower.includes('saumya') || lower.includes('sonu')) clean = 'Saumya Verma / Sonu Kumar';
+              else if (lower.includes('thakkar')) clean = 'Dhaval Thakkar / Ridham Thakkar';
             }
 
             if (clean.includes('/')) {
@@ -509,27 +518,72 @@ document.addEventListener('DOMContentLoaded', () => {
             return 'GYM V/S GYM';
           };
 
-          state.leaderboard = results.map((r, i) => {
-            return {
-              rank: r.rank || r.position || r.place || i + 1,
-              bib: r.startNo || r.bib || r.idParticipant || `B${i+1}`,
-              name: cleanName(r, i),
-              club: cleanClub(r),
-              nat: r.nationality || r.nation || 'IND',
-              split: r.splitName || r.checkpointName || r.checkpoint || r.split || '',
-              time: r.splitTimeStr || r.splitTime || r.timeText || r.time || r.finishNetStr || r.finishTimeNet || '',
-              delta: i === 0 ? '' : (r.splitDiffStr || r.delta || '')
-            };
-          });
+          if (isUserInStartlistMode && state.selectedEventKey === 'BOG') {
+            state.leaderboard = REAL_ATHLETE_PAIRS_DEFAULT.map((p, i) => ({
+              rank: i + 1,
+              bib: p.bib,
+              name: p.name,
+              club: p.club || 'Battle of Gyms',
+              nat: p.nat || 'IND',
+              split: '',
+              time: '',
+              delta: ''
+            }));
 
-          state.tickerItems = results.map((r, i) => {
-            return {
-              bib: r.startNo || r.bib || r.idParticipant || '00',
-              name: cleanName(r, i),
-              checkpoint: r.splitName || r.checkpointName || r.checkpoint || r.split || cleanClub(r),
-              time: r.splitTimeStr || r.splitTime || r.timeText || r.finishNetStr || r.finishTimeNet || ''
-            };
-          });
+            state.tickerItems = state.leaderboard.map(p => ({
+              bib: p.bib,
+              name: p.name,
+              checkpoint: 'Starting List',
+              time: ''
+            }));
+          } else {
+            const isHistoricalWithLiveGun = allFinished && !!liveRaceStartMs;
+
+            const mappedResults = results.map((r, i) => {
+              const pName = cleanName(r, i);
+              return {
+                rank: r.rank || r.position || r.place || i + 1,
+                bib: r.startNo || r.bib || r.idParticipant || `B${i+1}`,
+                name: pName,
+                club: cleanClub(r),
+                nat: r.nationality || r.nation || 'IND',
+                split: isHistoricalWithLiveGun ? 'ON COURSE' : (r.splitName || r.checkpointName || r.checkpoint || r.split || ''),
+                time: isHistoricalWithLiveGun ? '' : (r.splitTimeStr || r.splitTime || r.timeText || r.time || r.finishNetStr || r.finishTimeNet || ''),
+                delta: (i === 0 || isHistoricalWithLiveGun) ? '' : (r.splitDiffStr || r.delta || '')
+              };
+            });
+
+            // If BOG event, ensure all 17 pairs are present in leaderboard
+            if (state.selectedEventKey === 'BOG') {
+              const existingNames = new Set(mappedResults.map(m => m.name.toLowerCase()));
+              for (const defaultPair of REAL_ATHLETE_PAIRS_DEFAULT) {
+                if (!existingNames.has(defaultPair.name.toLowerCase())) {
+                  mappedResults.push({
+                    rank: mappedResults.length + 1,
+                    bib: defaultPair.bib,
+                    name: defaultPair.name,
+                    club: defaultPair.club || 'Battle of Gyms',
+                    nat: defaultPair.nat || 'IND',
+                    split: liveRaceStartMs ? 'ON COURSE' : '',
+                    time: '',
+                    delta: ''
+                  });
+                  existingNames.add(defaultPair.name.toLowerCase());
+                }
+              }
+            }
+
+            state.leaderboard = mappedResults;
+
+            state.tickerItems = mappedResults.map((r, i) => {
+              return {
+                bib: r.bib || '00',
+                name: r.name,
+                checkpoint: r.split || r.club || 'Battle of Gyms',
+                time: r.time || ''
+              };
+            });
+          }
 
           updateSpotlightSelectOptions();
           syncState();
@@ -906,7 +960,68 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; saveControlPanelSettings(); syncState(); });
-  if (gridModeSelect) gridModeSelect.addEventListener('change', () => { state.gridMode = gridModeSelect.value; saveControlPanelSettings(); syncState(); });
+  if (gridModeSelect) gridModeSelect.addEventListener('change', () => { 
+    state.gridMode = gridModeSelect.value; 
+    if (state.gridMode === 'startlist') {
+      state.isRaceStarted = false;
+      liveRaceStartMs = null;
+      state.raceClockTime = '00:00:00';
+      if (panelClockTime) panelClockTime.innerText = '00:00:00';
+      if (raceStatusBadge) {
+        raceStatusBadge.className = 'status-badge status-info';
+        raceStatusBadge.innerText = 'PRE-RACE (STANDBY)';
+      }
+    }
+    saveControlPanelSettings(); 
+    syncState(); 
+  });
+
+  if (startRaceGunBtn) {
+    startRaceGunBtn.addEventListener('click', () => {
+      state.isRaceStarted = true;
+      liveRaceStartMs = Date.now();
+      state.gridMode = 'livesplits';
+      if (gridModeSelect) gridModeSelect.value = 'livesplits';
+      if (raceStatusBadge) {
+        raceStatusBadge.className = 'status-badge status-success';
+        raceStatusBadge.innerText = 'RACE LIVE (ACTIVE)';
+      }
+      if (panelClockTime) panelClockTime.innerText = '00:00:00';
+      state.raceClockTime = '00:00:00';
+      saveControlPanelSettings();
+      syncState();
+      updateStatus('Gun Fired! Real live running timer is now active on broadcast.', 'success');
+    });
+  }
+
+  if (resetRaceClockBtn) {
+    resetRaceClockBtn.addEventListener('click', () => {
+      state.isRaceStarted = false;
+      liveRaceStartMs = null;
+      state.gridMode = 'startlist';
+      if (gridModeSelect) gridModeSelect.value = 'startlist';
+      if (raceStatusBadge) {
+        raceStatusBadge.className = 'status-badge status-info';
+        raceStatusBadge.innerText = 'PRE-RACE (STANDBY)';
+      }
+      if (panelClockTime) panelClockTime.innerText = '00:00:00';
+      state.raceClockTime = '00:00:00';
+      state.leaderboard = REAL_ATHLETE_PAIRS_DEFAULT.map((p, i) => ({
+        rank: i + 1,
+        bib: p.bib,
+        name: p.name,
+        club: p.club || 'Battle of Gyms',
+        nat: p.nat || 'IND',
+        split: '',
+        time: '',
+        delta: ''
+      }));
+      saveControlPanelSettings();
+      syncState();
+      updateStatus('Reset to Pre-Race Starting List. Timer reset to 00:00:00.', 'info');
+    });
+  }
+
   if (displayContentSelect) displayContentSelect.addEventListener('change', () => { state.displayContent = displayContentSelect.value; saveControlPanelSettings(); syncState(); });
   if (nameFormatSelect) nameFormatSelect.addEventListener('change', () => { state.nameFormat = nameFormatSelect.value; saveControlPanelSettings(); syncState(); });
   if (posSelect) posSelect.addEventListener('change', () => { state.position = posSelect.value; saveControlPanelSettings(); syncState(); });
