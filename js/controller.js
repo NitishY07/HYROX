@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     position: 'pos-bottom-grid',
     nameFormat: 'full',
     displayContent: 'both',
-    gridMode: 'startlist',
+    gridMode: 'auto',
+    currentStation: '',
     raceClockTime: '00:00:00',
     raceClockPosition: 'pos-clock-top-left',
     allowSimFallback: false,
@@ -103,8 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const sponsorLogoInput = document.getElementById('sponsorLogoInput');
   const openOverlayBtn = document.getElementById('openOverlayBtn');
   const networkUrlsContainer = document.getElementById('networkUrlsContainer');
-  const startRaceGunBtn = document.getElementById('startRaceGunBtn');
-  const resetRaceClockBtn = document.getElementById('resetRaceClockBtn');
   const panelClockTime = document.getElementById('panelClockTime');
   const raceStatusBadge = document.getElementById('raceStatusBadge');
 
@@ -112,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let simSyncInterval = null;
   let liveClockInterval = null;
   let liveRaceStartMs = null;
+  let lastApiSplitSec = -1;
 
   /**
    * Sync State across BroadcastChannel, LocalStorage, AND Server Network API
@@ -312,72 +312,104 @@ document.addEventListener('DOMContentLoaded', () => {
         if (results && results.length > 0) {
           simulator.stop();
 
-          // Sort results strictly by API rank/position
+          // Sort results strictly by API rank/position, or by furthest station & fastest timer
           results.sort((a, b) => {
-            const rA = parseInt(a.rank || a.position || a.place || 999, 10);
-            const rB = parseInt(b.rank || b.position || b.place || 999, 10);
-            return rA - rB;
+            const rA = parseInt(a.rank || a.position || a.place || 0, 10);
+            const rB = parseInt(b.rank || b.position || b.place || 0, 10);
+            if (rA > 0 && rB > 0 && rA !== rB) return rA - rB;
+            if (rA > 0 && rB === 0) return -1;
+            if (rB > 0 && rA === 0) return 1;
+            const posA = parseInt(a.splitPos || 0, 10);
+            const posB = parseInt(b.splitPos || 0, 10);
+            if (posA !== posB) return posB - posA;
+            const tA = a.splitTimeMs || (a.splitTimeSeconds ? a.splitTimeSeconds * 1000 : Number.MAX_SAFE_INTEGER);
+            const tB = b.splitTimeMs || (b.splitTimeSeconds ? b.splitTimeSeconds * 1000 : Number.MAX_SAFE_INTEGER);
+            return tA - tB;
           });
+
+          const parseTimeToSec = (tStr) => {
+            if (!tStr || !/^\d{1,2}:\d{2}/.test(String(tStr).trim())) return 0;
+            const parts = String(tStr).trim().split(':').map(Number);
+            if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+            if (parts.length === 2) return parts[0] * 60 + parts[1];
+            return 0;
+          };
 
           // Check if race has started and extract live timing strictly from API
           const allFinished = results.length > 0 && results.every(r => r.status === 'F' || r.status === 'finished');
           const isUserInStartlistMode = (state.gridMode === 'startlist');
 
+          // Detect active running athletes from API (not finished, and has split time or valid start time today)
+          const nowDate = new Date();
+          const nowTodMs = (nowDate.getHours() * 3600 + nowDate.getMinutes() * 60 + nowDate.getSeconds()) * 1000 + nowDate.getMilliseconds();
+
+          const activeRunning = results.find(r => {
+            if (r.status === 'F' || r.status === 'finished') return false;
+            const hasSplit = (r.splitTimeMs && r.splitTimeMs > 0) || (r.splitTimeSeconds && r.splitTimeSeconds > 0) || parseTimeToSec(r.splitTimeStr || r.splitTime || r.timeText) > 0;
+            const hasStartTod = r.startTodMs && nowTodMs >= r.startTodMs && (nowTodMs - r.startTodMs) < (6 * 3600 * 1000);
+            return hasSplit || hasStartTod;
+          });
+
           if (isUserInStartlistMode) {
-            // Operator is displaying Pre-Race Starting List before the gun
+            // Explicitly locked to Pre-Race Starting List
             state.isRaceStarted = false;
             liveRaceStartMs = null;
             state.startTimeMs = null;
+            lastApiSplitSec = -1;
+            state.currentStation = '';
             state.raceClockTime = '00:00:00';
             if (panelClockTime) panelClockTime.innerText = '00:00:00';
             if (raceStatusBadge) {
               raceStatusBadge.className = 'status-badge status-info';
-              raceStatusBadge.innerText = 'PRE-RACE (STANDBY)';
+              raceStatusBadge.innerText = 'PRE-RACE (LOCKED)';
             }
-          } else if (liveRaceStartMs) {
-            // Live Race is actively running (Gun fired or active race started) - Keep timer running!
+          } else if (activeRunning) {
+            // Race is actively LIVE in the API! Timer & station come strictly from API
             state.isRaceStarted = true;
+            const todMs = activeRunning.startNetTodMs || activeRunning.startTodMs;
+            if (todMs && nowTodMs >= todMs && (nowTodMs - todMs) < (6 * 3600 * 1000)) {
+              liveRaceStartMs = Date.now() - (nowTodMs - todMs);
+            } else {
+              const apiSplitSec = activeRunning.splitTimeMs
+                ? Math.floor(activeRunning.splitTimeMs / 1000)
+                : (activeRunning.splitTimeSeconds ? Math.floor(activeRunning.splitTimeSeconds) : parseTimeToSec(activeRunning.splitTimeStr || activeRunning.splitTime || activeRunning.timeText));
+              if (!liveRaceStartMs || apiSplitSec !== lastApiSplitSec) {
+                liveRaceStartMs = Date.now() - (apiSplitSec * 1000);
+                lastApiSplitSec = apiSplitSec;
+              }
+            }
             state.startTimeMs = liveRaceStartMs;
+            state.currentStation = activeRunning.splitName || activeRunning.checkpointName || activeRunning.splitKey || '';
             if (raceStatusBadge) {
               raceStatusBadge.className = 'status-badge status-success';
-              raceStatusBadge.innerText = 'RACE LIVE (ACTIVE)';
+              raceStatusBadge.innerText = 'API LIVE (ACTIVE)';
+            }
+          } else if (allFinished) {
+            // Complete event in API: display official winning finish time & FINISH station
+            state.isRaceStarted = true;
+            liveRaceStartMs = null;
+            state.startTimeMs = null;
+            lastApiSplitSec = -1;
+            const winningTime = results[0]?.splitTimeStr || results[0]?.finishNetStr || results[0]?.finishTimeNet || results[0]?.timeText || '00:00:00';
+            state.raceClockTime = winningTime;
+            state.currentStation = results[0]?.splitName || 'FINISH';
+            if (panelClockTime) panelClockTime.innerText = winningTime;
+            if (raceStatusBadge) {
+              raceStatusBadge.className = 'status-badge status-success';
+              raceStatusBadge.innerText = 'API OFFICIAL FINISH';
             }
           } else {
-            // Check if API has active live race in progress
-            const activeRunning = results.find(r => r.status !== 'F' && r.status !== 'R' && (r.splitTimeSeconds || r.splitTimeStr));
-            if (activeRunning) {
-              state.isRaceStarted = true;
-              const sec = activeRunning.splitTimeSeconds || 0;
-              liveRaceStartMs = Date.now() - (sec * 1000);
-              state.startTimeMs = liveRaceStartMs;
-              state.gridMode = 'livesplits';
-              if (gridModeSelect) gridModeSelect.value = 'livesplits';
-              if (raceStatusBadge) {
-                raceStatusBadge.className = 'status-badge status-success';
-                raceStatusBadge.innerText = 'RACE LIVE (ACTIVE)';
-              }
-            } else if (allFinished) {
-              // Historical or complete event: display official finish time when operator is not running a live race
-              state.isRaceStarted = true;
-              state.startTimeMs = null;
-              const winningTime = results[0]?.splitTimeStr || results[0]?.finishNetStr || results[0]?.timeText || '01:05:07';
-              state.raceClockTime = winningTime;
-              if (panelClockTime) panelClockTime.innerText = winningTime;
-              if (raceStatusBadge) {
-                raceStatusBadge.className = 'status-badge status-success';
-                raceStatusBadge.innerText = 'OFFICIAL FINISH';
-              }
-            } else {
-              // Pre-race standby
-              state.isRaceStarted = false;
-              liveRaceStartMs = null;
-              state.startTimeMs = null;
-              state.raceClockTime = '00:00:00';
-              if (panelClockTime) panelClockTime.innerText = '00:00:00';
-              if (raceStatusBadge) {
-                raceStatusBadge.className = 'status-badge status-info';
-                raceStatusBadge.innerText = 'PRE-RACE (STANDBY)';
-              }
+            // Pre-race standby from API (participations loaded, no splits or starts yet)
+            state.isRaceStarted = false;
+            liveRaceStartMs = null;
+            state.startTimeMs = null;
+            lastApiSplitSec = -1;
+            state.currentStation = '';
+            state.raceClockTime = '00:00:00';
+            if (panelClockTime) panelClockTime.innerText = '00:00:00';
+            if (raceStatusBadge) {
+              raceStatusBadge.className = 'status-badge status-info';
+              raceStatusBadge.innerText = 'API PRE-RACE (STANDBY)';
             }
           }
 
@@ -518,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return 'GYM V/S GYM';
           };
 
-          if (isUserInStartlistMode && state.selectedEventKey === 'BOG') {
+          if ((!state.isRaceStarted || isUserInStartlistMode) && state.selectedEventKey === 'BOG') {
             state.leaderboard = REAL_ATHLETE_PAIRS_DEFAULT.map((p, i) => ({
               rank: i + 1,
               bib: p.bib,
@@ -537,8 +569,6 @@ document.addEventListener('DOMContentLoaded', () => {
               time: ''
             }));
           } else {
-            const isHistoricalWithLiveGun = allFinished && !!liveRaceStartMs;
-
             const mappedResults = results.map((r, i) => {
               const pName = cleanName(r, i);
               return {
@@ -547,9 +577,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: pName,
                 club: cleanClub(r),
                 nat: r.nationality || r.nation || 'IND',
-                split: isHistoricalWithLiveGun ? 'ON COURSE' : (r.splitName || r.checkpointName || r.checkpoint || r.split || ''),
-                time: isHistoricalWithLiveGun ? '' : (r.splitTimeStr || r.splitTime || r.timeText || r.time || r.finishNetStr || r.finishTimeNet || ''),
-                delta: (i === 0 || isHistoricalWithLiveGun) ? '' : (r.splitDiffStr || r.delta || '')
+                split: r.splitName || r.checkpointName || r.checkpoint || r.split || '',
+                time: r.splitTimeStr || r.splitTime || r.timeText || r.time || r.finishNetStr || r.finishTimeNet || '',
+                delta: i === 0 ? '' : (r.splitDiffStr || r.delta || '')
               };
             });
 
@@ -564,7 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     name: defaultPair.name,
                     club: defaultPair.club || 'Battle of Gyms',
                     nat: defaultPair.nat || 'IND',
-                    split: liveRaceStartMs ? 'ON COURSE' : '',
+                    split: '',
                     time: '',
                     delta: ''
                   });
@@ -706,7 +736,7 @@ document.addEventListener('DOMContentLoaded', () => {
       eventKey: eventSelect ? eventSelect.value : '',
       nameFormat: nameFormatSelect ? nameFormatSelect.value : 'full',
       displayContent: displayContentSelect ? displayContentSelect.value : 'both',
-      gridMode: gridModeSelect ? gridModeSelect.value : 'startlist',
+      gridMode: gridModeSelect ? gridModeSelect.value : 'auto',
       theme: themeSelect ? themeSelect.value : 'theme-starting-list',
       position: posSelect ? posSelect.value : 'pos-bottom-grid',
       showClubs: toggleClubs ? toggleClubs.checked : true,
@@ -965,62 +995,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (state.gridMode === 'startlist') {
       state.isRaceStarted = false;
       liveRaceStartMs = null;
+      state.startTimeMs = null;
+      state.currentStation = '';
       state.raceClockTime = '00:00:00';
       if (panelClockTime) panelClockTime.innerText = '00:00:00';
       if (raceStatusBadge) {
         raceStatusBadge.className = 'status-badge status-info';
-        raceStatusBadge.innerText = 'PRE-RACE (STANDBY)';
+        raceStatusBadge.innerText = 'PRE-RACE (LOCKED)';
       }
     }
     saveControlPanelSettings(); 
-    syncState(); 
+    syncState();
+    if (state.mode === 'live') startLivePolling();
   });
-
-  if (startRaceGunBtn) {
-    startRaceGunBtn.addEventListener('click', () => {
-      state.isRaceStarted = true;
-      liveRaceStartMs = Date.now();
-      state.gridMode = 'livesplits';
-      if (gridModeSelect) gridModeSelect.value = 'livesplits';
-      if (raceStatusBadge) {
-        raceStatusBadge.className = 'status-badge status-success';
-        raceStatusBadge.innerText = 'RACE LIVE (ACTIVE)';
-      }
-      if (panelClockTime) panelClockTime.innerText = '00:00:00';
-      state.raceClockTime = '00:00:00';
-      saveControlPanelSettings();
-      syncState();
-      updateStatus('Gun Fired! Real live running timer is now active on broadcast.', 'success');
-    });
-  }
-
-  if (resetRaceClockBtn) {
-    resetRaceClockBtn.addEventListener('click', () => {
-      state.isRaceStarted = false;
-      liveRaceStartMs = null;
-      state.gridMode = 'startlist';
-      if (gridModeSelect) gridModeSelect.value = 'startlist';
-      if (raceStatusBadge) {
-        raceStatusBadge.className = 'status-badge status-info';
-        raceStatusBadge.innerText = 'PRE-RACE (STANDBY)';
-      }
-      if (panelClockTime) panelClockTime.innerText = '00:00:00';
-      state.raceClockTime = '00:00:00';
-      state.leaderboard = REAL_ATHLETE_PAIRS_DEFAULT.map((p, i) => ({
-        rank: i + 1,
-        bib: p.bib,
-        name: p.name,
-        club: p.club || 'Battle of Gyms',
-        nat: p.nat || 'IND',
-        split: '',
-        time: '',
-        delta: ''
-      }));
-      saveControlPanelSettings();
-      syncState();
-      updateStatus('Reset to Pre-Race Starting List. Timer reset to 00:00:00.', 'info');
-    });
-  }
 
   if (displayContentSelect) displayContentSelect.addEventListener('change', () => { state.displayContent = displayContentSelect.value; saveControlPanelSettings(); syncState(); });
   if (nameFormatSelect) nameFormatSelect.addEventListener('change', () => { state.nameFormat = nameFormatSelect.value; saveControlPanelSettings(); syncState(); });

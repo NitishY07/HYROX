@@ -74,7 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (s.includes('sandbag') || s.includes('lunge')) return { num: '07', name: 'SANDBAG LUNGES' };
     if (s.includes('wall') || s.includes('ball')) return { num: '08', name: 'WALL BALLS' };
     if (s.includes('finish') || s.includes('total') || s.includes('ziel')) return { num: 'FI', name: 'FINISH' };
-    if (s.includes('run') || s.includes('rox')) return { num: 'RN', name: 'RUNNING' };
+    if (s.includes('rox')) return { num: 'RX', name: 'ROXZONE' };
+    if (s.includes('run')) return { num: 'RN', name: splitStr.toUpperCase() };
     return { num: '', name: splitStr.toUpperCase() };
   }
 
@@ -197,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let zoneHtml = `<span class="gfx-grid-station-pill">STARTING LIST</span>`;
             if (!isStartlistGrid && isRaceLive && currentLeaderboard && currentLeaderboard.length > 0) {
               const activeItem = currentLeaderboard.find(item => item.split && item.split !== 'REGISTERED' && item.split !== '-') || currentLeaderboard[0];
-              const activeSplit = activeItem?.split || activeItem?.checkpoint || state.currentStation;
+              const activeSplit = state.currentStation || activeItem?.split || activeItem?.checkpoint;
               const zone = parseHyroxZone(activeSplit);
               if (zone) {
                 if (zone.num && zone.name) {
@@ -206,19 +207,19 @@ document.addEventListener('DOMContentLoaded', () => {
                   zoneHtml = `<span class="gfx-grid-station-pill">${zone.name}</span>`;
                 }
               } else {
-                zoneHtml = `<div class="gfx-grid-station-num">${formatSlashedNum('01')}</div><div class="gfx-grid-station-pill">SKIERG</div>`;
+                zoneHtml = `<span class="gfx-grid-station-pill">RACE IN PROGRESS</span>`;
               }
             }
             eventBar.innerHTML = zoneHtml;
           } else {
-            if (isRaceLive && currentLeaderboard && currentLeaderboard.length > 0) {
+            if (!isStartlistGrid && isRaceLive && currentLeaderboard && currentLeaderboard.length > 0) {
               const activeItem = currentLeaderboard.find(item => item.split && item.split !== 'REGISTERED' && item.split !== '-') || currentLeaderboard[0];
-              const activeSplit = activeItem?.split || activeItem?.checkpoint || state.currentStation;
+              const activeSplit = state.currentStation || activeItem?.split || activeItem?.checkpoint;
               const zone = parseHyroxZone(activeSplit);
               if (zone) {
                 eventBar.innerText = zone.num ? `${zone.num} ${zone.name}` : zone.name;
               } else {
-                eventBar.innerText = '01 SKIERG';
+                eventBar.innerText = 'RACE IN PROGRESS';
               }
             } else {
               eventBar.innerText = headerText.toUpperCase();

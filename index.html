@@ -82,16 +82,13 @@
           </div>
 
           <div class="race-clock-control-box" style="background: rgba(0, 0, 0, 0.4); padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.35); margin-bottom: 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span style="font-size: 11px; font-weight: 800; color: #AAA; text-transform: uppercase; letter-spacing: 0.5px;">Live Race Timer Control</span>
-              <span id="raceStatusBadge" class="status-badge status-info" style="font-size: 11px; padding: 2px 8px; font-weight: 800;">PRE-RACE (STANDBY)</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 11px; font-weight: 800; color: #AAA; text-transform: uppercase; letter-spacing: 0.5px;">API Live Race Timer (Read-Only)</span>
+              <span id="raceStatusBadge" class="status-badge status-info" style="font-size: 11px; padding: 2px 8px; font-weight: 800;">API PRE-RACE (STANDBY)</span>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
               <div id="panelClockTime" style="font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 900; color: #FFD700; min-width: 130px;">00:00:00</div>
-              <div style="display: flex; gap: 8px;">
-                <button id="startRaceGunBtn" type="button" class="btn" style="background: #00E676; color: #000; font-weight: 900; padding: 7px 14px; font-size: 12px; border: none; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 4px;">▶ START GUN</button>
-                <button id="resetRaceClockBtn" type="button" class="btn" style="background: #FF9100; color: #000; font-weight: 900; padding: 7px 14px; font-size: 12px; border: none; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 4px;">⟲ RESET PRE-RACE</button>
-              </div>
+              <span style="font-size: 11px; color: #888; font-weight: 600;">Synced automatically from Mika Timing API</span>
             </div>
           </div>
 
@@ -190,10 +187,11 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="gridModeSelect">Grid Mode (Starting List vs Live Splits)</label>
+            <label for="gridModeSelect">Grid Mode (API Automatic vs Pre-Race Lock)</label>
             <select id="gridModeSelect">
-              <option value="startlist" selected>Pre-Race Starting List (Team/Gym Names)</option>
-              <option value="livesplits">Live Race Mode (Station Splits &amp; Split Times from API)</option>
+              <option value="auto" selected>Auto (API Driven: Startlist → Live Stations &amp; Placements)</option>
+              <option value="startlist">Force Pre-Race Starting List (Lock 00:00:00)</option>
+              <option value="livesplits">Force Live Race Mode (API Splits &amp; Finish)</option>
             </select>
           </div>
           <div class="form-group">
