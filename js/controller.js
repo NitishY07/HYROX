@@ -1,19 +1,22 @@
+
 const REAL_ATHLETE_PAIRS_DEFAULT = [
-  { rank: 1, bib: '172007', name: 'Team Sudhanshu Pant', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 2, bib: '172004', name: 'Team Nancy Gupta', club: 'Xtrofit Lab', nat: 'IND', split: '', time: '' },
-  { rank: 3, bib: '172005', name: 'Team Aashka Thakkar', club: 'Liftmix Rehab Solutions', nat: 'IND', split: '', time: '' },
-  { rank: 4, bib: '172009', name: 'Team Sahil Sharma', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 5, bib: '172002', name: 'Team Paromita Mandal', club: 'House of Champions', nat: 'IND', split: '', time: '' },
-  { rank: 6, bib: '172010', name: 'Team Nini Bhatia', club: 'Amit Bhagat', nat: 'IND', split: '', time: '' },
-  { rank: 7, bib: '172015', name: 'Team Stuti Mandaliya', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 8, bib: '172001', name: 'Team Sanjay Negi', club: 'EST', nat: 'IND', split: '', time: '' },
-  { rank: 9, bib: '172008', name: 'Team Saloni Sathe', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 10, bib: '172006', name: 'Team Ranu Chatwani', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 11, bib: '172003', name: 'Team Bhoomik Goswami', club: 'Strength Bar Athlete', nat: 'IND', split: '', time: '' },
-  { rank: 12, bib: '172013', name: 'Team Jaydip Solanki', club: 'MY GYM 2.0', nat: 'IND', split: '', time: '' },
-  { rank: 13, bib: '172011', name: 'Team Ridham Patel Thakkar', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' },
-  { rank: 14, bib: '172012', name: 'Team Malarkodi Mahendran', club: 'Metcon Apex', nat: 'IND', split: '', time: '' },
-  { rank: 15, bib: '172014', name: 'Team Akshay Mhetre', club: 'GYM V/S GYM', nat: 'IND', split: '', time: '' }
+  { rank: 1, bib: '001', name: 'Dhaval Thakkar / Ridham Thakkar', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 2, bib: '002', name: 'Palak Goswami / Bhoomik Goswami', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 3, bib: '003', name: 'Beneeta Kiran / Sudhanshu Pant', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 4, bib: '004', name: 'Vedant Mandaliya / Stuti Mandaliya', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 5, bib: '005', name: 'Ketan Wadkar / Ranu Chatwani', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 6, bib: '006', name: 'Vishesh Kumar Singh / Saloni Sathe', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 7, bib: '007', name: 'Bhavin Doshi / Malarkodi Mahendran', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 8, bib: '008', name: 'Aakshka Thakkar / Yagya Raj', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 9, bib: '009', name: 'Shilpa Patel / Jaydip Solanki', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 10, bib: '010', name: 'Megumi Saito / Sahil Sharma', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 11, bib: '011', name: 'Ashwani Kumar Gupta / Nancy Gupta', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 12, bib: '012', name: 'Amit Bhagat / Nini Bhatia', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 13, bib: '013', name: 'Sanjay Negi / Bhavneet Kaur', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 14, bib: '014', name: 'Helina Swamy / Akshay Mhetre', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 15, bib: '015', name: 'Paromita Mandal / Rohit Parab', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 16, bib: '016', name: 'Devender Singh / Princi Kumari', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' },
+  { rank: 17, bib: '017', name: 'Saumya Verma / Sonu Kumar', club: 'Battle of Gyms', nat: 'IND', split: '', time: '' }
 ];
 /**
  * Operator Control Panel Logic (controller.js)
@@ -48,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       leaderboard: true,
       lowerThird: false,
       ticker: true,
-      showTimer: false,
+      showTimer: true,
       showClubs: true,
       raceClock: true
     },
@@ -308,25 +311,30 @@ document.addEventListener('DOMContentLoaded', () => {
           });
 
           // Check if race has started and extract live timing strictly from API
-          const leader = results[0];
           let raceStarted = false;
           let calculatedElapsedSec = 0;
 
-          if (leader) {
-            const apiTimeStr = leader.splitTimeStr || leader.splitTime || leader.timeText || leader.time || leader.finishNetStr || leader.finishTimeNet;
-            const apiSeconds = leader.splitTimeSeconds || leader.finishTimeNetSeconds;
-            const apiStartMs = leader.startNetTodMs || leader.startTodMs;
+          // Check all results for valid split time, finish time or start timestamp
+          for (const item of results) {
+            const apiTimeStr = item.splitTimeStr || item.splitTime || item.timeText || item.time || item.finishNetStr || item.finishTimeNet;
+            const apiSeconds = item.splitTimeSeconds || item.finishTimeNetSeconds;
+            const apiStartMs = item.startNetTodMs || item.startTodMs;
 
             if (apiSeconds && apiSeconds > 0) {
-              calculatedElapsedSec = Math.floor(apiSeconds);
+              calculatedElapsedSec = Math.max(calculatedElapsedSec, Math.floor(apiSeconds));
               raceStarted = true;
             } else if (apiTimeStr && /^\d{1,2}:\d{2}/.test(apiTimeStr)) {
               const parts = apiTimeStr.split(':').map(Number);
-              if (parts.length === 3) calculatedElapsedSec = parts[0] * 3600 + parts[1] * 60 + parts[2];
-              else if (parts.length === 2) calculatedElapsedSec = parts[0] * 60 + parts[1];
-              if (calculatedElapsedSec > 0) raceStarted = true;
+              let sec = 0;
+              if (parts.length === 3) sec = parts[0] * 3600 + parts[1] * 60 + parts[2];
+              else if (parts.length === 2) sec = parts[0] * 60 + parts[1];
+              if (sec > 0) {
+                calculatedElapsedSec = Math.max(calculatedElapsedSec, sec);
+                raceStarted = true;
+              }
             } else if (apiStartMs && apiStartMs > 0 && apiStartMs <= Date.now()) {
-              calculatedElapsedSec = Math.floor((Date.now() - apiStartMs) / 1000);
+              const sec = Math.floor((Date.now() - apiStartMs) / 1000);
+              calculatedElapsedSec = Math.max(calculatedElapsedSec, sec);
               raceStarted = true;
             }
           }
@@ -365,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let clean = raw.replace(/^[\s.,]+/, '').replace(/\s*\([A-Z]{3}\)$/i, '').trim();
             clean = clean.replace(/[\s.,]+$/, '').trim();
 
-            // Only apply legacy Mumbai BOG manual pairs if viewing Mumbai meeting
+            // BOG team mapping for Gujarat and other venues
             if (state.selectedMeetingId === 'LR3MS4JI1804' && state.selectedEventKey === 'BOG') {
               const bogTeams = {
                 'khushboo': 'Pankaj Pasi & Khusboo Adalja',
@@ -394,6 +402,70 @@ document.addEventListener('DOMContentLoaded', () => {
               };
               const cleanLower = clean.toLowerCase();
               for (const [key, pairName] of Object.entries(bogTeams)) {
+                if (cleanLower.includes(key)) {
+                  clean = pairName;
+                  break;
+                }
+              }
+            } else if (state.selectedEventKey === 'BOG') {
+              const bogGujaratTeams = {
+                'thakkar': 'Dhaval Thakkar / Ridham Thakkar',
+                'ridham': 'Dhaval Thakkar / Ridham Thakkar',
+                'dhaval': 'Dhaval Thakkar / Ridham Thakkar',
+                'goswami': 'Palak Goswami / Bhoomik Goswami',
+                'bhoomik': 'Palak Goswami / Bhoomik Goswami',
+                'palak': 'Palak Goswami / Bhoomik Goswami',
+                'pant': 'Beneeta Kiran / Sudhanshu Pant',
+                'sudhanshu': 'Beneeta Kiran / Sudhanshu Pant',
+                'beneeta': 'Beneeta Kiran / Sudhanshu Pant',
+                'mandaliya': 'Vedant Mandaliya / Stuti Mandaliya',
+                'vedant': 'Vedant Mandaliya / Stuti Mandaliya',
+                'stuti': 'Vedant Mandaliya / Stuti Mandaliya',
+                'chatwani': 'Ketan Wadkar / Ranu Chatwani',
+                'ranu': 'Ketan Wadkar / Ranu Chatwani',
+                'ketan': 'Ketan Wadkar / Ranu Chatwani',
+                'wadkar': 'Ketan Wadkar / Ranu Chatwani',
+                'sathe': 'Vishesh Kumar Singh / Saloni Sathe',
+                'saloni': 'Vishesh Kumar Singh / Saloni Sathe',
+                'vishesh': 'Vishesh Kumar Singh / Saloni Sathe',
+                'doshi': 'Bhavin Doshi / Malarkodi Mahendran',
+                'bhavin': 'Bhavin Doshi / Malarkodi Mahendran',
+                'malarkodi': 'Bhavin Doshi / Malarkodi Mahendran',
+                'mahendran': 'Bhavin Doshi / Malarkodi Mahendran',
+                'aakshka': 'Aakshka Thakkar / Yagya Raj',
+                'aashka': 'Aakshka Thakkar / Yagya Raj',
+                'yagya': 'Aakshka Thakkar / Yagya Raj',
+                'solanki': 'Shilpa Patel / Jaydip Solanki',
+                'jaydip': 'Shilpa Patel / Jaydip Solanki',
+                'shilpa': 'Shilpa Patel / Jaydip Solanki',
+                'saito': 'Megumi Saito / Sahil Sharma',
+                'megumi': 'Megumi Saito / Sahil Sharma',
+                'sahil': 'Megumi Saito / Sahil Sharma',
+                'gupta': 'Ashwani Kumar Gupta / Nancy Gupta',
+                'ashwani': 'Ashwani Kumar Gupta / Nancy Gupta',
+                'nancy': 'Ashwani Kumar Gupta / Nancy Gupta',
+                'bhagat': 'Amit Bhagat / Nini Bhatia',
+                'bhatia': 'Amit Bhagat / Nini Bhatia',
+                'nini': 'Amit Bhagat / Nini Bhatia',
+                'amit': 'Amit Bhagat / Nini Bhatia',
+                'negi': 'Sanjay Negi / Bhavneet Kaur',
+                'sanjay': 'Sanjay Negi / Bhavneet Kaur',
+                'bhavneet': 'Sanjay Negi / Bhavneet Kaur',
+                'swamy': 'Helina Swamy / Akshay Mhetre',
+                'helina': 'Helina Swamy / Akshay Mhetre',
+                'mhetre': 'Helina Swamy / Akshay Mhetre',
+                'akshay': 'Helina Swamy / Akshay Mhetre',
+                'mandal': 'Paromita Mandal / Rohit Parab',
+                'paromita': 'Paromita Mandal / Rohit Parab',
+                'parab': 'Paromita Mandal / Rohit Parab',
+                'rohit': 'Paromita Mandal / Rohit Parab',
+                'devender': 'Devender Singh / Princi Kumari',
+                'princi': 'Devender Singh / Princi Kumari',
+                'saumya': 'Saumya Verma / Sonu Kumar',
+                'sonu': 'Saumya Verma / Sonu Kumar'
+              };
+              const cleanLower = clean.toLowerCase();
+              for (const [key, pairName] of Object.entries(bogGujaratTeams)) {
                 if (cleanLower.includes(key)) {
                   clean = pairName;
                   break;
@@ -584,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
       theme: themeSelect ? themeSelect.value : 'theme-starting-list',
       position: posSelect ? posSelect.value : 'pos-bottom-grid',
       showClubs: toggleClubs ? toggleClubs.checked : true,
-      showTimer: toggleTimer ? toggleTimer.checked : false,
+      showTimer: toggleTimer ? toggleTimer.checked : true,
       raceClock: toggleRaceClock ? toggleRaceClock.checked : true,
       ticker: toggleTicker ? toggleTicker.checked : true,
       banner: toggleBanner ? toggleBanner.checked : false,
@@ -650,6 +722,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof config.showTimer === 'boolean') {
           if (toggleTimer) toggleTimer.checked = config.showTimer;
           state.visibleElements.showTimer = config.showTimer;
+        } else if (toggleTimer) {
+          toggleTimer.checked = true;
+          state.visibleElements.showTimer = true;
         }
         if (typeof config.raceClock === 'boolean') {
           if (toggleRaceClock) toggleRaceClock.checked = config.raceClock;
