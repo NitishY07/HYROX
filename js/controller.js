@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
       nameFormat: state.nameFormat,
       displayContent: state.displayContent,
       gridMode: state.gridMode,
+      currentStation: state.currentStation,
       raceClockTime: state.raceClockTime,
       raceClockPosition: state.raceClockPosition,
       allowSimFallback: state.allowSimFallback,
@@ -354,20 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return hasSplit || hasStartTod;
           });
 
-          if (isUserInStartlistMode) {
-            // Explicitly locked to Pre-Race Starting List
-            state.isRaceStarted = false;
-            liveRaceStartMs = null;
-            state.startTimeMs = null;
-            lastApiSplitSec = -1;
-            state.currentStation = '';
-            state.raceClockTime = '00:00:00';
-            if (panelClockTime) panelClockTime.innerText = '00:00:00';
-            if (raceStatusBadge) {
-              raceStatusBadge.className = 'status-badge status-info';
-              raceStatusBadge.innerText = 'PRE-RACE (LOCKED)';
-            }
-          } else if (activeRunning) {
+          // Determine race clock state from API regardless of grid display mode
+          if (activeRunning) {
             // Race is actively LIVE in the API! Timer & station come strictly from API
             state.isRaceStarted = true;
             const todMs = activeRunning.startNetTodMs || activeRunning.startTodMs;
@@ -996,18 +985,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (themeSelect) themeSelect.addEventListener('change', () => { state.theme = themeSelect.value; saveControlPanelSettings(); syncState(); });
   if (gridModeSelect) gridModeSelect.addEventListener('change', () => { 
     state.gridMode = gridModeSelect.value; 
-    if (state.gridMode === 'startlist') {
-      state.isRaceStarted = false;
-      liveRaceStartMs = null;
-      state.startTimeMs = null;
-      state.currentStation = '';
-      state.raceClockTime = '00:00:00';
-      if (panelClockTime) panelClockTime.innerText = '00:00:00';
-      if (raceStatusBadge) {
-        raceStatusBadge.className = 'status-badge status-info';
-        raceStatusBadge.innerText = 'PRE-RACE (LOCKED)';
-      }
-    }
     saveControlPanelSettings(); 
     syncState();
     if (state.mode === 'live') startLivePolling();
